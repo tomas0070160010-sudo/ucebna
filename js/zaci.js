@@ -1,6 +1,6 @@
 // Žáci (pro lektora a správce): přístupy, naposledy, postup v Matice, Hodina spolu a náhled žáka, lekce a odemykání, body, nový žák, nové heslo.
 // Bez měření času učení – jen to, co žák udělal.
-import { tabulka, zapsat, spravaUctu } from "./server.js";
+import { api, tabulka, zapsat, spravaUctu } from "./server.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -47,7 +47,7 @@ function kresli() {
       <p class="pozn">${s.posl ? `Naposledy v lekci <b>${esc(NAZEV[s.posl] || s.posl)}</b>.` : "Matika ještě nebyla otevřená."} ${s.ulozeno ? `Postup uložený ${kdy(s.ulozeno)}.` : ""}</p>
       ${temata ? `<div class="temata">${temata}</div>` : ""}
       ${pr.some((x) => x.aplikace === "matika" && x.role === "zak") ? `<div class="radek"><button type="button" class="hlavni" data-z="hodina" title="Všechno otevřené, nejdřív úlohy, které ještě nedělal(a). Nic se neuloží.">Hodina spolu</button><button type="button" data-z="zkouska" title="Přesně jeho / její verze. Body ani postup se neuloží.">Náhled žáka</button></div>` : ""}
-      <div class="radek">${pr.some((x) => x.aplikace === "matika" && x.role === "zak") ? `<button type="button" data-z="lekce">Lekce a odemykání</button><button type="button" data-z="body">Nastavit body</button>` : ""}${ja.spravce ? `<button type="button" data-z="heslo">Nové heslo</button>` : ""}</div>
+      <div class="radek">${pr.some((x) => x.aplikace === "matika" && x.role === "zak") ? `<button type="button" data-z="lekce">Lekce a odemykání</button><button type="button" data-z="body">Nastavit body</button>` : ""}${ja.spravce ? `<button type="button" data-z="pristupy">Přístupy</button><button type="button" data-z="heslo">Nové heslo</button>` : ""}</div>
       <div class="panel" hidden></div></article>`; }).join("")
     : `<p class="pozn">Zatím tu nikdo není.${ja.spravce ? " Přidej prvního žáka tlačítkem nahoře." : ""}</p>`;
 }
@@ -83,6 +83,23 @@ function panelBody(karta, uid) {
       info.textContent = `Nastaveno na ${+v} bodů. Projeví se, až příště otevře Matiku.`; } catch (x) { info.textContent = "Nepovedlo se uložit: " + x.message; } });
 }
 
+// ---------- panel: přístupy a zablokování (jen správce) ----------
+function panelPristupy(karta, uid) {
+  const p = data.profily.find((x) => x.id === uid) || {}, role = (app) => (data.pristupy.find((x) => x.uzivatel === uid && x.aplikace === app) || {}).role || "nema";
+  $(".panel", karta).innerHTML = `<form class="pristupy-form" novalidate><table class="lekce-tab"><tbody>${Object.entries(APP).map(([a, n]) => `<tr><th>${n}</th><td><select name="${a}" aria-label="Přístup – ${n}">
+      ${[["nema", "nemá přístup"], ["zak", "žák"], ["host", "host"], ["lektor", "lektor"]].map(([v, t]) => `<option value="${v}" ${role(a) === v ? "selected" : ""}>${t}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table>
+    <label class="zaskrt"><input type="checkbox" name="blok" ${p.zablokovan ? "checked" : ""}> Zablokovat – do aplikací se nedostane, postup zůstane uložený</label>
+    <div class="radek"><button type="button" data-z="zavrit">Zavřít</button><button type="submit" class="hlavni">Uložit</button></div><p class="pozn stav-panel" aria-live="polite">Lektor vidí jen žáky z aplikací, kde je sám lektorem.</p></form>`;
+  $("form", karta).addEventListener("submit", async (e) => { e.preventDefault(); const f = e.target, info = $(".stav-panel", karta); info.textContent = "Ukládám…";
+    try {
+      for (const a of Object.keys(APP)) { const v = f[a].value; if (v === role(a)) continue;
+        if (v === "nema") await api(`/rest/v1/pristupy?uzivatel=eq.${uid}&aplikace=eq.${a}`, { method: "DELETE" });
+        else await zapsat("pristupy", { uzivatel: uid, aplikace: a, role: v }, "uzivatel,aplikace"); }
+      if (!!p.zablokovan !== f.blok.checked) await api(`/rest/v1/profily?id=eq.${uid}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ zablokovan: f.blok.checked }) });
+      await nactiZaky(ja); $("#pridat-stav").textContent = `Přístupy uloženy (${p.jmeno || "účet"}).`;
+    } catch (x) { info.textContent = "Nepovedlo se uložit: " + x.message; } });
+}
+
 // ---------- panel: nové heslo (jen správce) ----------
 function panelHeslo(karta, uid) {
   $(".panel", karta).innerHTML = `<form class="heslo-form" novalidate><label>Nové heslo (aspoň 8 znaků)<input name="heslo" type="text" autocomplete="new-password" spellcheck="false" minlength="8" required></label>
@@ -108,7 +125,7 @@ document.addEventListener("click", (e) => { const b = e.target.closest("[data-z]
     document.dispatchEvent(new CustomEvent("ucebna-nahled", { detail: { uid, jmeno: p ? p.jmeno : "", rezim: b.dataset.z } })); return; }
   const p = $(".panel", karta); if (!p.hidden && p.dataset.co === b.dataset.z) { p.hidden = true; p.innerHTML = ""; return; }
   p.dataset.co = b.dataset.z; p.hidden = false;
-  if (b.dataset.z === "lekce") panelLekce(karta, uid); if (b.dataset.z === "heslo") panelHeslo(karta, uid); if (b.dataset.z === "body") panelBody(karta, uid); });
+  if (b.dataset.z === "lekce") panelLekce(karta, uid); if (b.dataset.z === "heslo") panelHeslo(karta, uid); if (b.dataset.z === "body") panelBody(karta, uid); if (b.dataset.z === "pristupy") panelPristupy(karta, uid); });
 document.addEventListener("submit", (e) => { if (e.target.id === "form-pridat") { e.preventDefault(); pridat(e.target); } });
 // přihlašovací jméno z jména: „Petr Novák“ → „petr.novak“
 document.addEventListener("input", (e) => { if (e.target.name !== "jmeno" || !e.target.closest("#form-pridat")) return; const f = e.target.form;

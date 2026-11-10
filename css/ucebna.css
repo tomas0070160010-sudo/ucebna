@@ -73,7 +73,7 @@ code { font: 600 14px ui-monospace, "Cascadia Mono", Consolas, monospace; backgr
 .tema { font-size: 13px; background: var(--karta); border: 1px solid var(--linka); border-radius: 8px; padding: 3px 8px; } .tema b { color: var(--modra); letter-spacing: 1px; font-size: 11px; }
 .zak button, .zaci-hlava button { padding: 8px 12px; font-size: 15px; }
 .panel { border-top: 1px solid var(--linka); padding-top: 12px; }
-.lekce-form, .heslo-form, .body-form, .pridat { display: grid; gap: 12px; }
+.lekce-form, .heslo-form, .body-form, .pristupy-form, .pridat { display: grid; gap: 12px; }
 .lekce-tab { border-collapse: collapse; width: 100%; } .lekce-tab select { max-width: 260px; } .lekce-tab th { text-align: left; font-weight: 600; font-size: 15px; padding: 5px 8px 5px 0; } .lekce-tab td { padding: 4px 0; }
 select { font: 15px system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--inkoust); background: var(--karta); border: 1.5px solid var(--linka); border-radius: 8px; padding: 7px 8px; width: 100%; }
 .radek-pole { display: flex; align-items: center; gap: 10px; } .radek-pole input { width: 110px; }
