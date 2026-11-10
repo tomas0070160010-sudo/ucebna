@@ -56,6 +56,8 @@ export const zapsat = async (tab, radek, konflikt) => (await api(`/rest/v1/${tab
   method: "POST", headers: { "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=representation" }, body: JSON.stringify(radek) })).json();
 export const funkce = (nazev, parametry) => api("/rest/v1/rpc/" + nazev, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(parametry) }).catch(() => null);
 
+// soubor ze soukromého repozitáře přes funkci na serveru (vždy nejnovější verze)
+export const souborZRepa = async (cesta) => (await api("/functions/v1/soubor?cesta=" + encodeURIComponent(cesta))).text();
 export const souborText = async (cesta) => (await api("/storage/v1/object/authenticated/aplikace/" + cesta)).text();
 export const nahratSoubor = (cesta, soubor) => api("/storage/v1/object/aplikace/" + cesta, { method: "POST", headers: { "Content-Type": soubor.type || "text/html", "x-upsert": "true" }, body: soubor });
 export const seznamSouboru = async (slozka) => (await api("/storage/v1/object/list/aplikace", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prefix: slozka, limit: 100 }) })).json();

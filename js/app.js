@@ -1,5 +1,5 @@
 // Učebna: přihlášení, dlaždice aplikací, spuštění aplikace se synchronizací a Správa souborů.
-import { relace, prihlasit, odhlasit, tabulka, funkce, souborText, nahratSoubor, seznamSouboru } from "./server.js";
+import { relace, prihlasit, odhlasit, tabulka, funkce, souborText, souborZRepa, nahratSoubor, seznamSouboru } from "./server.js";
 import { stahnout, nahrat, serverNovejsi, smazMistni, mistni } from "./sync.js";
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -26,6 +26,7 @@ function domu() {
     return `<button type="button" class="dlazdice" data-app="${esc(a.id)}" ${z.brzy ? "disabled" : ""}><span class="znak" aria-hidden="true">${z.znak}</span><b>${esc(a.nazev)}</b><small>${z.brzy ? "Připravujeme" : esc(z.popis)}</small></button>`; }).join("")
     : `<p class="pozn">Zatím nemáš přístup k žádné aplikaci. Napiš lektorovi.</p>`;
   $("#sprava").hidden = !ja.spravce; if (ja.spravce) nactiSoubory();
+  if (appky.some((a) => a.id === "matika")) souborZRepa("matika/VERZE").then((v) => { const s = $('[data-app="matika"] small'); if (s && v) s.textContent = `${APLIKACE.matika.popis} · verze ${v.trim()}`; }).catch(() => null);
 }
 
 async function start() {
@@ -50,8 +51,9 @@ async function spustit(app) {
   try {
     await stahnout(app, z.predpona, ja.id);
     const lektor = ja.spravce || ja.pristupy[app] === "lektor";
-    // jeden soubor aplikace pro všechny; starší zvlášť nahrané verze (lektor.html / zak.html) jako záloha
-    let html = null; for (const soubor of lektor ? ["matika.html", "lektor.html", "zak.html"] : ["matika.html", "zak.html"]) { try { html = await souborText(`${app}/${soubor}`); break; } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; } }
+    // jeden soubor aplikace pro všechny: nejdřív nejnovější verze ze soukromého repozitáře, ručně nahraný soubor je záloha
+    let html = null; try { html = await souborZRepa(`${app}/matika.html`); } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; }
+    if (!html) for (const soubor of lektor ? ["matika.html", "lektor.html", "zak.html"] : ["matika.html", "zak.html"]) { try { html = await souborText(`${app}/${soubor}`); break; } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; } }
     if (!html) { stavSync(lektor ? "Matika tu ještě není – nahraj ji ve Správě." : "Matika tu ještě není. Lektor ji brzy přidá.", "ne"); return; }
     // soubor z artefaktu nemá kostru stránky – bez <!doctype> by se kreslil ve starém režimu prohlížeče
     if (!/^\s*<!doctype/i.test(html)) html = `<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>${html}</body></html>`;
@@ -96,7 +98,7 @@ const SOUBORY = [["matika", "matika", "Matika po krocích", "soubor matika-po-kr
 async function nactiSoubory() {
   let seznam = []; try { seznam = await seznamSouboru("matika/"); } catch (e) { /* ukáže se jako nenahráno */ }
   $("#soubory").innerHTML = SOUBORY.map(([app, kdo, nazev, kde]) => { const f = seznam.find((x) => x.name === `${kdo}.html`);
-    return `<div class="soubor"><div><b>${nazev}</b><small>${f ? `nahráno ${cas(f.updated_at || f.created_at)} · ${Math.round((f.metadata?.size || 0) / 1024)} kB` : "zatím nenahráno"} · ${kde}</small></div>
+    return `<div class="soubor"><div><b>${nazev} – ruční záloha</b><small>Nové verze přicházejí samy. Ruční soubor se použije, jen když server verzi z repozitáře nenačte. ${f ? `Záloha nahrána ${cas(f.updated_at || f.created_at)}.` : "Záloha zatím není."} (${kde})</small></div>
       <label class="tl">Nahrát…<input type="file" accept=".html,text/html" data-nahrat="${app}/${kdo}" hidden></label></div>`; }).join("");
 }
 document.addEventListener("change", async (e) => { const i = e.target.closest("[data-nahrat]"); if (!i || !i.files[0]) return;
