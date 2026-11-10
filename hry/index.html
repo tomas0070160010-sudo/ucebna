@@ -564,6 +564,13 @@ div.lo-rezim { background: var(--karta); border: 1.5px solid var(--linka); } .lo
 .os-tip.ja { background: var(--modra); } .os-tip.on { background: var(--oranzova); }
 .os-spravne { top: 0; display: grid; justify-items: center; color: var(--zelena); font-size: 13px; }
 .os-spravne::after { content: ""; border: 8px solid transparent; border-top-color: var(--zelena); margin-top: 2px; }
+/* 🎚️ obtížnost her */
+.obt-volba { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.obt-volba .vybrano { background: var(--modra); border-color: var(--modra); color: #fff; }
+.obt-pozn { margin: 2px 0 10px; }
+.zv-u { font-weight: 400; color: var(--tuzka); font-size: 12px; display: block; }
+.os-osa[data-max="1"] .os-3, .os-osa[data-max="2"] .os-3 { display: none; }
+.os-osa[data-max="3"] .os-1 { left: calc(var(--l) + (100% - 2 * var(--l)) / 3); } .os-osa[data-max="3"] .os-2 { left: calc(var(--l) + (100% - 2 * var(--l)) * 2 / 3); } .os-osa[data-max="3"] .os-3 { left: calc(100% - var(--l)); }
 /* 🎯 Úhlové dělo */
 .dl-ovladani { justify-content: center; gap: 8px; margin-top: 8px; }
 .dl-ovladani .hlavni { min-width: 9em; }
@@ -1423,6 +1430,29 @@ const PRAVIDLA = [
   () => ({ nazev: "víc než ½", dobre: () => vyber(["0,6", "0,75", "0,8", "0,9", "3/4", "2/3", "5/8", "60%", "75%", "0,51"]), spatne: () => vyber(["0,4", "0,25", "0,3", "0,45", "1/3", "2/5", "3/8", "40%", "20%", "0,05"]) }),
   () => ({ nazev: "rovno ¼", dobre: () => vyber(["1/4", "0,25", "25%", "2/8", "3/12", "4/16"]), spatne: () => vyber(["1/5", "0,4", "40%", "2/5", "0,2", "1/3", "4%", "0,14"]) }),
 ];
+const PRVO = (n) => { if (n < 2) return false; for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; };
+const nahodne = (pod, test) => { let x; do { x = pod(); } while (!test(x)); return x; };
+const PRAVIDLA_U = {
+  lehka: [
+    () => { const n = vyber([2, 5, 10]); return { nazev: `násobky ${n}`, dobre: () => String(n * nah(1, 10)), spatne: () => String(nahodne(() => nah(1, 10 * n), (x) => x % n !== 0)) }; },
+    () => ({ nazev: "sudá čísla", dobre: () => String(2 * nah(1, 49)), spatne: () => String(2 * nah(0, 49) + 1) }),
+    () => ({ nazev: "lichá čísla", dobre: () => String(2 * nah(0, 49) + 1), spatne: () => String(2 * nah(1, 49)) }),
+    () => ({ nazev: "větší než 50", dobre: () => String(nah(51, 99)), spatne: () => String(nah(10, 50)) }),
+  ],
+  stredni: PRAVIDLA,
+  obtizna: [
+    () => { const n = nah(6, 12); return { nazev: `násobky ${n}`, dobre: () => String(n * nah(2, 12)), spatne: () => String(nahodne(() => nah(n + 1, n * 12), (x) => x % n !== 0)) }; },
+    () => ({ nazev: "prvočísla", dobre: () => String(nahodne(() => nah(2, 97), PRVO)), spatne: () => String(nahodne(() => nah(4, 99), (x) => !PRVO(x) && x % 2 === 1)) }),
+    () => ({ nazev: "zlomky rovné ⅔", dobre: () => { const k = nah(1, 8); return `${2 * k}/${3 * k}`; }, spatne: () => vyber(["3/4", "3/5", "4/9", "6/8", "5/6", "2/5", "8/10", "10/12"]) }),
+    () => ({ nazev: "dělitelné 3 i 4", dobre: () => String(12 * nah(1, 8)), spatne: () => String(nahodne(() => nah(6, 99), (x) => (x % 3 === 0) !== (x % 4 === 0))) }),
+  ],
+  lektorska: [
+    () => ({ nazev: "druhé mocniny", dobre: () => String(nah(4, 15) ** 2), spatne: () => String(nahodne(() => nah(10, 230), (x) => !Number.isInteger(Math.sqrt(x)))) }),
+    () => ({ nazev: "prvočísla do 200", dobre: () => String(nahodne(() => nah(50, 199), PRVO)), spatne: () => String(vyber([51, 57, 87, 91, 111, 119, 133, 143, 161, 169, 187])) }),
+    () => ({ nazev: "rovno ⅓", dobre: () => vyber(["1/3", "2/6", "3/9", "4/12", "5/15", "7/21"]), spatne: () => vyber(["0,3", "0,33", "3/10", "2/5", "1/4", "30%", "4/9"]) }),
+    () => ({ nazev: "dělitelné 6", dobre: () => String(6 * nah(3, 30)), spatne: () => String(nahodne(() => nah(14, 180), (x) => x % 6 !== 0 && (x % 2 === 0 || x % 3 === 0))) }),
+  ],
+};
 const otoc = (t) => t[0].split("").map((_, x) => t.map((r) => r[x]).reverse().join(""));
 const bunky = (t) => t.flatMap((r, y) => [...r].map((z, x) => (z === "#" ? [x, y] : null)).filter(Boolean));
 // terén pro kolo: souměrný podle středu, mezery mezi tvary, start obou hadů volný, všechna volná pole propojená (i přes okraj)
@@ -1483,6 +1513,7 @@ function spust(el, skore, opt, P) {
 
 // sit = null (sám) | { host, spoj, kod }
 function hra(el, skore, P, sit, cisla = false) {
+  const U = cisla ? Obtiznost.je() : "stredni", RYCHLOST = { lehka: 30, stredni: 0, obtizna: -15, lektorska: -30 }[U] || 0;
   const { W, H } = P, C = sit ? 15 : cisla ? 30 : 20, SX = W / C, SY = H / C, KOLA = 3, DELKA = 60;
   el.innerHTML = `<div class="lo-hlava"><button type="button" class="maly" data-hd="zpet">← Jiný režim</button>${sit ? `<span class="lo-spojeni ok">Místnost ${sit.kod}</span>` : ""}</div><div class="hd-plocha"></div>`;
   const pl = el.querySelector(".hd-plocha"), { cv, g, napis } = P.platno(pl);
@@ -1495,11 +1526,11 @@ function hra(el, skore, P, sit, cisla = false) {
   const obsazeno = () => { const s = new Set(); S.ter.forEach(([x, y]) => s.add(`${x},${y}`)); S.hadi.forEach((h) => h.telo.forEach(([x, y]) => s.add(`${x},${y}`))); S.jidlo.forEach(([x, y]) => s.add(`${x},${y}`)); return s; };
   function poloz() { const o = obsazeno(); let x, y, n = 0; do { x = Math.floor(Math.random() * SX); y = Math.floor(Math.random() * SY); } while (o.has(`${x},${y}`) && n++ < 500); if (!cisla) { S.jidlo.push([x, y]); return; }
     const dobrych = S.jidlo.filter((j) => j[3]).length, dobre = dobrych < 2 || Math.random() < 0.35; S.jidlo.push([x, y, dobre ? S.pr.dobre() : S.pr.spatne(), dobre]); }
-  function novePravidlo() { let p; do { p = PRAVIDLA[Math.floor(Math.random() * PRAVIDLA.length)](); } while (S.pr && p.nazev === S.pr.nazev); S.pr = p; S.jidlo = []; for (let i = 0; i < 4; i++) poloz(); napis(`Sbírej: <b>${p.nazev}</b>. Špatné číslo hada zkrátí.`); }
+  function novePravidlo() { const PR = PRAVIDLA_U[U] || PRAVIDLA; let p; do { p = PR[Math.floor(Math.random() * PR.length)](); } while (S.pr && p.nazev === S.pr.nazev && PR.length > 1); S.pr = p; S.jidlo = []; for (let i = 0; i < 4; i++) poloz(); napis(`Sbírej: <b>${p.nazev}</b>. Špatné číslo hada zkrátí.`); }
   function kolo(k) { S.kolo = k; S.ter = sit ? teren(SX, SY, k, STARTY) : []; S.hadi = sit ? [novyHad(0), novyHad(1)] : [novyHad(0)]; S.jidlo = []; if (cisla) novePravidlo(); else for (let i = 0; i < (sit ? 3 : 1); i++) poloz();
     S.zbyva = DELKA; S.odpocet = sit ? 3 : 0; S.bezi = !sit ? false : true; }
   function nova() { S = { kolo: 1, body: sit ? [0, 0] : [0], konec: false }; kolo(1); konecSam = false;
-    napis(sit ? `Tvůj had je <b style="color:var(--modra)">modrý</b>. ${KOLA} kola po minutě – kdo nasbírá víc kostiček. Zdí projdeš na druhou stranu.` : cisla ? `Sbírej: <b>${S.pr.nazev}</b>. Zmáčkni šipku nebo přejeď prstem – had se rozjede.` : "Zmáčkni šipku nebo přejeď prstem – had se rozjede. Zdí projdeš na druhou stranu."); ukazSkore(); }
+    napis(sit ? `Tvůj had je <b style="color:var(--modra)">modrý</b>. ${KOLA} kola po minutě – kdo nasbírá víc kostiček. Zdí projdeš na druhou stranu.` : cisla ? `${Obtiznost.nazev(U)} · sbírej: <b>${S.pr.nazev}</b>. Zmáčkni šipku nebo přejeď prstem – had se rozjede.` : "Zmáčkni šipku nebo přejeď prstem – had se rozjede. Zdí projdeš na druhou stranu."); ukazSkore(); }
   const ukazSkore = () => skore(sit ? `${S.body[ja]} : ${S.body[1 - ja]}` : S.body[0]);
   function zatoc(i, k) { const h = S && S.hadi[i]; const s = SM[k]; if (!h || !s) return; const posl = h.fronta.length ? h.fronta[h.fronta.length - 1] : h.smer;
     if (s[0] === -posl[0] && s[1] === -posl[1]) return; if (h.fronta.length < 3) h.fronta.push(s); }
@@ -1515,11 +1546,11 @@ function hra(el, skore, P, sit, cisla = false) {
       if (S.hadi.some((h, j) => h.bum === 0 && h.telo.slice(0, j === i ? -1 : undefined).some(([x, y]) => x === hl[0] && y === hl[1]))) return true;
       return hlavy.some((o, j) => j !== i && o && o[0] === hl[0] && o[1] === hl[1]); });
     S.hadi.forEach((h, i) => { const hl = hlavy[i]; if (!hl) return;
-      if (naraz[i]) { if (!sit) { konecSam = true; S.bezi = false; const r = P.rekord(cisla ? "had-cisla" : "had", S.body[0]); napis(`Bum! Kostiček: <b>${S.body[0]}</b>${r && S.body[0] ? " – nový rekord! 🏆" : ""}. Zmáčkni šipku nebo klepni na hřiště a hraj znovu.`); return; }
+      if (naraz[i]) { if (!sit) { konecSam = true; S.bezi = false; const r = P.rekord(cisla ? "had-cisla-" + U : "had", S.body[0]); napis(`Bum! Kostiček: <b>${S.body[0]}</b>${r && S.body[0] ? " – nový rekord! 🏆" : ""}. Zmáčkni šipku nebo klepni na hřiště a hraj znovu.`); return; }
         h.telo = h.telo.slice(0, 3); h.bum = 10; return; } // souboj: zkrátit, chvilku stát, pak znovu u startu
       h.telo.unshift(hl); const j = S.jidlo.findIndex(([x, y]) => x === hl[0] && y === hl[1]);
       if (j >= 0 && cisla && !S.jidlo[j][3]) { const sp = S.jidlo[j]; S.jidlo.splice(j, 1); poloz(); h.telo = h.telo.slice(0, Math.max(0, h.telo.length - 3));
-        if (h.telo.length < 2) { konecSam = true; S.bezi = false; const r = P.rekord("had-cisla", S.body[0]); napis(`${sp[2]} nepatří mezi ${S.pr.nazev}. Had je moc krátký – konec. Správně: <b>${S.body[0]}</b>${r && S.body[0] ? " – nový rekord! 🏆" : ""}. Klepni na hřiště a hraj znovu.`); }
+        if (h.telo.length < 2) { konecSam = true; S.bezi = false; const r = P.rekord("had-cisla-" + U, S.body[0]); napis(`${sp[2]} nepatří mezi ${S.pr.nazev}. Had je moc krátký – konec. Správně: <b>${S.body[0]}</b>${r && S.body[0] ? " – nový rekord! 🏆" : ""}. Klepni na hřiště a hraj znovu.`); }
         else napis(`✗ ${sp[2]} nepatří mezi <b>${S.pr.nazev}</b> – had se zkrátil.`); return; }
       if (j >= 0) { S.body[i]++; S.jidlo.splice(j, 1); if (cisla && S.body[0] % 5 === 0) novePravidlo(); else { poloz(); if (cisla) napis(`Sbírej: <b>${S.pr.nazev}</b>`); } ukazSkore(); } else h.telo.pop(); });
   }
@@ -1542,7 +1573,7 @@ function hra(el, skore, P, sit, cisla = false) {
   const mmss = (s) => { const c = Math.ceil(s); return `${Math.floor(c / 60)}:${String(c % 60).padStart(2, "0")}`; };
   function kresli(t) { raf = requestAnimationFrame(kresli); if (!P.vidim()) { t0 = t; return; } const c = P.barvy();
     if (!t0) t0 = t; const dt = Math.min(0.1, (t - t0) / 1000);
-    if (S && host) { sekundy(dt); const tik = sit ? (S.kolo >= 3 ? 115 : 125) : Math.max(80, 135 - S.body[0] * 2);
+    if (S && host) { sekundy(dt); const tik = sit ? (S.kolo >= 3 ? 115 : 125) : Math.max(70, 135 + RYCHLOST - S.body[0] * 2);
       if ((sit ? !S.konec && !S.odpocet : S.bezi) && t - (kresli.k || 0) > tik) { kresli.k = t; krok(); if (sit) posli(t); } }
     t0 = t;
     if (sit && host && t - odesl > 400) posli(t); // odpočet a konec kola i bez pohybu
@@ -1564,7 +1595,7 @@ function hra(el, skore, P, sit, cisla = false) {
   nova(); raf = requestAnimationFrame(kresli);
   return { stop: () => cancelAnimationFrame(raf), zprava, klav };
 }
-return { spust, teren };
+return { spust, teren, PRAVIDLA_U };
 })();
 // ================= 🌐 společná volba režimu a místnost pro hry dvou hráčů (nové hry: závod, odhadovačka) =================
 // Online2.lobby(el, skore, opt, cfg) – cfg: { id (data-atribut tlačítek), kanal (název hry v kanálu a v odkazu #hra-<kanal>-KÓD), uvod, mistni: [{ k, b, s }], onlinePopis, hra(el, skore, rezim, sit) → { stop, zprava, klav } }
@@ -1604,26 +1635,79 @@ const lista = (id, sit) => `<div class="lo-hlava"><button type="button" class="m
 return { lobby, lista };
 })();
 
+// ================= 🎚️ obtížnost vzdělávacích her: každý hráč si volí svou (Lehká / Střední / Obtížná / Lektorská) =================
+// Volba se pamatuje v tomhle prohlížeči. Platí pro Závod v počítání, Odhadovačku na ose, Hada s čísly a Úhlové dělo.
+// V souboji online hraje každý se svou obtížností; když mají oba stejnou, mají v závodě i stejné příklady.
+const Obtiznost = (() => {
+const UR = [["lehka", "Lehká"], ["stredni", "Střední"], ["obtizna", "Obtížná"], ["lektorska", "Lektorská"]];
+const je = () => { const v = nacist("obtiznost", "stredni"); return UR.some(([k]) => k === v) ? v : "stredni"; };
+const nazev = (k = je()) => (UR.find(([x]) => x === k) || UR[1])[1];
+const volba = () => `<div class="obt-volba" role="group" aria-label="Obtížnost her"><span class="pozn">Obtížnost:</span>${UR.map(([k, n]) => `<button type="button" class="maly${k === je() ? " vybrano" : ""}" data-obt="${k}" aria-pressed="${k === je()}">${n}</button>`).join("")}</div>`;
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-obt]"); if (!b) return; ulozit("obtiznost", b.dataset.obt);
+  document.querySelectorAll("[data-obt]").forEach((x) => { const a = x.dataset.obt === b.dataset.obt; x.classList.toggle("vybrano", a); x.setAttribute("aria-pressed", String(a)); }); document.dispatchEvent(new CustomEvent("obtiznost-zmena")); });
+
+// ---------- příklady pro závod (výběr ze 4 možností) ----------
+const mix = (a) => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const moz = (sp, kolem) => { const s = new Set([String(sp)]); for (const k of mix(kolem.map(String))) { if (s.size >= 4) break; if (k !== String(sp) && k !== "" && !/NaN|Infinity|^-/.test(k)) s.add(k); } let n = 1; while (s.size < 4) s.add(String(+sp + 10 * n++)); return mix([...s]); };
+const nsd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+const zlomek = (p, q) => { const g = nsd(p, q); p /= g; q /= g; return q === 1 ? String(p) : `${p}/${q}`; };
+const cs = (x) => String(Math.round(x * 100) / 100).replace(".", ",");
+const Q = {
+  lehka: [
+    () => { const a = nah(2, 10), b = nah(2, 10), sp = a * b; return { t: `${a} · ${b} = ?`, sp: String(sp), m: moz(sp, [sp + a, sp - b, sp + 1, sp + 10]) }; },
+    () => { const a = nah(11, 60), b = nah(11, 39), sp = a + b; return { t: `${a} + ${b} = ?`, sp: String(sp), m: moz(sp, [sp + 1, sp - 1, sp + 10, sp - 10]) }; },
+    () => { const a = nah(40, 99), b = nah(11, a - 5), sp = a - b; return { t: `${a} − ${b} = ?`, sp: String(sp), m: moz(sp, [sp + 1, sp - 1, sp + 10, a + b]) }; },
+    () => { const n = 10 * nah(2, 20), sp = n / 2; return { t: `Kolik je 50 % z ${n}?`, sp: String(sp), m: moz(sp, [n / 10, sp + 5, n / 4, n - 5]) }; },
+    () => { const n = 10 * nah(2, 30), sp = n / 10; return { t: `Kolik je 10 % z ${n}?`, sp: String(sp), m: moz(sp, [n / 2, sp * 2, sp + 1, sp + 10]) }; },
+    () => { const n = 4 * nah(3, 25), sp = n / 4; return { t: `Kolik je čtvrtina z ${n}?`, sp: String(sp), m: moz(sp, [n / 2, sp + 4, sp - 1, n - 4]) }; },
+    () => { const a = nah(11, 89), sp = 100 - a; return { t: `Kolik chybí ${a} do 100?`, sp: String(sp), m: moz(sp, [sp + 10, sp - 10, sp + 1, a]) }; },
+  ],
+  stredni: [() => OtazkyHer.matika()],
+  obtizna: [
+    () => { const b = vyber([2, 3, 4, 6]), d = vyber([3, 4, 5, 6].filter((x) => x !== b)), a = nah(1, b - 1), c = nah(1, d - 1), sp = zlomek(a * d + c * b, b * d);
+      return { t: `${a}/${b} + ${c}/${d} = ?`, sp, m: moz(sp, [zlomek(a + c, b + d), `${a + c}/${b * d}`, zlomek(a * d + c * b + 1, b * d), zlomek(a * c, b * d)]) }; },
+    () => { const a = nah(2, 9), x = nah(2, 12), b = nah(1, 20), c = a * x + b; return { t: `${a}x + ${b} = ${c}. Kolik je x?`, sp: String(x), m: moz(x, [x + 1, x - 1, c - b, Math.round(c / a)]) }; },
+    () => { const p = vyber([5, 15, 35, 45, 65, 85]), n = 20 * nah(2, 18), sp = (p * n) / 100; return { t: `Kolik je ${p} % z ${n}?`, sp: cs(sp), m: moz(cs(sp), [cs(sp + 2), cs(sp * 2), cs(n / p), cs(sp - 3)]) }; },
+    () => { const a = nah(25, 80), b = nah(20, 150 - a), sp = 180 - a - b; return { t: `Trojúhelník má úhly ${a}° a ${b}°. Jaký je třetí?`, sp: sp + "°", m: moz(sp + "°", [90 - a > 0 ? 90 - a + "°" : sp + 10 + "°", sp + 10 + "°", sp - 10 + "°", 360 - a - b + "°"]) }; },
+    () => { const k = nah(11, 20), sp = k; return { t: `√${k * k} = ?`, sp: String(sp), m: moz(sp, [k + 1, k - 1, (k * k) / 2, k + 2]) }; },
+    () => { const a = nah(12, 49), b = nah(3, 9), sp = a * b; return { t: `${a} · ${b} = ?`, sp: String(sp), m: moz(sp, [sp + b, sp - b, sp + 10, sp - 10]) }; },
+  ],
+  lektorska: [
+    () => { const k = nah(2, 9), sp = `x² + ${2 * k}x + ${k * k}`; return { t: `Roznásob (x + ${k})²`, sp, m: moz(sp, [`x² + ${k * k}`, `x² + ${k}x + ${k * k}`, `x² + ${2 * k}x + ${2 * k}`, `x² + ${2 * k}x + ${k * k + k}`, `2x + ${2 * k}`]) }; },
+    () => { const A = nah(31, 69), d = nah(2, 8), B = A - d, sp = (A - B) * (A + B); return { t: `${A}² − ${B}² = ?`, sp: String(sp), m: moz(sp, [d * d, sp + 10, sp - d, (A + B) * 2]) }; },
+    () => { const k = nah(2, 6), a = nah(1, 9), b = a + nah(1, 8), x = k * (b - a); return { t: `x/${k} + ${a} = ${b}. Kolik je x?`, sp: String(x), m: moz(x, [b - a, k * b, x + k, (b + a) * k]) }; },
+    () => { const p = vyber([10, 20, 30, 50]), sp = 100 - (p * p) / 100; return { t: `Cena stoupne o ${p} % a pak klesne o ${p} %. Kolik procent původní ceny stojí?`, sp: sp + " %", m: mix([sp + " %", "100 %", 100 - p + " %", 100 + p / 2 + " %"]) }; },
+    () => { const a = nah(1, 5), b = nah(a + 1, 9), c = nah(1, 5), d = nah(c + 1, 9), sp = zlomek(a * d, b * c); return { t: `${a}/${b} : ${c}/${d} = ?`, sp, m: moz(sp, [zlomek(a * c, b * d), zlomek(b * c, a * d), zlomek(a + c, b + d), zlomek(a * d + 1, b * c)]) }; },
+    () => { const a = nah(13, 39), b = nah(13, 29), sp = a * b; return { t: `${a} · ${b} = ?`, sp: String(sp), m: moz(sp, [sp + 10, sp - 10, sp + a, sp - b]) }; },
+    () => { const n = nah(4, 15); return { t: `x² = ${n * n}. Kolik je x?`, sp: `±${n}`, m: mix([`±${n}`, String(n), `${(n * n) / 2}`, `±${n * 2}`]) }; },
+  ],
+};
+const priklad = (u = je()) => vyber(Q[u] || Q.stredni)();
+return { UR, je, nazev, volba, priklad, zlomek, nsd };
+})();
+
 // ================= 🚀 Závod v počítání: kdo první správně vyřeší 10 příkladů – sám na čas, nebo online souboj =================
-// Oba hráči mají stejné příklady (pošle je zakladatel). Špatná odpověď = ukáže se správná a jde se dál (příklad se nepočítá).
+// Každý hraje se svou obtížností (Obtiznost); při stejné obtížnosti mají oba stejné příklady (pošle je zakladatel). Špatná odpověď = ukáže se správná a jde se dál (příklad se nepočítá).
 // O vítězi rozhoduje zakladatel místnosti (kdo dřív dojel do cíle). Příklady: OtazkyHer.matika() – procenta, násobilka, rovnice, úhly, zlomky.
 const Zavod = (() => {
 const CIL = 10, ZASOBA = 40; let AKT = null; // AKT = správná odpověď právě zobrazeného příkladu (pro testy)
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 function spust(el, skore, opt, P) {
   return Online2.lobby(el, skore, opt, { id: "zv", kanal: "zavod", uvod: `Vyřeš ${CIL} příkladů co nejrychleji. Špatná odpověď neubírá, jen se nepočítá.`,
-    mistni: [{ k: "sam", b: "⏱️ Sám na čas", s: "Překonej svůj nejlepší čas." }], onlinePopis: "Oba stejné příklady – kdo bude dřív v cíli.",
+    mistni: [{ k: "sam", b: "⏱️ Sám na čas", s: "Překonej svůj nejlepší čas." }], onlinePopis: "Každý se svou obtížností – kdo bude dřív v cíli.",
     hra: (e, s, rezim, sit) => hra(e, s, sit, P) });
 }
 function hra(el, skore, sit, P) {
   const host = !sit || sit.host;
-  let q = sit && !host ? null : Array.from({ length: ZASOBA }, () => OtazkyHer.matika()), i = 0, n = 0, souper = 0, start = 0, konec = false, zamek = false, tik = 0, vitez = null, odpocet = sit ? 3 : 0;
+  const U = Obtiznost.je(), sada = () => Array.from({ length: ZASOBA }, () => Obtiznost.priklad(U));
+  let uOn = "", q = sit && !host ? null : sada(), i = 0, n = 0, souper = 0, start = 0, konec = false, zamek = false, tik = 0, vitez = null, odpocet = sit ? 3 : 0;
   el.innerHTML = `${Online2.lista("zv", sit)}<div class="zv-drahy">
     <div class="zv-draha"><span class="zv-jm">Ty</span><div class="zv-trat"><span class="zv-raketa ty" style="--p:0">🚀</span></div><b class="zv-n" data-n="ty">0</b></div>
-    ${sit ? `<div class="zv-draha"><span class="zv-jm">Soupeř</span><div class="zv-trat"><span class="zv-raketa on" style="--p:0">🛸</span></div><b class="zv-n" data-n="on">0</b></div>` : ""}</div>
+    ${sit ? `<div class="zv-draha"><span class="zv-jm">Soupeř <small class="zv-u"></small></span><div class="zv-trat"><span class="zv-raketa on" style="--p:0">🛸</span></div><b class="zv-n" data-n="on">0</b></div>` : ""}</div>
     <div class="zv-karta" aria-live="polite"></div><p class="pozn pauza-napis zv-napis"></p>`;
   const karta = el.querySelector(".zv-karta"), napis = (t) => (el.querySelector(".zv-napis").innerHTML = t);
   const cas = () => ((performance.now() - start) / 1000).toFixed(1).replace(".", ",");
+  function ukazU() { const e = el.querySelector(".zv-u"); if (e) e.textContent = uOn ? Obtiznost.nazev(uOn) : ""; }
   function ukaz() { el.querySelector(".zv-raketa.ty").style.setProperty("--p", n / CIL); el.querySelector('[data-n="ty"]').textContent = n;
     if (sit) { el.querySelector(".zv-raketa.on").style.setProperty("--p", souper / CIL); el.querySelector('[data-n="on"]').textContent = souper; skore(`${n} : ${souper}`); } else skore(n); }
   function otazka() { if (konec) return; if (!q) { karta.innerHTML = `<p class="zv-cekej">Čekám na příklady…</p>`; return; }
@@ -1635,18 +1719,18 @@ function hra(el, skore, sit, P) {
     if (dobre) n++; i++; ukaz(); if (sit) sit.spoj.posli({ t: "stav", n });
     setTimeout(() => { zamek = false; if (n >= CIL) cil(); else otazka(); }, dobre ? 350 : 1100); }
   function cil() { konec = true; const t = cas();
-    if (!sit) { const ms = Math.round((performance.now() - start) / 100); const r = P.rekord("zavod", ms, true); karta.innerHTML = `<p class="zv-otazka">🏁 V cíli za <b>${t} s</b>${r ? " – nový rekord! 🏆" : ""}</p><button type="button" class="hlavni" data-zv="m-sam">Znovu</button>`; napis(""); return; }
+    if (!sit) { const ms = Math.round((performance.now() - start) / 100); const r = P.rekord("zavod-" + U, ms, true); karta.innerHTML = `<p class="zv-otazka">🏁 V cíli za <b>${t} s</b>${r ? " – nový rekord! 🏆" : ""}</p><button type="button" class="hlavni" data-zv="m-sam">Znovu</button>`; napis(""); return; }
     karta.innerHTML = `<p class="zv-otazka">🏁 V cíli za ${t} s</p>`; if (host) rozhodni("z"); else sit.spoj.posli({ t: "cil" }); }
   function rozhodni(kdo) { if (vitez) return; vitez = kdo; sit.spoj.posli({ t: "vitez", kdo }); vysledek(); }
   function vysledek() { konec = true; const ja = host ? "z" : "s", vyhra = vitez === ja;
     karta.innerHTML = `<p class="zv-otazka">${vyhra ? "🎉 Výhra – v cíli první!" : "Soupeř byl v cíli dřív."}</p>${host ? `<button type="button" class="hlavni" data-zvo="znovu">Hrát znovu</button>` : `<p class="pozn">Novou hru spustí ten, kdo založil místnost.</p>`}`; }
-  function nova() { q = Array.from({ length: ZASOBA }, () => OtazkyHer.matika()); i = n = souper = 0; konec = false; vitez = null; odpocet = 3; start = 0;
-    sit.spoj.posli({ t: "start", q }); ukaz(); otazka(); }
+  function nova() { q = sada(); i = n = souper = 0; konec = false; vitez = null; odpocet = 3; start = 0;
+    sit.spoj.posli({ t: "start", q, u: U }); ukaz(); otazka(); }
   function zprava(m) {
     if (m.t === "odchod") { konec = true; napis("Soupeř odešel ze hry."); return; }
     if (m.t === "stav") { souper = Math.min(CIL, +m.n || 0); ukaz(); }
-    if (host) { if (m.t === "cil") rozhodni("s"); if (m.t === "chci") sit.spoj.posli({ t: "start", q }); return; }
-    if (m.t === "start") { q = m.q; i = n = souper = 0; konec = false; vitez = null; odpocet = 3; start = 0; ukaz(); otazka(); }
+    if (host) { if (m.t === "cil") rozhodni("s"); if (m.t === "chci") { uOn = m.u || ""; ukazU(); sit.spoj.posli({ t: "start", q, u: U }); } return; }
+    if (m.t === "start") { uOn = m.u || ""; ukazU(); q = m.u === U ? m.q : sada(); i = n = souper = 0; konec = false; vitez = null; odpocet = 3; start = 0; ukaz(); otazka(); }
     if (m.t === "vitez") { vitez = m.kdo; vysledek(); } }
   el.addEventListener("click", (e) => { const b = e.target.closest("[data-zm]"); if (b) odpoved(+b.dataset.zm); if (e.target.closest('[data-zvo="znovu"]') && sit && host) nova(); });
   function klav(k) { if (/^[1-4]$/.test(k)) odpoved(+k - 1); }
@@ -1656,71 +1740,88 @@ function hra(el, skore, sit, P) {
   let t0 = performance.now(); tik = setInterval(() => { const ted = performance.now(), dt = (ted - t0) / 1000; t0 = ted;
     if (odpocet > 0 && q) { const pred = Math.ceil(odpocet); odpocet = Math.max(0, odpocet - dt); if (!odpocet) { start = ted; otazka(); } else if (Math.ceil(odpocet) !== pred) otazka(); }
     if (!konec && start && !sit) napis(`⏱️ ${cas()} s`); }, 100);
-  if (sit && host) sit.spoj.posli({ t: "start", q }); else if (sit) sit.spoj.posli({ t: "chci" }); else start = performance.now();
-  ukaz(); otazka(); napis("Odpovídej klepnutím, nebo klávesami 1–4.");
+  if (sit && host) sit.spoj.posli({ t: "start", q, u: U }); else if (sit) sit.spoj.posli({ t: "chci", u: U }); else start = performance.now();
+  ukaz(); otazka(); napis(`Obtížnost: <b>${Obtiznost.nazev(U)}</b> · odpovídej klepnutím, nebo klávesami 1–4.`);
   return { stop: () => { clearInterval(tik); document.removeEventListener("keydown", klavesa); }, zprava, klav };
 }
 return { spust, _akt: () => AKT };
 })();
 
 // ================= 📏 Odhadovačka na ose: kde leží zlomek, desetinné číslo nebo procento? – sám, nebo online =================
-// 10 kol. Klepneš na osu, ukáže se správné místo. Body 0–100 podle toho, jak blízko (5 % délky osy = 80 bodů).
-// Online: oba mají stejná čísla (pošle zakladatel), body se ukážou, až tipnou oba; kdo je blíž, má víc bodů.
+// 10 kol. Klepneš na osu, ukáže se správné místo. Body 0–100 podle toho, jak blízko – přísnost podle obtížnosti.
+// Obtížnost: Lehká (osa 0–1, polovinky, čtvrtiny, desetiny), Střední (0–1, od 6. kola 0–2), Obtížná (0–2, sedminy, setiny),
+// Lektorská (0–3, smíšená čísla, odmocniny, π/2). Online: každý má svá čísla podle své obtížnosti; kolo skončí, až tipnou oba.
 const Osa = (() => {
-const KOL = 10;
+const KOL = 10, PRISNOST = { lehka: 300, stredni: 400, obtizna: 500, lektorska: 600 };
 const nahO = (a, b) => a + Math.floor(Math.random() * (b - a + 1)), vyberO = (a) => a[Math.floor(Math.random() * a.length)];
 const des = (x) => String(Math.round(x * 1000) / 1000).replace(".", ",");
-// cíl: { h: html, t: text pro čtečku, v: hodnota, max: konec osy (1 nebo 2) }
-function cil(kolo) {
+const zlO = (a, b) => ({ h: zl(a, b), t: `${a}/${b}`, v: a / b });
+// cíl: { h: html, t: text pro čtečku, v: hodnota, max: konec osy }
+function cil(kolo, u = "stredni") {
+  if (u === "lehka") { const d = vyberO(["zl", "des", "proc"]);
+    if (d === "zl") { const b = vyberO([2, 4, 10]), a = nahO(1, b - 1); return { ...zlO(a, b), max: 1 }; }
+    if (d === "des") { const v = nahO(1, 9) / 10; return { h: des(v), t: des(v), v, max: 1 }; }
+    const p = vyberO([10, 20, 25, 30, 50, 60, 75, 90]); return { h: `${p} %`, t: `${p} %`, v: p / 100, max: 1 }; }
+  if (u === "obtizna") { const d = vyberO(["zl", "zl", "des", "proc"]);
+    if (d === "zl") { let a, b; do { b = vyberO([3, 6, 7, 8, 9, 12]); a = nahO(1, 2 * b - 1); } while (a % b === 0); return { ...zlO(a, b), max: 2 }; }
+    if (d === "des") { const v = nahO(1, 199) / 100; return { h: des(v), t: des(v), v, max: 2 }; }
+    const p = 5 * nahO(1, 39); return { h: `${p} %`, t: `${p} %`, v: p / 100, max: 2 }; }
+  if (u === "lektorska") { const d = vyberO(["zl", "smis", "des", "zvl", "proc"]);
+    if (d === "zl") { let a, b; do { b = vyberO([3, 4, 6, 7, 9, 11]); a = nahO(1, 3 * b - 1); } while (a % b === 0); return { ...zlO(a, b), max: 3 }; }
+    if (d === "smis") { const c = nahO(1, 2), b = vyberO([3, 5, 7, 8]), a = nahO(1, b - 1); return { h: `${c} ${zl(a, b)}`, t: `${c} a ${a}/${b}`, v: c + a / b, max: 3 }; }
+    if (d === "des") { const v = nahO(1, 299) / 100; return { h: des(v), t: des(v), v, max: 3 }; }
+    if (d === "zvl") return { ...vyberO([{ h: "√2", t: "odmocnina ze 2", v: Math.SQRT2 }, { h: "√3", t: "odmocnina ze 3", v: Math.sqrt(3) }, { h: "√5", t: "odmocnina z 5", v: Math.sqrt(5) }, { h: "π/2", t: "pí polovin", v: Math.PI / 2 }, { h: "√8", t: "odmocnina z 8", v: Math.sqrt(8) }]), max: 3 };
+    const p = 5 * nahO(1, 59); return { h: `${p} %`, t: `${p} %`, v: p / 100, max: 3 }; }
+  // střední
   const max = kolo >= 6 ? 2 : 1, druh = vyberO(max === 1 ? ["zl", "zl", "des", "proc"] : ["zl", "smis", "des", "proc"]);
-  if (druh === "zl") { let a, b; do { b = vyberO([3, 4, 5, 6, 8, 10]); a = nahO(1, b * max - 1); } while (a % b === 0); return { h: zl(a, b), t: `${a}/${b}`, v: a / b, max }; }
+  if (druh === "zl") { let a, b; do { b = vyberO([3, 4, 5, 6, 8, 10]); a = nahO(1, b * max - 1); } while (a % b === 0); return { ...zlO(a, b), max }; }
   if (druh === "smis") { const b = vyberO([2, 3, 4, 5]), a = nahO(1, b - 1); return { h: `1 ${zl(a, b)}`, t: `1 a ${a}/${b}`, v: 1 + a / b, max }; }
   if (druh === "des") { const v = max === 1 ? vyberO([nahO(1, 9) / 10, nahO(1, 19) / 20, nahO(1, 99) / 100]) : nahO(11, 19) / 10; return { h: des(v), t: des(v), v, max }; }
   const p = max === 1 ? vyberO([5, 10, 15, 20, 25, 30, 40, 45, 60, 70, 75, 80, 90, 95]) : vyberO([110, 120, 125, 140, 150, 160, 175, 180]); return { h: `${p} %`, t: `${p} %`, v: p / 100, max };
 }
-const body = (tip, c) => Math.max(0, 100 - Math.round((Math.abs(tip - c.v) / c.max) * 400));
+const body = (tip, c, u = "stredni") => Math.max(0, 100 - Math.round((Math.abs(tip - c.v) / c.max) * (PRISNOST[u] || 400)));
 function spust(el, skore, opt, P) {
   return Online2.lobby(el, skore, opt, { id: "os", kanal: "osa", uvod: `Kde na ose leží zlomek, desetinné číslo nebo procento? ${KOL} kol, klepni co nejpřesněji.`,
-    mistni: [{ k: "sam", b: "📏 Sám", s: "Kolik bodů z 1000 nasbíráš?" }], onlinePopis: "Oba stejná čísla – kdo trefí blíž, má víc bodů.",
+    mistni: [{ k: "sam", b: "📏 Sám", s: "Kolik bodů z 1000 nasbíráš?" }], onlinePopis: "Každý svá čísla podle své obtížnosti – kdo nasbírá víc bodů.",
     hra: (e, s, rezim, sit) => hra(e, s, sit, P) });
 }
 function hra(el, skore, sit, P) {
-  const host = !sit || sit.host, ja = host ? "z" : "s", on = host ? "s" : "z";
-  let cile = sit && !host ? null : Array.from({ length: KOL }, (_, i) => cil(i + 1)), i = 0, tipy = {}, soucet = { z: 0, s: 0 }, odhaleno = false, konec = false, dalsi = 0;
+  const host = !sit || sit.host, U = Obtiznost.je();
+  let cile = Array.from({ length: KOL }, (_, i) => cil(i + 1, U)), i = 0, muj = null, jeho = null, soucet = [0, 0], odhaleno = false, konec = false, dalsi = 0, uOn = "";
   el.innerHTML = `${Online2.lista("os", sit)}<div class="os-hra"><p class="os-kolo"></p><div class="os-cil" aria-live="polite"></div>
-    <div class="os-osa" role="slider" tabindex="0" aria-label="Číselná osa – klepni, kde číslo leží" aria-valuemin="0"><div class="os-cara"></div><span class="os-k os-0">0</span><span class="os-k os-1">1</span><span class="os-k os-2">2</span><div class="os-znacky"></div></div>
+    <div class="os-osa" role="slider" tabindex="0" aria-label="Číselná osa – klepni, kde číslo leží" aria-valuemin="0"><div class="os-cara"></div><span class="os-k os-0">0</span><span class="os-k os-1">1</span><span class="os-k os-2">2</span><span class="os-k os-3">3</span><div class="os-znacky"></div></div>
     <p class="pozn pauza-napis os-napis">Klepni na osu tam, kde podle tebe číslo leží.</p></div>`;
   const $o = (s) => el.querySelector(s), napis = (t) => ($o(".os-napis").innerHTML = t);
-  const ukazSkore = () => skore(sit ? `${soucet[ja]} : ${soucet[on]}` : soucet.z);
-  function kresli() { if (!cile) { $o(".os-cil").innerHTML = "Čekám na čísla…"; return; } const c = cile[i];
-    $o(".os-kolo").textContent = `Kolo ${i + 1} z ${KOL}`; $o(".os-cil").innerHTML = `<span class="os-cislo">${c.h}</span>`;
+  const ukazSkore = () => skore(sit ? `${soucet[0]} : ${soucet[1]}` : soucet[0]);
+  function kresli() { const c = cile[i];
+    $o(".os-kolo").textContent = `Kolo ${i + 1} z ${KOL} · ${Obtiznost.nazev(U)}${sit && uOn ? ` · soupeř: ${Obtiznost.nazev(uOn)}` : ""}`; $o(".os-cil").innerHTML = `<span class="os-cislo">${c.h}</span>`;
     const osa = $o(".os-osa"); osa.dataset.max = c.max; osa.setAttribute("aria-valuemax", c.max);
-    const zn = []; if (tipy[ja] != null) zn.push(`<span class="os-tip ja" style="--x:${tipy[ja] / c.max}" title="tvůj tip"></span>`);
-    if (odhaleno) { if (sit && tipy[on] != null) zn.push(`<span class="os-tip on" style="--x:${tipy[on] / c.max}" title="soupeř"></span>`); zn.push(`<span class="os-spravne" style="--x:${c.v / c.max}"><b>${c.h}</b></span>`); }
+    const zn = []; if (muj) zn.push(`<span class="os-tip ja" style="--x:${muj.x / c.max}" title="tvůj tip"></span>`);
+    if (odhaleno) zn.push(`<span class="os-spravne" style="--x:${c.v / c.max}"><b>${c.h}</b></span>`);
     $o(".os-znacky").innerHTML = zn.join(""); ukazSkore(); }
-  function tipni(x) { if (!cile || konec || tipy[ja] != null) return; const c = cile[i]; tipy[ja] = Math.round(Math.max(0, Math.min(c.max, x)) * 1000) / 1000;
-    if (!sit) { odhal(); return; } sit.spoj.posli({ t: "tip", i, x: tipy[ja] }); napis("Čekám na tip soupeře…"); kresli(); if (host) zkusOdhalit(); }
-  function zkusOdhalit() { if (tipy.z != null && tipy.s != null && !odhaleno) { sit.spoj.posli({ t: "odhal", i, tipy }); odhal(); } }
-  function odhal() { odhaleno = true; const c = cile[i], b = {}; ["z", "s"].forEach((k) => { if (tipy[k] != null) { b[k] = body(tipy[k], c); soucet[k] += b[k]; } });
-    napis(sit ? `Ty <b>${b[ja]}</b> b. · soupeř <b>${b[on]}</b> b.` : `<b>${b[ja]}</b> bodů${b[ja] >= 95 ? " – přesně! 🎯" : b[ja] >= 80 ? " – skvělé" : ""}.`); kresli();
-    if (host) dalsi = setTimeout(() => { if (i + 1 >= KOL) { konecHry(); if (sit) sit.spoj.posli({ t: "konec", soucet }); } else { posun(i + 1); if (sit) sit.spoj.posli({ t: "kolo", i }); } }, sit ? 2600 : 1700); }
-  function posun(n) { i = n; tipy = {}; odhaleno = false; napis("Klepni na osu tam, kde podle tebe číslo leží."); kresli(); }
-  function konecHry() { konec = true; const a = soucet[ja], b = soucet[on];
-    if (!sit) { const r = P.rekord("osa", a); napis(`Konec: <b>${a}</b> bodů z 1000${r ? " – nový rekord! 🏆" : ""}. <button type="button" class="maly" data-os="m-sam">Znovu</button>`); return; }
+  function tipni(x) { if (konec || muj) return; const c = cile[i], t = Math.round(Math.max(0, Math.min(c.max, x)) * 1000) / 1000; muj = { x: t, b: body(t, c, U) };
+    if (!sit) { odhal(); return; } sit.spoj.posli({ t: "tip", i, b: muj.b, u: U }); if (!jeho) napis("Čekám na tip soupeře…"); kresli(); zkusOdhalit(); }
+  function zkusOdhalit() { if (muj && (jeho || !sit) && !odhaleno) odhal(); }
+  function odhal() { odhaleno = true; soucet[0] += muj.b; if (jeho) soucet[1] += jeho.b;
+    napis(sit ? `Ty <b>${muj.b}</b> b. · soupeř <b>${jeho.b}</b> b.` : `<b>${muj.b}</b> bodů${muj.b >= 95 ? " – přesně! 🎯" : muj.b >= 80 ? " – skvělé" : ""}.`); kresli();
+    if (host) dalsi = setTimeout(() => { if (i + 1 >= KOL) { if (sit) sit.spoj.posli({ t: "konec" }); konecHry(); } else { if (sit) sit.spoj.posli({ t: "kolo", i: i + 1 }); posun(i + 1); } }, sit ? 2600 : 1700); }
+  function posun(n) { i = n; muj = null; jeho = cekajici[n] || null; delete cekajici[n]; odhaleno = false; napis("Klepni na osu tam, kde podle tebe číslo leží."); kresli(); }
+  const cekajici = {}; // tip soupeře z dalšího kola, který přišel dřív než pokyn ke kolu
+  function konecHry() { konec = true; const [a, b] = soucet;
+    if (!sit) { const r = P.rekord("osa-" + U, a); napis(`Konec: <b>${a}</b> bodů z 1000${r ? " – nový rekord! 🏆" : ""}. <button type="button" class="maly" data-os="m-sam">Znovu</button>`); return; }
     napis(`${a > b ? "🎉 Výhra" : a < b ? "Soupeř vyhrál" : "Remíza"} <b>${a} : ${b}</b>${host ? ` <button type="button" class="maly" data-osz="znovu">Hrát znovu</button>` : ""}`); }
-  function nova() { cile = Array.from({ length: KOL }, (_, k) => cil(k + 1)); soucet = { z: 0, s: 0 }; konec = false; posun(0); sit.spoj.posli({ t: "start", cile }); }
+  function nova() { cile = Array.from({ length: KOL }, (_, k) => cil(k + 1, U)); soucet = [0, 0]; konec = false; posun(0); }
   function zprava(m) {
     if (m.t === "odchod") { konec = true; clearTimeout(dalsi); napis("Soupeř odešel ze hry."); return; }
-    if (host) { if (m.t === "tip" && m.i === i) { tipy.s = m.x; kresli(); zkusOdhalit(); } if (m.t === "chci") sit.spoj.posli({ t: "start", cile, i }); return; }
-    if (m.t === "start") { cile = m.cile; soucet = { z: 0, s: 0 }; konec = false; posun(m.i || 0); }
-    if (m.t === "odhal" && m.i === i) { tipy = m.tipy; odhal(); }
+    if (m.t === "tip") { uOn = m.u || uOn; if (m.i === i && !odhaleno) { jeho = { b: +m.b || 0 }; kresli(); zkusOdhalit(); } else if (m.i > i) cekajici[m.i] = { b: +m.b || 0 }; return; }
+    if (m.t === "znovu" && !host) { nova(); return; }
+    if (host) return;
     if (m.t === "kolo") posun(m.i);
-    if (m.t === "konec") { soucet = m.soucet; ukazSkore(); konecHry(); } }
+    if (m.t === "konec") konecHry(); }
   const osa = $o(".os-osa");
-  osa.addEventListener("pointerdown", (e) => { const r = $o(".os-cara").getBoundingClientRect(); if (!cile) return; tipni(((e.clientX - r.left) / r.width) * cile[i].max); });
-  osa.addEventListener("keydown", (e) => { if (!cile || !/^[0-9]$/.test(e.key)) return; tipni((+e.key / 10) * cile[i].max); }); // klávesy 0–9 = desetiny osy
-  el.addEventListener("click", (e) => { if (e.target.closest('[data-osz="znovu"]') && sit && host) nova(); });
-  if (sit && host) sit.spoj.posli({ t: "start", cile, i }); else if (sit) sit.spoj.posli({ t: "chci" });
+  osa.addEventListener("pointerdown", (e) => { const r = $o(".os-cara").getBoundingClientRect(); tipni(((e.clientX - r.left) / r.width) * cile[i].max); });
+  osa.addEventListener("keydown", (e) => { if (!/^[0-9]$/.test(e.key)) return; tipni((+e.key / 10) * cile[i].max); }); // klávesy 0–9 = desetiny osy
+  el.addEventListener("click", (e) => { if (e.target.closest('[data-osz="znovu"]') && sit && host) { sit.spoj.posli({ t: "znovu" }); nova(); } });
   kresli();
   return { stop: () => clearTimeout(dalsi), zprava };
 }
@@ -1730,41 +1831,51 @@ return { spust, cil, body };
 // ================= 🎯 Úhlové dělo: odhadni úhel bez čísel – nastav hlaveň na zadaný úhel a vystřel =================
 // 10 kol. Při míření se úhel neukazuje (jen čtvrtkruh s 0°, 45° a 90°). Po výstřelu se ukáže skutečný úhel a odchylka.
 // Balónek visí tam, kam doletí koule při přesném úhlu – kdo odhadne přesně, trefí. Body za kolo: 10 − odchylka ve stupních.
+// Obtížnost: Lehká (násobky 15°, značky po 15°), Střední (po 5°, značky 0°, 45°, 90°), Obtížná (po 1°, jen 0° a 90°),
+// Lektorská (po 1° až do 170° – i tupé úhly, dělo uprostřed, žádné značky).
 const Delo = (() => {
-const KOL = 10, G = 260, X0 = 46, Y0 = 0; // Y0 = výška ústí nad zemí se počítá z výšky plátna
+const KOL = 10, G = 260;
+const rozsah = (od, do_, krok) => Array.from({ length: Math.floor((do_ - od) / krok) + 1 }, (_, i) => od + i * krok);
+const NAST = {
+  lehka: { uhly: [15, 30, 45, 60, 75], znacky: [0, 15, 30, 45, 60, 75, 90], max: 89, stred: false },
+  stredni: { uhly: rozsah(10, 85, 5), znacky: [0, 45, 90], max: 89, stred: false },
+  obtizna: { uhly: rozsah(8, 82, 1), znacky: [0, 90], max: 89, stred: false },
+  lektorska: { uhly: rozsah(10, 170, 1).filter((u) => Math.abs(u - 90) > 4), znacky: [], max: 175, stred: true },
+};
 function spust(el, skore, opt, P) {
-  const { W, H } = P; el.innerHTML = `<div class="dl-plocha"></div><div class="radek dl-ovladani"><button type="button" class="maly" data-dl="-5">−5°</button><button type="button" class="maly" data-dl="-1">−1°</button>
+  const { W, H } = P, U = Obtiznost.je(), N = NAST[U] || NAST.stredni, X0 = N.stred ? W / 2 : 46; el.innerHTML = `<div class="dl-plocha"></div><div class="radek dl-ovladani"><button type="button" class="maly" data-dl="-5">−5°</button><button type="button" class="maly" data-dl="-1">−1°</button>
     <button type="button" class="hlavni" data-dl="vystrel">Vystřelit</button><button type="button" class="maly" data-dl="1">+1°</button><button type="button" class="maly" data-dl="5">+5°</button></div>`;
-  const pl = el.querySelector(".dl-plocha"), { cv, g, napis } = P.platno(pl), ZEM = H - 26, V0 = Math.sqrt((G * (W - X0 - 30)) / 1); // dostřel při 45° ≈ šířka plátna
-  const uhly = () => { const a = Array.from({ length: 16 }, (_, i) => 10 + i * 5); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a.slice(0, KOL); };
+  const pl = el.querySelector(".dl-plocha"), { cv, g, napis } = P.platno(pl), ZEM = H - 26, V0 = Math.sqrt(G * (W - X0 - 30)); // dostřel při 45° ≈ k okraji plátna
+  const uhly = () => { let a = [...N.uhly]; while (a.length < KOL) a = a.concat(N.uhly); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a.slice(0, KOL); };
   let cile, kolo, uhel, body, let_ = null, vysl = null, raf, konec = false, t0 = 0;
   const rad = (d) => (d * Math.PI) / 180, dolet = (d) => (V0 * V0 * Math.sin(2 * rad(d))) / G;
-  function nova() { cile = uhly(); kolo = 0; uhel = 45; body = 0; let_ = null; vysl = null; konec = false; skore(0); zadani(); }
+  function nova() { cile = uhly(); kolo = 0; uhel = N.stred ? 90 : 45; body = 0; let_ = null; vysl = null; konec = false; skore(0); zadani(); }
   const tl = (t) => { const b = el.querySelector('[data-dl="vystrel"]'); if (b) b.textContent = t; };
-  function zadani() { tl("Vystřelit"); napis(`Kolo ${kolo + 1} z ${KOL}: nastav hlaveň na <b>${cile[kolo]}°</b> a vystřel. Táhni hlaveň myší nebo prstem (nebo šipky), pak Vystřelit (mezerník).`); }
+  function zadani() { tl("Vystřelit"); napis(`${Obtiznost.nazev(U)} · kolo ${kolo + 1} z ${KOL}: nastav hlaveň na <b>${cile[kolo]}°</b> a vystřel. Táhni hlaveň myší nebo prstem (nebo šipky), pak Vystřelit (mezerník).`); }
   function vystrel() { if (let_ || konec) { if (konec) nova(); else if (vysl) dalsi(); return; } if (vysl) { dalsi(); return; }
     let_ = { t: 0, d: uhel }; }
-  function dalsi() { vysl = null; kolo++; if (kolo >= KOL) { konec = true; const r = P.rekord("delo", body); tl("Hrát znovu"); napis(`Konec: <b>${body}</b> bodů ze ${KOL * 10}${r ? " – nový rekord! 🏆" : ""}.`); return; } zadani(); }
+  function dalsi() { vysl = null; kolo++; if (kolo >= KOL) { konec = true; const r = P.rekord("delo-" + U, body); tl("Hrát znovu"); napis(`Konec: <b>${body}</b> bodů ze ${KOL * 10}${r ? " – nový rekord! 🏆" : ""}.`); return; } zadani(); }
   function dopad() { const c = cile[kolo], odch = Math.abs(uhel - c), b = Math.max(0, 10 - odch), zasah = Math.abs(dolet(uhel) - dolet(c)) < 16; body += b; skore(body);
     vysl = { c, u: uhel, zasah }; let_ = null; tl(kolo + 1 >= KOL ? "Výsledek" : "Další kolo");
     napis(`${zasah ? "💥 Zásah! " : ""}Hlaveň mířila na <b>${uhel}°</b>, zadání bylo <b>${c}°</b> → odchylka ${odch}°, <b>+${b}</b> b. Klepni na Další kolo.`); }
-  function nastav(d) { if (let_ || vysl || konec) return; uhel = Math.max(1, Math.min(89, Math.round(d))); }
+  function nastav(d) { if (let_ || vysl || konec) return; uhel = Math.max(1, Math.min(N.max, Math.round(d))); }
   cv.addEventListener("pointerdown", (e) => { cv.setPointerCapture(e.pointerId); miri(e); }); cv.addEventListener("pointermove", (e) => { if (e.buttons) miri(e); });
-  function miri(e) { const r = cv.getBoundingClientRect(), x = ((e.clientX - r.left) / r.width) * W - X0, y = ZEM - ((e.clientY - r.top) / r.height) * H; if (x > 4) nastav((Math.atan2(Math.max(0, y), x) * 180) / Math.PI); }
+  function miri(e) { const r = cv.getBoundingClientRect(), x = ((e.clientX - r.left) / r.width) * W - X0, y = ZEM - ((e.clientY - r.top) / r.height) * H; if (N.stred || x > 4) nastav((Math.atan2(Math.max(0, y), x) * 180) / Math.PI); }
   el.addEventListener("click", (e) => { const b = e.target.closest("[data-dl]"); if (!b) return; if (b.dataset.dl === "vystrel") vystrel(); else nastav(uhel + +b.dataset.dl); });
   function klav(k) { if (k === "ArrowUp" || k === "ArrowRight") nastav(uhel + 1); if (k === "ArrowDown" || k === "ArrowLeft") nastav(uhel - 1); if (k === " ") vystrel(); }
   function kresli(t) { raf = requestAnimationFrame(kresli); if (!P.vidim()) { t0 = t; return; } const dt = Math.min(0.05, ((t - (t0 || t)) / 1000)); t0 = t; const c = P.barvy();
     g.fillStyle = c.pozadi; g.fillRect(0, 0, W, H); g.fillStyle = c.cara; g.fillRect(0, ZEM, W, H - ZEM);
-    // čtvrtkruh bez čísel (jen 0°, 45°, 90°)
-    g.strokeStyle = c.cara; g.lineWidth = 1.5; g.beginPath(); g.arc(X0, ZEM, 70, -Math.PI / 2, 0); g.stroke();
-    [0, 45, 90].forEach((d) => { g.beginPath(); g.moveTo(X0 + 64 * Math.cos(rad(d)), ZEM - 64 * Math.sin(rad(d))); g.lineTo(X0 + 76 * Math.cos(rad(d)), ZEM - 76 * Math.sin(rad(d))); g.stroke(); });
-    g.fillStyle = c.cara; g.font = "600 11px system-ui, sans-serif"; g.textAlign = "center"; g.fillText("0°", X0 + 86, ZEM - 2); g.fillText("45°", X0 + 64, ZEM - 64); g.fillText("90°", X0, ZEM - 80);
-    if (cile && !konec) { const cx = X0 + dolet(cile[kolo]); if (cx < W - 6) { g.fillStyle = vysl && vysl.zasah ? c.z : c.b; g.beginPath(); g.ellipse(cx, ZEM - 34, 11, 14, 0, 0, 7); g.fill(); g.strokeStyle = c.ink; g.lineWidth = 1; g.beginPath(); g.moveTo(cx, ZEM - 20); g.lineTo(cx, ZEM); g.stroke(); } }
+    // úhloměr: čtvrtkruh se značkami podle obtížnosti (lektorská: půlkruh bez značek)
+    g.strokeStyle = c.cara; g.lineWidth = 1.5; g.beginPath(); g.arc(X0, ZEM, 70, N.stred ? -Math.PI : -Math.PI / 2, 0); g.stroke();
+    g.fillStyle = c.cara; g.font = "600 11px system-ui, sans-serif"; g.textAlign = "center";
+    N.znacky.forEach((d) => { g.beginPath(); g.moveTo(X0 + 64 * Math.cos(rad(d)), ZEM - 64 * Math.sin(rad(d))); g.lineTo(X0 + 76 * Math.cos(rad(d)), ZEM - 76 * Math.sin(rad(d))); g.stroke();
+      g.fillText(d + "°", X0 + 90 * Math.cos(rad(d)), ZEM - 90 * Math.sin(rad(d)) + (d === 0 ? -2 : 4)); });
+    if (cile && !konec) { const cx = X0 + dolet(cile[kolo]); if (cx > 6 && cx < W - 6) { g.fillStyle = vysl && vysl.zasah ? c.z : c.b; g.beginPath(); g.ellipse(cx, ZEM - 34, 11, 14, 0, 0, 7); g.fill(); g.strokeStyle = c.ink; g.lineWidth = 1; g.beginPath(); g.moveTo(cx, ZEM - 20); g.lineTo(cx, ZEM); g.stroke(); } }
     // hlaveň
     g.save(); g.translate(X0, ZEM); g.rotate(-rad(uhel)); g.fillStyle = c.ink; g.beginPath(); g.roundRect(0, -6, 46, 12, 4); g.fill(); g.restore();
     g.fillStyle = c.a; g.beginPath(); g.arc(X0, ZEM, 13, Math.PI, 0); g.fill();
     if (let_) { let_.t += dt * 1.6; const d = rad(let_.d), x = X0 + V0 * Math.cos(d) * let_.t, y = ZEM - (V0 * Math.sin(d) * let_.t - 0.5 * G * let_.t * let_.t);
-      g.fillStyle = c.ink; g.beginPath(); g.arc(x, Math.min(y, ZEM), 5, 0, 7); g.fill(); if (y >= ZEM && let_.t > 0.05) dopad(); else if (x > W + 20) dopad(); }
+      g.fillStyle = c.ink; g.beginPath(); g.arc(x, Math.min(y, ZEM), 5, 0, 7); g.fill(); if (y >= ZEM && let_.t > 0.05) dopad(); else if (x > W + 20 || x < -20) dopad(); }
     if (vysl) { // skutečný a zadaný úhel
       [[vysl.u, c.a, `${vysl.u}°`], [vysl.c, c.z, `${vysl.c}°`]].forEach(([d, barva, txt], i) => { g.strokeStyle = barva; g.lineWidth = 2.5; g.beginPath(); g.moveTo(X0, ZEM); g.lineTo(X0 + 120 * Math.cos(rad(d)), ZEM - 120 * Math.sin(rad(d))); g.stroke();
         g.fillStyle = barva; g.font = "700 14px system-ui, sans-serif"; g.fillText(txt, X0 + 138 * Math.cos(rad(d)), ZEM - 138 * Math.sin(rad(d)) + (i ? 12 : -2)); }); } }
@@ -1794,13 +1905,24 @@ let hra = null, posledni = ZAK ? "#" + ZAK.lekce[0] : "#zlomky";
 const bezi = () => Rytmus.bezi(), zbyva = () => Rytmus.zbyva;
 const mmss = (ms) => `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, "0")}`;
 window.addEventListener("hashchange", () => { if (!/^#(hry|testy)/.test(location.hash) && location.hash) posledni = location.hash.replace(/-\d+$/, ""); });
+// údaj na kartě hry: počet hráčů a rekord (u vzdělávacích her pro zvolenou obtížnost)
+function info(id) { const u = Obtiznost.je(), r = (k) => nacist("pauza-" + k, 0);
+  if (id === "zavod") return `1–2 hráči · nejlepší: ${r("zavod-" + u) ? String(r("zavod-" + u) / 10).replace(".", ",") + " s" : "–"}`;
+  if (id === "osa") return `1–2 hráči · nejlepší: ${r("osa-" + u) || "–"}`;
+  if (id === "delo") return `nejlepší: ${r("delo-" + u) || "–"} ze 100`;
+  if (id === "had") return `1–2 hráči · nejlepší: ${r("had")} · s čísly: ${r("had-cisla-" + u) || "–"}`;
+  if (["lode", "piskvorky", "pingpong"].includes(id)) return "1–2 hráči";
+  if (id === "clovece") return "2–4 hráči";
+  if (id === "pexeso") return `nejmíň otočení: ${r("pexeso") || "–"}`;
+  return `nejlepší: ${r(id)}`; }
 function kresli() {
   app.hidden = !Odhaleni.je("pauza"); if (app.hidden) return;
   const muze = true, doPauzy = 0, pl = $("#pauza-plocha", app), drz = pl && !pl.hidden ? pl : null;
   app.innerHTML = `${window.__HRY_VEREJNE ? "" : `<h3>☕ Hry na oddech</h3>
     <p class="pozn">Kdykoli si chceš odpočinout. Hry body nedávají. Lodě, piškvorky a ping-pong si zahraješ i online – každý na svém zařízení, spojíte se kódem nebo QR kódem.</p>`}
+    ${Obtiznost.volba()}<p class="pozn obt-pozn">Obtížnost platí pro závod, odhadovačku, hada s čísly a dělo – každý hráč si volí svou.</p>
     <div class="hry">${HRY_P.map((h) => `<article class="hra-karta${muze ? "" : " zamceno"}"><b>${h.ik} ${h.n}</b><p class="pozn">${h.p}</p>
-      <span class="pozn">${h.id === "delo" ? `nejlepší: ${nacist("pauza-delo", 0) || "–"} ze 100` : h.id === "osa" ? `1–2 hráči · nejlepší: ${nacist("pauza-osa", 0) || "–"}` : h.id === "zavod" ? `1–2 hráči · nejlepší: ${nacist("pauza-zavod", 0) ? String(nacist("pauza-zavod", 0) / 10).replace(".", ",") + " s" : "–"}` : h.id === "lode" || h.id === "piskvorky" || h.id === "pingpong" ? "1–2 hráči" : h.id === "clovece" ? "2–4 hráči" : h.id === "pexeso" ? `nejmíň otočení: ${nacist("pauza-" + h.id, 0) || "–"}` : `nejlepší: ${nacist("pauza-" + h.id, 0)}`}</span>
+      <span class="pozn">${info(h.id)}</span>
       <button type="button" class="hlavni" data-pauza="${h.id}" ${muze ? "" : "disabled"}>${muze ? "Hrát" : `🔒 za ${doPauzy} min`}</button></article>`).join("")}</div>
     <div class="pauza-plocha" id="pauza-plocha" hidden></div>`;
   if (drz) $("#pauza-plocha", app).replaceWith(drz);
@@ -1956,6 +2078,7 @@ app.addEventListener("click", (e) => { const b = e.target.closest("[data-pauza],
   if (b.dataset.pa === "zavrit") { zastav(); $("#pauza-plocha", app).hidden = true; kresli(); } });
 document.addEventListener("den-zmena", () => { if (!$("#lekce-hry").hidden && !hra) kresli(); });
 document.addEventListener("odhaleni-zmena", () => { if (!hra) kresli(); });
+document.addEventListener("obtiznost-zmena", () => kresli());
 window.addEventListener("hashchange", () => { if (location.hash === "#hry") kresli(); else if (hra && hra.id !== "pexeso") { zastav(); const pl = $("#pauza-plocha", app); if (pl) pl.hidden = true; } });
 kresli();
 // pozvánka odkazem / QR kódem: #hra-lode-K7QX → rovnou do místnosti (host nepotřebuje pauzu ani účet)
@@ -1966,7 +2089,7 @@ window.addEventListener("hashchange", zOdkazu); setTimeout(zOdkazu, 0);
 window.__pauza = { otevri, get hra() { return hra; }, konecPauzy };
 })();
 
-window.__hryTest = { teren: Had.teren, zavodSp: Zavod._akt, osa: Osa };
+window.__hryTest = { teren: Had.teren, zavodSp: Zavod._akt, osa: Osa, had: Had, obt: Obtiznost };
 })();
 </script>
 </body></html>
