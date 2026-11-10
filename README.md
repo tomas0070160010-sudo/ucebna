@@ -3,6 +3,7 @@
 Stránka pro doučování a hry (přihlášení přes Supabase projekt `ucebna`).
 
 ## Verze
+- **0.8.2** (10. 11. 2026) – stránka her: Tetris online souboj (kód nebo QR kód, stejný čas, pauza u obou), způsob odpovědi určí hra, pokusy, pomalý dopad, WSAD. Potřebuje Matiku 3.20.
 - **0.8.1** (10. 11. 2026) – stránka her: nová hra Tetris se zlomky (nejdřív zjednoduš, pak poskládej; obtížnost podle hráče). Potřebuje Matiku 3.19.
 - **0.8** (10. 11. 2026) – stránka her: vzdělávací hry Závod v počítání (i online), Odhadovačka na ose (i online), Had s čísly, Úhlové dělo; obtížnost Lehká / Střední / Obtížná / Lektorská – každý hráč si volí svou. Potřebuje Matiku 3.17.
 - **0.7** (10. 11. 2026) – veřejná stránka `hry/` bez přihlášení a bez dat: lodě, piškvorky, ping-pong a had online (soupeř načte QR kód z Matiky nebo ze stránky her), Člověče a pexeso. Odkaz „Jen hry – bez přihlášení“ na přihlášení. `hry/index.html` se sestavuje ze stejných souborů her jako Matika (`sestav-hry.py`) – neupravovat ručně. Potřebuje Matiku 3.16 (QR kód míří sem).
