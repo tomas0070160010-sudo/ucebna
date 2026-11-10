@@ -3,6 +3,7 @@
 Stránka pro doučování a hry (přihlášení přes Supabase projekt `ucebna`).
 
 ## Verze
+- **0.2** (10. 11. 2026) – jeden soubor Matiky pro všechny: žákovskou verzi si Učebna složí sama z nastavení lektora (tabulka `nastaveni`, klíč `zak`).
 - **0.1** (10. 11. 2026) – přihlášení jménem nebo e-mailem a heslem, dlaždice aplikací, Matika ze zamčeného úložiště v rámu s automatickým ukládáním postupu (tabulka `stav`), aktivita, Správa souborů pro správce.
 
 ## Jak to funguje

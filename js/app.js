@@ -50,8 +50,12 @@ async function spustit(app) {
   try {
     await stahnout(app, z.predpona, ja.id);
     const lektor = ja.spravce || ja.pristupy[app] === "lektor";
-    let html = null; for (const soubor of lektor ? ["lektor.html", "zak.html"] : ["zak.html"]) { try { html = await souborText(`${app}/${soubor}`); break; } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; } }
-    if (!html) { stavSync(lektor ? "Soubor aplikace tu ještě není – nahraj ho ve Správě." : "Aplikace tu ještě není. Napiš lektorovi.", "ne"); return; }
+    // jeden soubor aplikace pro všechny; starší zvlášť nahrané verze (lektor.html / zak.html) jako záloha
+    let html = null; for (const soubor of lektor ? ["matika.html", "lektor.html", "zak.html"] : ["matika.html", "zak.html"]) { try { html = await souborText(`${app}/${soubor}`); break; } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; } }
+    if (!html) { stavSync(lektor ? "Matika tu ještě není – nahraj ji ve Správě." : "Matika tu ještě není. Lektor ji brzy přidá.", "ne"); return; }
+    // soubor z artefaktu nemá kostru stránky – bez <!doctype> by se kreslil ve starém režimu prohlížeče
+    if (!/^\s*<!doctype/i.test(html)) html = `<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>${html}</body></html>`;
+    if (!lektor) html = await zakovska(app, html);
     if (bezi && bezi.url) URL.revokeObjectURL(bezi.url);
     const url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
     bezi = { app, predpona: z.predpona, url, minuty: 0 };
@@ -61,6 +65,16 @@ async function spustit(app) {
     bezi.casovac = setInterval(ulozit, 20000);
     bezi.uceniCas = setInterval(() => { if (document.visibilityState !== "visible") return; bezi.minuty++; if (bezi.minuty % 5 === 0) funkce("zapis_aktivitu", { app, co: "uceni", min: 5 }); }, 60000);
   } catch (e) { if (e.kod === "odhlaseno") { zastavit(); ukaz("prihlaseni"); hlaseni(e.message); } else stavSync(e.message, "ne"); }
+}
+// žákovská verze: do souboru se vloží nastavení od lektora (lekce, odemykání, cíl dne) – stejně jako soubor ze Sdílet
+async function zakovska(app, html) {
+  if (new DOMParser().parseFromString(html, "text/html").getElementById("zak-data")) return html; // už je to soubor pro žáka
+  const [n] = await tabulka(`nastaveni?select=data&aplikace=eq.${app}&uzivatel=eq.${ja.id}`);
+  const zak = (n && n.data && n.data.zak) || { vytvoreno: new Date().toISOString().slice(0, 10), lekce: ["zlomky", "uhly", "vyrazy", "rovnice", "geometrie", "telesa", "konstrukce", "grafy", "procenta", "rady", "cas", "slovni"],
+    odemceni: { lekce: {}, kroky: {} }, cilDne: 50, nastaveni: { postupne: true, klic: "po", casomira: true }, testy: [] };
+  const vlozit = `<script type="application/json" id="zak-data">${JSON.stringify(zak).replace(/</g, "\\u003c")}<\/script>\n`;
+  const i = html.search(/<script id="matika-js">/);
+  return i >= 0 ? html.slice(0, i) + vlozit + html.slice(i) : html.replace(/<\/body>/i, vlozit + "</body>");
 }
 function zastavit() { if (!bezi) return; clearInterval(bezi.casovac); clearInterval(bezi.uceniCas); if (bezi.url) URL.revokeObjectURL(bezi.url); $("#ramec").src = "about:blank"; bezi = null; }
 
@@ -78,7 +92,7 @@ document.addEventListener("click", async (e) => { const b = e.target.closest("[d
   if (b.dataset.a === "odhlasit") { await ulozit(); zastavit(); Object.entries(APLIKACE).forEach(([app, z]) => { if (z.predpona) smazMistni(app, z.predpona); }); await odhlasit(); ja = null; ukaz("prihlaseni"); } });
 
 // ---------- Správa: soubory aplikací (jen správce) ----------
-const SOUBORY = [["matika", "zak", "Matika – pro žákyni", "Vyrobíš ho v Matice: Testy › Sdílet."], ["matika", "lektor", "Matika – pro lektora", "Celá Matika (soubor matika-po-krocich-v….html z OneDrivu)."]];
+const SOUBORY = [["matika", "matika", "Matika po krocích", "soubor matika-po-krocich-v….html z OneDrivu – žákyně dostane svou verzi sama"]];
 async function nactiSoubory() {
   let seznam = []; try { seznam = await seznamSouboru("matika/"); } catch (e) { /* ukáže se jako nenahráno */ }
   $("#soubory").innerHTML = SOUBORY.map(([app, kdo, nazev, kde]) => { const f = seznam.find((x) => x.name === `${kdo}.html`);
@@ -88,8 +102,8 @@ async function nactiSoubory() {
 document.addEventListener("change", async (e) => { const i = e.target.closest("[data-nahrat]"); if (!i || !i.files[0]) return;
   const [app, kdo] = i.dataset.nahrat.split("/"), soubor = i.files[0], st = $("#sprava-stav"); i.value = "";
   const text = await soubor.text(), jeZak = !!new DOMParser().parseFromString(text, "text/html").getElementById("zak-data");
-  if (kdo === "zak" && !jeZak) { st.textContent = "Tohle není soubor pro žákyni. Vyrob ho v Matice: Testy › Sdílet."; return; }
-  if (kdo === "lektor" && jeZak) { st.textContent = "Tohle je soubor pro žákyni – nahraj ho do řádku „pro žákyni“."; return; }
+  if (jeZak) { st.textContent = "Tohle je soubor pro žákyni ze Sdílet. Nahraj celou Matiku – soubor matika-po-krocich-v….html z OneDrivu."; return; }
+  if (!/<script id="matika-js">/.test(text)) { st.textContent = "Tohle nevypadá jako soubor Matiky. Vyber matika-po-krocich-v….html."; return; }
   st.textContent = "Nahrávám…";
   try { await nahratSoubor(`${app}/${kdo}.html`, new Blob([text], { type: "text/html" })); st.textContent = `Nahráno ${hodiny()}.`; nactiSoubory(); }
   catch (x) { st.textContent = "Nahrání se nepovedlo: " + x.message; } });
