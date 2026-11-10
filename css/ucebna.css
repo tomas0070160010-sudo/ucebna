@@ -1,0 +1,57 @@
+/* Učebna – stejné barvy a papír s mřížkou jako Matika */
+:root { --papir: #fbfcf7; --mrizka: #e4ebf1; --karta: #ffffff; --linka: #d5dce5; --inkoust: #1d2946; --tuzka: #59647a;
+  --modra: #2e6cd0; --cervena: #cf3f36; --zelena: #1f7f54; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --papir: #131826; --mrizka: #1c2334; --karta: #1a2131; --linka: #2f394d; --inkoust: #e6ebf6; --tuzka: #a4aec3;
+  --modra: #72a5ff; --cervena: #ff6c62; --zelena: #4dc690; color-scheme: dark; } }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { min-height: 100vh; font: 17px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--inkoust); background: var(--papir);
+  background-image: linear-gradient(var(--mrizka) 1px, transparent 1px), linear-gradient(90deg, var(--mrizka) 1px, transparent 1px); background-size: 28px 28px; }
+h1, h2, h3 { margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.karta { background: var(--karta); border: 1.5px solid var(--linka); border-radius: 18px; }
+.pozn { color: var(--tuzka); font-size: 15px; margin: 0; }
+button, .tl { font: 700 16px/1 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--inkoust); background: var(--karta); border: 1.5px solid var(--linka);
+  border-radius: 10px; padding: 11px 15px; cursor: pointer; touch-action: manipulation; }
+button:hover, .tl:hover { border-color: var(--modra); }
+button:disabled { opacity: .55; cursor: default; }
+.hlavni { background: var(--inkoust); border-color: var(--inkoust); color: var(--karta); }
+:focus-visible { outline: 3px solid var(--modra); outline-offset: 2px; }
+
+/* přihlášení */
+.stred { min-height: 100vh; display: grid; place-items: center; padding: 24px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); }
+.uvod { width: 100%; max-width: 420px; padding: 30px 26px; display: grid; gap: 14px; }
+.uvod h1 { font-size: 34px; }
+.pod { margin: 0; color: var(--tuzka); }
+form { display: grid; gap: 14px; }
+label { display: grid; gap: 6px; font-weight: 700; font-size: 15px; }
+input { font: 17px/1.3 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--inkoust); background: var(--papir); border: 1.5px solid var(--linka); border-radius: 10px; padding: 12px 14px; width: 100%; }
+input:focus { border-color: var(--modra); outline: none; }
+.chyba { margin: 0; color: var(--cervena); font-weight: 700; font-size: 15px; }
+
+/* lišta a domů */
+.lista { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  padding-top: max(10px, env(safe-area-inset-top, 0px)); background: var(--papir); border-bottom: 1.5px solid var(--linka); }
+.znacka { font-size: 19px; }
+.kdo { margin-left: auto; color: var(--tuzka); font-size: 15px; }
+.lista button { padding: 8px 12px; font-size: 15px; }
+.obsah { max-width: 880px; margin: 0 auto; padding: 26px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 20px; }
+.obsah h2 { font-size: 28px; }
+.mrizka { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.dlazdice { display: grid; gap: 4px; text-align: left; padding: 20px; border-radius: 18px; line-height: 1.35; font-weight: 400; }
+.dlazdice b { font-size: 20px; }
+.dlazdice small { color: var(--tuzka); font-size: 15px; }
+.dlazdice .znak { font-size: 30px; line-height: 1; color: var(--modra); font-weight: 700; margin-bottom: 6px; }
+.dlazdice:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 6px 18px color-mix(in srgb, var(--inkoust) 10%, transparent); }
+.sprava { padding: 20px; display: grid; gap: 12px; }
+.soubor { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--linka); flex-wrap: wrap; }
+.soubor > div { display: grid; min-width: 0; flex: 1 1 260px; }
+.soubor small { color: var(--tuzka); font-size: 14px; }
+
+/* spuštěná aplikace */
+.aplikace { position: fixed; inset: 0; display: flex; flex-direction: column; background: var(--papir); }
+.lista.tenka { position: static; padding-block: 6px; gap: 14px; }
+.lista.tenka button { padding: 6px 10px; font-size: 14px; }
+.stav-sync { color: var(--tuzka); font-size: 14px; } .stav-sync.ok { color: var(--zelena); } .stav-sync.ne { color: var(--cervena); font-weight: 700; }
+#ramec { flex: 1; width: 100%; border: 0; background: var(--papir); }
+@media (prefers-reduced-motion: reduce) { .dlazdice:hover { transform: none; } }

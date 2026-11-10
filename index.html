@@ -3,26 +3,49 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Učebna</title>
 <meta name="robots" content="noindex">
-<style>
-  :root { --papir: #fbfcf7; --karta: #ffffff; --inkoust: #1d2946; --tuzka: #59647a; --linka: #d5dce5; --modra: #2e6cd0; --mrizka: #e4ebf1; color-scheme: light; }
-  @media (prefers-color-scheme: dark) { :root { --papir: #131826; --karta: #1a2131; --inkoust: #e6ebf6; --tuzka: #a4aec3; --linka: #2f394d; --modra: #72a5ff; --mrizka: #1c2334; color-scheme: dark; } }
-  * { box-sizing: border-box; }
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 24px max(16px, env(safe-area-inset-right, 0px));
-    font: 17px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--inkoust); background: var(--papir);
-    background-image: linear-gradient(var(--mrizka) 1px, transparent 1px), linear-gradient(90deg, var(--mrizka) 1px, transparent 1px); background-size: 28px 28px; }
-  main { width: 100%; max-width: 460px; background: var(--karta); border: 1.5px solid var(--linka); border-radius: 18px; padding: 32px 28px; }
-  h1 { margin: 0 0 6px; font-size: 34px; letter-spacing: -0.01em; }
-  p { margin: 0 0 12px; color: var(--tuzka); }
-  .stav { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--modra); border: 1.5px solid currentColor; border-radius: 999px; padding: 4px 12px; }
-</style>
+<meta name="theme-color" content="#fbfcf7">
+<title>Učebna</title>
+<link rel="stylesheet" href="css/ucebna.css">
+<script type="module" src="js/app.js"></script>
 </head>
 <body>
-<main>
-  <h1>Učebna</h1>
-  <p>Lekce, procvičování a hry na pauzu – po přihlášení na mobilu i na počítači.</p>
-  <span class="stav">Připravujeme přihlášení</span>
-</main>
+
+<!-- přihlášení -->
+<div id="obr-prihlaseni" class="stred" hidden>
+  <main class="karta uvod">
+    <h1>Učebna</h1>
+    <p class="pod">Lekce, procvičování a hry na pauzu – na mobilu i na počítači.</p>
+    <form id="form-prihlaseni" novalidate>
+      <label>Jméno nebo e-mail<input name="jmeno" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label>Heslo<input name="heslo" type="password" autocomplete="current-password" required></label>
+      <p id="chyba" class="chyba" role="alert" hidden></p>
+      <button type="submit" class="hlavni">Přihlásit se</button>
+    </form>
+    <p class="pozn">Účet ti založí lektor. Heslo si můžeš nechat uložit v prohlížeči.</p>
+  </main>
+</div>
+
+<!-- domů: aplikace -->
+<div id="obr-domu" hidden>
+  <header class="lista"><b class="znacka">Učebna</b><span id="kdo" class="kdo"></span><button type="button" data-a="odhlasit">Odhlásit</button></header>
+  <main class="obsah">
+    <h2 id="pozdrav"></h2>
+    <div id="dlazdice" class="mrizka"></div>
+    <section id="sprava" class="karta sprava" hidden>
+      <h3>Správa</h3>
+      <p class="pozn">Soubory aplikací leží v zamčeném úložišti. Vidí je jen přihlášení, kteří k aplikaci mají přístup.</p>
+      <div id="soubory"></div>
+      <p id="sprava-stav" class="pozn" aria-live="polite"></p>
+    </section>
+  </main>
+</div>
+
+<!-- spuštěná aplikace -->
+<div id="obr-aplikace" class="aplikace" hidden>
+  <header class="lista tenka"><button type="button" data-a="zpet">← Učebna</button><span id="stav-sync" class="stav-sync" aria-live="polite"></span></header>
+  <iframe id="ramec" title="Aplikace" hidden></iframe>
+</div>
+
 </body>
 </html>
