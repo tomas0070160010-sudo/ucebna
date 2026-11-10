@@ -3,6 +3,7 @@
 Stránka pro doučování a hry (přihlášení přes Supabase projekt `ucebna`).
 
 ## Verze
+- **0.8.6** (11. 11. 2026) – Žáci › Body a odměny: lektor může dát odměnu za hvězdičky dřív (zaškrtnutím); stránka her: piškvorky na telefonu na poli 12 × 12, vzhled kostek v Tetrisu. Potřebuje Matiku 3.23.
 - **0.8.5** (11. 11. 2026) – stránka her na telefonu: hra se otevře přes celou obrazovku (všechno vidět, zavře ji i tlačítko Zpět), tlačítka větší pro prst. Potřebuje Matiku 3.22.2.
 - **0.8.4** (10. 11. 2026) – stránka her: Tetris jde ovládat prstem na desce (táhni, klepni, švihni dolů); Správa › PDF testů pozná i soubor stažený z Matiky (`matika-2025-A-test.pdf`). Potřebuje Matiku 3.22.
 - **0.8.3** (10. 11. 2026) – stránka her: Tetris má rychlý návod (jde přeskočit, ❓ Jak hrát). Potřebuje Matiku 3.21.

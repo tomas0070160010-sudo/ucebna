@@ -428,6 +428,59 @@ html.pdf-otevreno { overflow: hidden; }
 @keyframes zv-px-a { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 0; } }
 @keyframes zv-px-b { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 1; } }
 @keyframes zv-px-mrk { 0% { opacity: 0; } 94% { opacity: 1; } 97% { opacity: 0; } 100% { opacity: 0; } }
+/* ===== 🎁 odměny za ⭐ (c6-odmeny.js): katalog v záložce ⭐ ===== */
+.odm-app { display: grid; gap: 14px; } .odm-hlava { display: grid; gap: 4px; } .odm-hlava h3, .odm-druh h4 { margin: 0; } .odm-druh { display: grid; gap: 8px; }
+.odm-katalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); gap: 10px; }
+.odm { background: var(--karta); border: 1.5px solid var(--linka); border-radius: 16px; padding: 10px; display: grid; gap: 6px; align-content: start; }
+.odm > b { font-size: 15px; } .odm-cena { font: 800 13px/1 var(--f-text); color: var(--oranzova); } .odm.zamceno { opacity: .6; } .odm.zamceno .odm-nahled { filter: grayscale(.7); }
+.odm button { justify-self: start; } .odm button.odm-ted { background: var(--zelena); border-color: var(--zelena); color: #fff; }
+.odm-nahled { position: relative; height: 78px; border-radius: 12px; overflow: hidden; display: grid; place-items: center; background: var(--mrizka); isolation: isolate; }
+.odm-ik { font-size: 34px; } .odm-partak .zvire { width: 74px; height: 74px; } .odm-ik .tt-c { width: 26px; height: 26px; display: inline-grid; place-items: center; margin: 0 1px; border-radius: 4px; font: 800 14px/1 var(--f-cisla, ui-monospace, monospace); }
+/* ===== pozadí přehledu (scény, c6-odmeny-sceny.js) ===== */
+.ph-hero.ma-pozadi { position: relative; overflow: hidden; isolation: isolate; border-color: transparent; color: #fff; }
+.ph-hero.ma-pozadi::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgb(0 0 0 / .38), rgb(0 0 0 / .08) 60%, transparent); pointer-events: none; }
+.ph-hero.ma-pozadi > :not(.pz-vrstva) { position: relative; z-index: 2; } .ph-hero.ma-pozadi h2, .ph-hero.ma-pozadi .nad-maly { color: #fff; } .ph-hero.ma-pozadi p { color: rgb(255 255 255 / .9); }
+.pz-vrstva { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.ph-hero.ma-pozadi .ph-hlavni { background: #fff; border-color: #fff; color: #1d2946; } .ph-hero.ma-pozadi .ph-hlavni:hover { background: #eef3ff; }
+.ma-pozadi.bg-noc { background: radial-gradient(ellipse at 70% 120%, #3b2a6b 0, transparent 60%), linear-gradient(#0b1026, #1a1d4a); }
+.ma-pozadi.bg-rakety { background: linear-gradient(#0a1633, #173a6b 70%, #2a5a8a); }
+.ma-pozadi.bg-ohnostroj { background: linear-gradient(#0b0a1f, #1c1440); }
+.ma-pozadi.bg-bubliny { background: linear-gradient(#0f5c86, #1d8bb3); }
+.ma-pozadi.bg-snih { background: linear-gradient(#22324d, #3d5577); }
+.ma-pozadi.bg-zare { background: linear-gradient(#06121f, #0b2233); }
+.ma-pozadi.bg-akvarium { background: linear-gradient(#0a4d68, #0f7b8f 70%, #13879a); }
+.pz-hv { position: absolute; width: 2px; height: 2px; background: #fff; animation: pz-blik 3s steps(2) infinite; }
+@keyframes pz-blik { 50% { opacity: .25; } }
+.pz-padajici { position: absolute; width: 80px; height: 2px; background: linear-gradient(90deg, #fff, transparent); transform: rotate(-25deg); opacity: 0; animation: pz-pad 4.8s linear infinite; }
+@keyframes pz-pad { 0% { opacity: 0; translate: 0 0; } 5% { opacity: 1; } 24% { opacity: 0; translate: -240px 110px; } 100% { opacity: 0; translate: -240px 110px; } }
+.pz-vlocka { position: absolute; width: 3px; height: 3px; background: #fff; animation: pz-snezi var(--d, 8s) linear infinite; }
+@keyframes pz-snezi { from { top: -6%; } to { top: 104%; translate: 14px 0; } }
+.pz-zem { position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: repeating-linear-gradient(90deg, #eef4ff 0 6px, #dfe8f7 6px 12px); }
+.pz-bub { position: absolute; border: 2px solid rgb(255 255 255 / .7); border-radius: 50%; animation: pz-stoupa var(--d, 7s) linear infinite; }
+@keyframes pz-stoupa { from { top: 106%; } to { top: -12%; translate: 10px 0; opacity: .2; } }
+.pz-raketa { position: absolute; width: 30px; animation: pz-let 7.8s linear infinite; filter: drop-shadow(0 0 5px #ffb347); } .pz-raketa svg { display: block; width: 100%; height: auto; rotate: 55deg; }
+@keyframes pz-let { from { left: -14%; top: var(--y0); } to { left: 108%; top: var(--y1); } }
+.pz-plamen { animation: pz-plamen .24s steps(2) infinite; } @keyframes pz-plamen { 50% { opacity: .35; } }
+.pz-ryba { position: absolute; width: 40px; animation: pz-plave var(--d, 12s) linear infinite; } .pz-ryba svg { display: block; width: 100%; height: auto; }
+@keyframes pz-plave { from { left: 104%; } to { left: -14%; } }
+.pz-pisek { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: repeating-linear-gradient(90deg, #d9c38a 0 5px, #ccb478 5px 10px); }
+.pz-ohen { position: absolute; width: 4px; height: 4px; opacity: 0; animation: pz-vybuch 2.8s ease-out infinite; }
+@keyframes pz-vybuch { 0% { opacity: 0; translate: 0 0; } 8% { opacity: 1; } 70% { opacity: .9; } 100% { opacity: 0; translate: var(--dx) var(--dy); } }
+.pz-pas { position: absolute; left: -20%; width: 140%; height: 60px; filter: blur(14px); opacity: .6; background: linear-gradient(90deg, transparent, var(--c), transparent); animation: pz-vlni 6s ease-in-out infinite alternate; }
+@keyframes pz-vlni { from { translate: -6% 0; skew: -8deg; } to { translate: 6% 16px; skew: 8deg; } }
+@media (prefers-reduced-motion: reduce) { .pz-padajici, .pz-ohen { opacity: .8; } }
+/* efekty z odměn (c6-odmeny-efekty.js) */
+.ef-vrstva { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden; }
+.ef-konfeta { position: absolute; top: -12px; width: 8px; height: 12px; border-radius: 2px; animation: ef-pad var(--d, 2.5s) cubic-bezier(.3, .6, .5, 1) forwards; }
+@keyframes ef-pad { to { top: 106%; translate: var(--x, 0) 0; rotate: var(--r, 360deg); } }
+.ef-jiskra { position: absolute; width: 6px; height: 6px; border-radius: 50%; opacity: 0; animation: ef-vybuch 1.6s ease-out forwards; }
+@keyframes ef-vybuch { 0% { opacity: 0; translate: 0 0; } 10% { opacity: 1; } 75% { opacity: .9; } 100% { opacity: 0; translate: var(--dx) var(--dy); } }
+/* vzhled kostek v Tetrisu (odměny) – platí na desce, v náhledu a v zadání */
+.tt-skin-neon .tt-dsk { background: #0b0f24; border-radius: 8px; } .tt-skin-neon .tt-c { background: #111a3a; border-color: #36f9f6; color: #e9fbff; box-shadow: 0 0 6px #36f9f699; }
+.tt-skin-neon .tt-c.pada { border-color: #ff4fd8; box-shadow: 0 0 8px #ff4fd8aa; } .tt-skin-neon .tt-cara { background: #e9fbff; } .tt-skin-neon .tt-cara.tl { background: #ff4fd8; }
+.tt-skin-drevo .tt-c { background: repeating-linear-gradient(90deg, #d4a06a 0 3px, #c8925b 3px 6px); border-color: #7a4f24; color: #3b2410; } .tt-skin-drevo .tt-c.pada { background: repeating-linear-gradient(90deg, #e6bb85 0 3px, #d9aa72 3px 6px); border-color: #8f5d2c; } .tt-skin-drevo .tt-cara { background: #3b2410; }
+.tt-skin-vesmir .tt-dsk { background: radial-gradient(#fff 1px, transparent 1.5px) 0 0 / 23px 23px, radial-gradient(#fff8 1px, transparent 1.5px) 11px 13px / 29px 29px, #160d33; border-radius: 8px; }
+.tt-skin-vesmir .tt-c { background: color-mix(in srgb, #7a5cff 45%, #160d33); border-color: #b39cff; color: #fff; } .tt-skin-vesmir .tt-c.pada { background: color-mix(in srgb, #ff9f43 45%, #160d33); border-color: #ffd28a; } .tt-skin-vesmir .tt-cara { background: #fff; } .tt-skin-vesmir .tt-cara.tl { background: #ffd34d; }
 .zv-pochvala { position: fixed; right: 12px; bottom: 76px; z-index: 42; display: flex; align-items: flex-end; gap: 4px; pointer-events: none; }
 .zv-pochvala .zvire { width: 96px; }
 .zv-bublina { display: grid; gap: 2px; background: var(--karta); border: 2px solid var(--oranzova); border-radius: 14px 14px 14px 4px; padding: 8px 12px; margin-bottom: 44px; font: 700 16px/1.2 var(--f-nadpis); color: var(--inkoust); box-shadow: 0 6px 18px rgb(0 0 0 / .15); }
@@ -1461,9 +1514,9 @@ function spust(el, skore) {
 return { spust, DRAHA, abs };
 })();
 
-// ================= ✕◯ Piškvorky: pět v řadě na poli 15 × 15 – proti počítači, dva u jednoho zařízení, online (kód místnosti) =================
+// ================= ✕◯ Piškvorky: pět v řadě na poli 15 × 15 (na telefonu 12 × 12, online vždy 15 × 15) – proti počítači, dva u jednoho zařízení, online (kód místnosti) =================
 const Piskvorky = (() => {
-const N = 15, KLIC = "hra-piskvorky", SMERY = [[1, 0], [0, 1], [1, 1], [1, -1]];
+let N = 15; const KLIC = "hra-piskvorky", SMERY = [[1, 0], [0, 1], [1, 1], [1, -1]];
 const xy = (c) => [c % N, Math.floor(c / N)], id = (x, y) => (x < 0 || y < 0 || x >= N || y >= N ? -1 : y * N + x);
 function pet(p, c, h) { const [x, y] = xy(c); for (const [dx, dy] of SMERY) { const r = [c];
     for (const s of [1, -1]) { let k = 1; while (true) { const n = id(x + dx * k * s, y + dy * k * s); if (n < 0 || p[n] !== h) break; r.push(n); k++; } }
@@ -1474,7 +1527,7 @@ function skore(p, c, h) { const [x, y] = xy(c); let s = 0;
     s += n >= 5 ? 1e6 : n === 4 ? (o === 2 ? 1e5 : o === 1 ? 1e4 : 0) : n === 3 ? (o === 2 ? 5e3 : o === 1 ? 400 : 0) : n === 2 ? (o === 2 ? 200 : o === 1 ? 30 : 0) : o === 2 ? 10 : 1; }
   return s; }
 function tahPC(p, pc) { const hrac = pc === "x" ? "o" : "x", vol = [];
-  if (p.every((v) => v == null)) return id(7, 7);
+  if (p.every((v) => v == null)) return id(N >> 1, N >> 1);
   for (let c = 0; c < N * N; c++) { if (p[c] != null) continue; const [x, y] = xy(c); let blizko = false;
     for (let dy = -2; dy <= 2 && !blizko; dy++) for (let dx = -2; dx <= 2; dx++) { const q = id(x + dx, y + dy); if (q >= 0 && p[q] != null) { blizko = true; break; } }
     if (blizko) vol.push([c, skore(p, c, pc) * 1.1 + skore(p, c, hrac) + Math.random()]); }
@@ -1483,7 +1536,8 @@ function spust(el, sk, opt = {}) {
   let g = null, spoj = null, kod = "", ja = "x", kodVstup = "", hlaska = "";
   const ulozHru = () => { if (g && g.rezim !== "online") ulozit(KLIC, g); };
   const jm = (h) => (g.rezim === "pocitac" ? (h === g.pc ? "Počítač" : "Ty") : g.rezim === "online" ? (h === ja ? "Ty" : "Soupeř") : h === "x" ? "Hráč ✕" : "Hráč ◯");
-  function nova(rezim) { g = { rezim, p: Array(N * N).fill(null), na: "x", pc: rezim === "pocitac" ? "o" : null, vyhra: null, posl: null, n: 0, zacina: g && g.zacina === "x" ? "o" : "x" }; g.na = g.zacina; if (rezim !== "online") ulozHru(); kresli(); if (g.pc === g.na) setTimeout(pcTah, 500); }
+  const velikost = (rezim) => (rezim !== "online" && matchMedia("(max-width: 560px)").matches ? 12 : 15); // na úzkém telefonu větší políčka
+  function nova(rezim) { N = velikost(rezim); g = { rezim, N, p: Array(N * N).fill(null), na: "x", pc: rezim === "pocitac" ? "o" : null, vyhra: null, posl: null, n: 0, zacina: g && g.zacina === "x" ? "o" : "x" }; g.na = g.zacina; if (rezim !== "online") ulozHru(); kresli(); if (g.pc === g.na) setTimeout(pcTah, 500); }
   function hraj(c, odkud) { if (!g || g.vyhra || g.p[c] != null) return false; if (g.rezim === "online" && odkud !== "souper" && g.na !== ja) return false; if (g.rezim === "pocitac" && odkud !== "pc" && g.na === g.pc) return false;
     g.p[c] = g.na; g.posl = c; g.n++; const r = pet(g.p, c, g.na);
     if (r) { g.vyhra = { h: g.na, r }; hlaska = `🎉 ${jm(g.na)} – pět v řadě!`; sk(jm(g.na)); } else if (g.n >= N * N) { g.vyhra = { h: null, r: [] }; hlaska = "Remíza – pole je plné."; } else g.na = g.na === "x" ? "o" : "x";
@@ -1508,7 +1562,7 @@ function spust(el, sk, opt = {}) {
     if (!g) { kresliVolbu(false); return; }
     if (g.cekam) { el.innerHTML = `<div class="lo-volba lo-cekani"><button type="button" class="maly" data-pi="zpet">← Jiný režim</button><span class="pozn">Kód místnosti</span><b class="lo-velky-kod">${kod}</b><p>${ja === "x" ? "Pošli kód soupeři. Hra začne, jakmile se připojí." : "Čekám na spojení se soupeřem…"}</p>${ja === "x" ? Spojeni.pozvanka("piskvorky", kod) : ""}<span class="lo-spojeni">Připojuji…</span></div>`; return; }
     const B = 30, W = N * B, vyh = new Set(g.vyhra ? g.vyhra.r : []), mujTah = !g.vyhra && (g.rezim === "dva" || (g.rezim === "online" ? g.na === ja : g.na !== g.pc));
-    let s = `<svg viewBox="-4 -4 ${W + 8} ${W + 8}" class="pi-deska${mujTah ? " hraje" : ""}" role="grid" aria-label="Hrací pole 15 krát 15"><rect x="-4" y="-4" width="${W + 8}" height="${W + 8}" rx="14" class="pi-podklad"/>`;
+    let s = `<svg viewBox="-4 -4 ${W + 8} ${W + 8}" class="pi-deska${mujTah ? " hraje" : ""}" role="grid" aria-label="Hrací pole ${N} krát ${N}"><rect x="-4" y="-4" width="${W + 8}" height="${W + 8}" rx="14" class="pi-podklad"/>`;
     for (let i = 0; i <= N; i++) s += `<line x1="${i * B}" y1="0" x2="${i * B}" y2="${W}" class="pi-cara"/><line x1="0" y1="${i * B}" x2="${W}" y2="${i * B}" class="pi-cara"/>`;
     for (let c = 0; c < N * N; c++) { const [x, y] = xy(c), v = g.p[c], cx = x * B + B / 2, cy = y * B + B / 2, tr = `${c === g.posl ? " posl" : ""}${vyh.has(c) ? " vyhra" : ""}`;
       if (v === "x") s += `<g class="pi-x${tr}"><path d="M${cx - 8} ${cy - 8} L${cx + 8} ${cy + 8} M${cx + 8} ${cy - 8} L${cx - 8} ${cy + 8}" pathLength="1"/></g>`;
@@ -1522,7 +1576,7 @@ function spust(el, sk, opt = {}) {
     if (t.dataset.c != null) { hraj(+t.dataset.c, "ja"); return; } const a = t.dataset.pi;
     if (a === "pocitac" || a === "dva") nova(a);
     if (a === "online") { hlaska = ""; kresliVolbu(true); }
-    if (a === "pokracovat") { g = nacist(KLIC, null); kresli(); if (g.pc === g.na) setTimeout(pcTah, 400); }
+    if (a === "pokracovat") { g = nacist(KLIC, null); N = g.N || Math.round(Math.sqrt(g.p.length)); kresli(); if (g.pc === g.na) setTimeout(pcTah, 400); }
     if (a === "zpet") { if (spoj) { spoj.posli({ t: "odchod" }); spoj.zavri(); spoj = null; } g = null; kresli(); }
     if (a === "zalozit") mistnost(true); if (a === "pripojit") { kodVstup = el.querySelector(".lo-kod").value; mistnost(false); }
     if (a === "znovu") { if (g.rezim === "online") { spoj.posli({ t: "znovu" }); nova("online"); g.na = "x"; kresli(); } else nova(g.rezim); } });
@@ -2270,6 +2324,7 @@ function spust(el, skore, opt, X = {}) {
     hra: (e, s, rezim, sit) => hra(e, s, sit, X) });
 }
 function hra(el, skore, sit, X) {
+  const skin = typeof Odmeny !== "undefined" ? Odmeny.kostky() : null; if (skin) el.classList.add("tt-skin-" + skin); // vzhled kostek z odměn za ⭐
   const U = Obtiznost.je();
   let zbyva = 0, pokus = 0, deska, pr, st, dalsi, kus, faze, rady, spravne, celkem, cervene, hist, pauza, pauzaKdo, acc, zprava, C, k, sada, sadaI, uOn = "", vyhra = null;
   const sv = { k: 0, rady: 0, cervene: 0, d: [], z: "", pryc: false }; // soupeř
