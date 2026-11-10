@@ -413,18 +413,18 @@ html.pdf-otevreno { overflow: hidden; }
 .zv-karta .zvire { width: 84px; } .zv-karta:disabled { cursor: default; color: var(--tuzka); opacity: 1; } .zv-karta:disabled .zvire { opacity: .4; }
 .zv-karta.vybrano { border-color: var(--oranzova); box-shadow: 0 0 0 2px var(--oranzova) inset; }
 .zv-karta:not(:disabled):hover .zvire { animation: zv-skok .5s ease-out; }
-.zv-klid .zv-ocas, .zv-radost .zv-ocas { animation: zv-vrt .45s ease-in-out infinite alternate; }
-.zv-klid .zv-hlava, .zv-klid .zv-telo { animation: zv-dych 2.8s ease-in-out infinite; }
-.zv-klid .zv-oci, .zv-radost .zv-oci { transform-box: fill-box; transform-origin: center; animation: zv-mrk 4.5s infinite; }
-.zv-radost { animation: zv-skok .55s ease-out 3; } .zv-radost .zv-jazyk { animation: zv-jaz .25s ease-in-out infinite alternate; }
-.zv-klid .zv-kridlo, .zv-radost .zv-kridlo { animation: zv-mav .3s ease-in-out infinite alternate; }
-.zv-klid .zv-kridlo { animation-duration: 1.4s; }
-@keyframes zv-vrt { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
-@keyframes zv-dych { 50% { transform: translateY(1.5px) rotate(-2deg); } }
+.zv-radost { animation: zv-skok .55s ease-out 3; }
 @keyframes zv-skok { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-12%); } }
-@keyframes zv-mav { from { transform: rotate(0); } to { transform: rotate(-20deg); } }
-@keyframes zv-mrk { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
-@keyframes zv-jaz { to { transform: translateY(1.6px); } }
+/* pixel art: animace = střídání celých snímků (každý má vlastní obrys, nic se neodtrhne); bez pohybu zůstane první snímek */
+.zvire-px .zv-p1, .zvire-px .zv-v1, .zvire-px .zv-m1, .zvire-px .zv-vicko { opacity: 0; }
+.zv-klid .zv-p0 { animation: zv-px-a 2.8s infinite step-end; } .zv-klid .zv-p1 { animation: zv-px-b 2.8s infinite step-end; }
+.zv-klid .zv-v0, .zv-radost .zv-v0 { animation: zv-px-a .5s infinite step-end; } .zv-klid .zv-v1, .zv-radost .zv-v1 { animation: zv-px-b .5s infinite step-end; }
+.zv-klid .zv-m0 { animation: zv-px-a .6s infinite step-end; } .zv-klid .zv-m1 { animation: zv-px-b .6s infinite step-end; }
+.zv-radost .zv-m0 { animation: zv-px-a .3s infinite step-end; } .zv-radost .zv-m1 { animation: zv-px-b .3s infinite step-end; }
+.zv-klid .zv-vicko { animation: zv-px-mrk 4.5s infinite step-end; }
+@keyframes zv-px-a { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes zv-px-b { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 1; } }
+@keyframes zv-px-mrk { 0% { opacity: 0; } 94% { opacity: 1; } 97% { opacity: 0; } 100% { opacity: 0; } }
 .zv-pochvala { position: fixed; right: 12px; bottom: 76px; z-index: 42; display: flex; align-items: flex-end; gap: 4px; pointer-events: none; }
 .zv-pochvala .zvire { width: 96px; }
 .zv-bublina { display: grid; gap: 2px; background: var(--karta); border: 2px solid var(--oranzova); border-radius: 14px 14px 14px 4px; padding: 8px 12px; margin-bottom: 44px; font: 700 16px/1.2 var(--f-nadpis); color: var(--inkoust); box-shadow: 0 6px 18px rgb(0 0 0 / .15); }
@@ -638,7 +638,7 @@ body.na-prehledu nav.zalozky { display: none; }
 .tt-n-ovl { display: grid; grid-template-columns: auto auto; gap: 8px 14px; align-items: center; text-align: left; } .tt-n-ovl kbd { display: inline-block; min-width: 1.6em; padding: 2px 6px; margin-right: 3px; border: 1.5px solid var(--mrizka); border-bottom-width: 3px; border-radius: 6px; font: 700 13px/1.2 var(--f-text, system-ui); text-align: center; }
 .tt-lista { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; } .tt-cerv { color: var(--cervena); } .tt-pz { background: var(--oranzova); border-color: var(--oranzova); color: #fff; }
 .tt-telo { display: flex; gap: 10px; align-items: flex-start; justify-content: center; }
-.tt-deska-obal { position: relative; flex: none; }
+.tt-deska-obal { position: relative; flex: none; } .tt-deska { touch-action: none; user-select: none; -webkit-user-select: none; } /* gesta na desce – stránka se při tom neposouvá */
 .tt-panel { position: absolute; inset: 0; z-index: 5; overflow: auto; display: grid; gap: 8px; align-content: start; justify-items: center; text-align: center; padding: 12px; background: color-mix(in srgb, var(--karta) 94%, transparent); border: 2px solid var(--modra); border-radius: 12px; }
 .tt-panel > b { font-size: 19px; } .tt-panel p { margin: 0; }
 .tt-ok { color: var(--zelena); font-style: normal; } .tt-ch { color: var(--cervena); font-style: normal; } .tt-zprava { font-weight: 800; color: var(--oranzova); }
@@ -651,7 +651,7 @@ body.na-prehledu nav.zalozky { display: none; }
 .tt-hist { margin: 0; padding-left: 14px; display: grid; gap: 3px; font-size: 12px; text-align: left; justify-self: stretch; } .tt-hist i { font-style: normal; font-weight: 800; }
 .tt-hist-cela { font-size: 14px; max-height: 40vh; overflow: auto; justify-self: center; }
 .tt-ovl { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 420px; width: 100%; justify-self: center; } .tt-ovl button { font-size: 20px; padding: 10px 0; touch-action: manipulation; }
-.tt-napoveda { text-align: center; margin: 0; } @media (pointer: coarse) { .tt-napoveda { display: none; } }
+.tt-napoveda { text-align: center; margin: 0; }
 .tt-dk { position: relative; flex: none; margin: 0 auto; }
 .tt-dsk { position: relative; border: 2px solid var(--inkoust); border-radius: 6px; box-sizing: content-box; background-color: var(--karta); background-image: linear-gradient(color-mix(in srgb, var(--mrizka) 55%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--mrizka) 55%, transparent) 1px, transparent 1px); background-size: var(--c) var(--c); overflow: hidden; }
 .tt-c { position: absolute; box-sizing: border-box; display: grid; place-items: center; font-weight: 800; font-style: normal; font-family: var(--f-mat); color: var(--inkoust); background: color-mix(in srgb, var(--modra) 16%, var(--karta)); border: 1.5px solid color-mix(in srgb, var(--modra) 55%, var(--karta)); border-radius: 4px; }
@@ -2218,7 +2218,7 @@ const SNIMKY = [
       <li><b>Napiš</b><span>výsledek na klávesnici ve hře · 3 pokusy</span></li><li><b>Doplň okénka</b><span>čísla do šablony výsledku · 3 pokusy</span></li></ul>
       <p class="pozn">💡 Klepnutím na čtvereček ho zašedneš – co už máš spočítané. Pokus to nestojí.</p>` },
   { n: "Pokládání dílku", h: () => `<div class="tt-n-ovl"><span><kbd>◀</kbd><kbd>▶</kbd> nebo <kbd>A</kbd><kbd>D</kbd></span><span>posun</span><span><kbd>⟳</kbd> nebo <kbd>W</kbd> <kbd>↑</kbd></span><span>otočit – otočí se i zápis</span>
-      <span><kbd>▼</kbd> nebo <kbd>S</kbd></span><span>rychleji dolů</span><span><kbd>⤓</kbd> nebo mezerník</span><span>pustit dolů</span><span><kbd>P</kbd></span><span>pauza</span></div>
+      <span><kbd>▼</kbd> nebo <kbd>S</kbd></span><span>rychleji dolů</span><span><kbd>⤓</kbd> nebo mezerník</span><span>pustit dolů</span><span><kbd>P</kbd></span><span>pauza</span><span>👆 na desce</span><span>táhni = posun · klepni = otočit · švihni dolů = pustit</span></div>
       <p class="pozn">Tečkovaně je vidět, kam dílek dopadne. Online hrajete každý svou desku – další dílek přijde, až oba vloží ten předchozí.</p>` },
 ];
 function otevri(obal, { zavreno } = {}) {
@@ -2268,7 +2268,7 @@ function hra(el, skore, sit, X) {
     <div class="tt-telo"><div class="tt-deska-obal"><div class="tt-deska"></div><div class="tt-panel" hidden></div></div>
       <div class="tt-bok"><span class="pozn">Další</span><div class="tt-dalsi"></div><span class="pozn">${Obtiznost.nazev(U)}</span>${sit ? `<span class="pozn">Soupeř <small class="tt-uon"></small></span><div class="tt-mini"></div>` : ""}<ol class="tt-hist" aria-label="Poslední příklady"></ol></div></div>
     <div class="tt-ovl" role="group" aria-label="Ovládání dílku"><button type="button" data-tt="vlevo" aria-label="Doleva">◀</button><button type="button" data-tt="otoc" aria-label="Otočit">⟳</button><button type="button" data-tt="dolu" aria-label="Dolů">▼</button><button type="button" data-tt="pust" aria-label="Pustit dolů">⤓</button><button type="button" data-tt="vpravo" aria-label="Doprava">▶</button></div>
-    <p class="pozn tt-napoveda">← → nebo A D posun · ↑ nebo W otočit · ↓ nebo S rychleji · mezerník pustit · P pauza</p></div>`;
+    <p class="pozn tt-napoveda">← → nebo A D posun · ↑ nebo W otočit · ↓ nebo S rychleji · mezerník pustit · P pauza · na desce: táhni, klepni = otočit, švihni dolů = pustit</p></div>`;
   const q = (s) => el.querySelector(s), panel = q(".tt-panel"), dsk = q(".tt-deska");
   const velikost = () => { C = Math.max(16, Math.min(30, Math.floor(((el.clientWidth || 360) - (sit ? 110 : 96)) / S))); };
   const lista = () => `<span>${sit ? `Ty <b>${rad(rady)}</b> · soupeř <b>${rad(sv.rady)}</b>` : `Řady <b>${rady}</b>`} · správně ${spravne}/${celkem}</span>
@@ -2365,8 +2365,18 @@ function hra(el, skore, sit, X) {
     const m = { ArrowLeft: vl, a: vl, A: vl, ArrowRight: vp, d: vp, D: vp, ArrowDown: dl, s: dl, S: dl, ArrowUp: otoc, w: otoc, W: otoc, " ": pust }[e.key];
     if (m) { e.preventDefault(); m(); } }
   const piseText = (e) => { if (e.target.classList && e.target.classList.contains("tt-vstup") && st) st.text = e.target.value; };
+  // gesta na desce (telefon i myš): táhnutí do stran posune dílek o tolik čtverečků, o kolik se posune prst; táhnutí dolů zrychlí;
+  // rychlé švihnutí dolů pustí dílek; krátké klepnutí otočí
+  let tah = null;
+  const tahZacni = (e) => { if (faze !== "pada" || pauza || !kus || !e.target.closest(".tt-deska")) return; tah = { x: e.clientX, y: e.clientY, t: performance.now(), dx: 0, dy: 0, max: 0 };
+    try { dsk.setPointerCapture(e.pointerId); } catch (x) { /* bez zachycení */ } };
+  const tahPohyb = (e) => { if (!tah) return; const dx = Math.trunc((e.clientX - tah.x) / C), dy = Math.trunc((e.clientY - tah.y) / C); tah.max = Math.max(tah.max, Math.hypot(e.clientX - tah.x, e.clientY - tah.y));
+    while (tah.dx < dx) { pohni(1, 0); tah.dx++; } while (tah.dx > dx) { pohni(-1, 0); tah.dx--; } while (tah.dy < dy) { pohni(0, 1); tah.dy++; } };
+  const tahKonec = (e) => { if (!tah) return; const t = performance.now() - tah.t, svih = (e.clientY - tah.y) / Math.max(1, t);
+    if (tah.max < 10 && t < 350) otoc(); else if (svih > 1.1 && e.clientY - tah.y > 2 * C) pust(); tah = null; };
+  el.addEventListener("pointerdown", tahZacni); el.addEventListener("pointermove", tahPohyb); el.addEventListener("pointerup", tahKonec); el.addEventListener("pointercancel", () => (tah = null));
   el.addEventListener("click", klik); el.addEventListener("submit", odeslat); el.addEventListener("input", piseText); document.addEventListener("keydown", klavesa);
-  function stop() { clearInterval(tik); document.removeEventListener("keydown", klavesa); el.removeEventListener("click", klik); el.removeEventListener("submit", odeslat); el.removeEventListener("input", piseText); }
+  function stop() { clearInterval(tik); document.removeEventListener("keydown", klavesa); el.removeEventListener("click", klik); el.removeEventListener("submit", odeslat); el.removeEventListener("input", piseText); el.removeEventListener("pointerdown", tahZacni); el.removeEventListener("pointermove", tahPohyb); el.removeEventListener("pointerup", tahKonec); }
   function novaHra(s) { deska = { c: new Map(), o: [], b: [] }; kus = null; rady = 0; spravne = 0; celkem = 0; cervene = 0; hist = []; pauza = false; acc = 0; zprava = ""; k = 0; vyhra = null;
     sada = s; sadaI = 0; Object.assign(sv, { k: 0, rady: 0, cervene: 0, d: [], z: "" }); skore(sit ? "0 : 0" : 0); dalsi = novyPriklad(); kolo(); q(".tt-hra").focus({ preventScroll: true }); }
   // ---------- online ----------
