@@ -2,7 +2,9 @@
 // Heslo zadává správce ve své stránce, funkce ho jen předá serveru přihlašování – nikde se neukládá ani nevypisuje.
 // Nasazení: Edge Function „ucet“, verify_jwt vypnuté (kdo volá, ověřuje funkce sama: musí být přihlášený správce).
 const SUPA = Deno.env.get("SUPABASE_URL") ?? "";
-const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+// klíč správce: starý (SUPABASE_SERVICE_ROLE_KEY), nebo nový (SUPABASE_SECRET_KEYS = {"default": "sb_secret_…"})
+const tajny = () => { try { const k = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") ?? "{}"); return k.default ?? Object.values(k)[0] ?? ""; } catch (_) { return ""; } };
+const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || tajny();
 const ANON = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 const POVOLENE = ["https://tomas0070160010-sudo.github.io", "http://localhost:8790"];
 const DOMENA = "@ucebna.invalid";
@@ -14,13 +16,19 @@ const cors = (req: Request) => {
   return { "Access-Control-Allow-Origin": POVOLENE.includes(o) ? o : POVOLENE[0], "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info", "Access-Control-Allow-Methods": "POST, OPTIONS", "Vary": "Origin" };
 };
 const json = (o: unknown, status: number, h: Record<string, string>) => new Response(JSON.stringify(o), { status, headers: { ...h, "Content-Type": "application/json; charset=utf-8" } });
-const admin = (cesta: string, volby: RequestInit = {}) => fetch(SUPA + cesta, { ...volby, headers: { apikey: SERVICE, Authorization: `Bearer ${SERVICE}`, "Content-Type": "application/json", ...(volby.headers ?? {}) } });
+const admin = (cesta: string, volby: RequestInit = {}) => fetch(SUPA + cesta, { ...volby, headers: { apikey: SERVICE, ...(SERVICE.startsWith("sb_") ? {} : { Authorization: `Bearer ${SERVICE}` }), "Content-Type": "application/json", ...(volby.headers ?? {}) } });
 const hesloOk = (h: unknown) => typeof h === "string" && h.length >= 8 && h.length <= 72;
 const prihlaseni = (email: string) => (email.endsWith(DOMENA) ? email.slice(0, -DOMENA.length) : email);
 
 Deno.serve(async (req: Request) => {
   const h = cors(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: h });
+  // kontrola nastavení bez dat: je klíč správce a server přihlašování ho přijme?
+  if (req.method === "GET" && new URL(req.url).searchParams.get("stav") === "1") {
+    if (!SERVICE) return json({ klic: false }, 200, h);
+    const r = await admin("/auth/v1/admin/users?page=1&per_page=1");
+    return json({ klic: true, prihlasovani: r.status }, 200, h);
+  }
   if (req.method !== "POST") return json({ chyba: "jen POST" }, 405, h);
 
   // kdo volá: přihlášený a správce
