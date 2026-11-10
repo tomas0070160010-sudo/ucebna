@@ -3,6 +3,7 @@
 Stránka pro doučování a hry (přihlášení přes Supabase projekt `ucebna`).
 
 ## Verze
+- **0.6** (10. 11. 2026, větev `pdf`, čeká na schválení) – PDF testů v zamčeném úložišti: Správa › PDF testů nahraje všechny najednou (názvy z CERMATu se převedou, zadání do `matika/testy/`, klíče a vyplněné archy do `matika/klice/` – ty pustí úložiště jen lektorovi); Matika v Učebně je otevírá přes `window.__nactiPdf` a kreslí pdf.js (funguje i na telefonu). Potřebuje Matiku 3.15.1.
 - **0.5** (10. 11. 2026) – bez tlaku: Učebna neměří čas učení, v lekcích není denní cíl; Žáci: **Hodina spolu** (celá Matika otevřená, nejdřív úlohy, které žák ještě nedělal, nic se neuloží) a **Náhled žáka** (přesně jeho verze, nic se neuloží; vlastní data lektora jsou mezitím stranou a vrátí se i po zavření stránky), **Nastavit body** (`nastaveni.zak.body`, Matika ho použije jednou); dlaždice **Hry** otevře Matiku u her (online lodě a piškvorky přes server). Potřebuje Matiku 3.15.
 - **0.4** (10. 11. 2026) – sekce Žáci pro lektora a správce: přístupy, poslední přihlášení, minuty učení (7 dní / dnes), body, vyřešené úlohy, poslední lekce a úrovně témat; lektor nastaví lekce, odemykání a denní cíl; správce přidá žáka (bez e-mailu) a nastaví nové heslo přes funkci `ucet` na serveru (`supabase/funkce/ucet.ts`, kontrola nastavení `?stav=1`).
 - **0.3** (10. 11. 2026) – Matika se načítá přes funkci `soubor` na serveru ze soukromého repozitáře `ucebna-soubory` (vždy nejnovější verze, nic se nenahrává ručně); ručně nahraný soubor je jen záloha.

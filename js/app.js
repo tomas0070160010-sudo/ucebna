@@ -1,5 +1,6 @@
 // Učebna: přihlášení, dlaždice aplikací, spuštění aplikace se synchronizací, náhled za žáka (Hodina spolu / Vyzkoušet) a Správa souborů.
 import { relace, prihlasit, odhlasit, tabulka, funkce, souborText, souborZRepa, nahratSoubor, seznamSouboru } from "./server.js";
+import { souborPdf, kresliPdf } from "./pdf-testy.js";
 import { stahnout, nahrat, serverNovejsi, smazMistni, mistni, odlozMistni, vratMistni, nastavMistni } from "./sync.js";
 import { nactiZaky } from "./zaci.js";
 
@@ -60,7 +61,10 @@ async function souborAplikace(app, lektor) {
   return /^\s*<!doctype/i.test(html) ? html : `<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>${html}</body></html>`;
 }
 const vlozPred = (html, kus) => { const i = html.search(/<script id="matika-js">/); return i >= 0 ? html.slice(0, i) + kus + html.slice(i) : html.replace(/<\/body>/i, () => kus + "</body>"); };
+// PDF testů pro Matiku v rámu: Matika zavolá parent.__ucebnaPdf("2025-A-test.pdf") a dostane odpověď serveru
+window.__ucebnaPdf = (nazev) => (/^\d{4}-[A-D]-(test|klic|arch)\.pdf$/.test(nazev) ? souborPdf(nazev) : Promise.resolve(new Response(null, { status: 400 })));
 function zobraz(html, hash, bezi2) {
+  html = vlozPred(html, `<script>window.__nactiPdf = (n) => parent.__ucebnaPdf(n);<\/script>\n`);
   if (bezi && bezi.url) URL.revokeObjectURL(bezi.url);
   const url = URL.createObjectURL(new Blob([html], { type: "text/html" }));
   bezi = { ...bezi2, url };
@@ -133,7 +137,7 @@ document.addEventListener("click", async (e) => { const b = e.target.closest("[d
 
 // ---------- Správa: soubory aplikací (jen správce) ----------
 const SOUBORY = [["matika", "matika", "Matika po krocích", "soubor matika-po-krocich-v….html z OneDrivu – žákyně dostane svou verzi sama"]];
-async function nactiSoubory() {
+async function nactiSoubory() { kresliPdf();
   let seznam = []; try { seznam = await seznamSouboru("matika/"); } catch (e) { /* ukáže se jako nenahráno */ }
   $("#soubory").innerHTML = SOUBORY.map(([app, kdo, nazev, kde]) => { const f = seznam.find((x) => x.name === `${kdo}.html`);
     return `<div class="soubor"><div><b>${nazev} – ruční záloha</b><small>Nové verze přicházejí samy. Ruční soubor se použije, jen když server verzi z repozitáře nenačte. ${f ? `Záloha nahrána ${cas(f.updated_at || f.created_at)}.` : "Záloha zatím není."} (${kde})</small></div>
