@@ -1,0 +1,102 @@
+// Žáci (pro lektora a správce): přístupy, poslední aktivita, minuty učení, postup v Matice, nastavení lekcí, nový žák, nové heslo.
+import { tabulka, zapsat, spravaUctu } from "./server.js";
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const LEKCE = [["zlomky", "Zlomky"], ["uhly", "Úhly"], ["vyrazy", "Výrazy"], ["rovnice", "Rovnice"], ["geometrie", "Obvody a obsahy"], ["telesa", "Tělesa"], ["konstrukce", "Konstrukce"],
+  ["grafy", "Grafy a tabulky"], ["procenta", "Procenta a poměr"], ["rady", "Řady obrazců"], ["cas", "Čas a rychlost"], ["slovni", "Slovní úlohy"]];
+const NAZEV = Object.fromEntries(LEKCE);
+const TEMATA = { ...NAZEV, cas: "Čas a jednotky" };
+const ROLE = { zak: "žák", lektor: "lektor", host: "host" }, APP = { matika: "Matika", hry: "Hry" };
+const VYCHOZI_ZAK = () => ({ vytvoreno: new Date().toISOString().slice(0, 10), lekce: LEKCE.map(([k]) => k), odemceni: { lekce: {}, kroky: {} }, cilDne: 50, nastaveni: { postupne: true, klic: "po", casomira: true }, testy: [] });
+const kdy = (t) => { if (!t) return "zatím nikdy"; const d = new Date(t), dnes = new Date(), vcera = new Date(Date.now() - 864e5), h = d.toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" });
+  return d.toDateString() === dnes.toDateString() ? `dnes ${h}` : d.toDateString() === vcera.toDateString() ? `včera ${h}` : d.toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric" }) + " " + h; };
+const cti = (data, k, z) => { try { const v = data && data["matika-" + k]; return v == null ? z : JSON.parse(v); } catch (e) { return z; } };
+// úroveň tématu 1–5 – stejná pravidla jako v Matice (Úrovně témat)
+function uroven(z) { if (!z || !z.ok) return 0; const dny = z.dny || []; let u = 1; const roz = dny.length < 2 ? 0 : (new Date(dny[dny.length - 1]) - new Date(dny[0])) / 864e5;
+  if (z.ok >= 3 && dny.length >= 2) u = 2; if (u >= 2 && z.ok >= 10 && z.np >= 5) u = 3; if (u >= 3 && z.test >= 1) u = 4; if (u >= 4 && roz >= 7) u = 5; return u; }
+
+let ja = null, data = null;
+const el = () => $("#zaci");
+
+export async function nactiZaky(kdo) {
+  ja = kdo; el().hidden = false; $("[data-z='pridat']", el()).hidden = !ja.spravce; $("#zaci-seznam").innerHTML = `<p class="pozn">Načítám…</p>`;
+  const od = new Date(Date.now() - 7 * 864e5).toISOString();
+  try {
+    const [profily, pristupy, stav, aktivita, nastaveni, ucty] = await Promise.all([tabulka("profily?select=id,jmeno,naposledy,zablokovan&order=jmeno"), tabulka("pristupy?select=uzivatel,aplikace,role"),
+      tabulka("stav?select=uzivatel,aplikace,data,upraveno"), tabulka(`aktivita?select=uzivatel,udalost,minuty,kdy&kdy=gte.${encodeURIComponent(od)}`), tabulka("nastaveni?select=uzivatel,aplikace,data"),
+      ja.spravce ? spravaUctu("seznam").catch(() => []) : Promise.resolve([])]);
+    data = { profily: profily.filter((p) => p.id !== ja.id), pristupy, stav, aktivita, nastaveni, ucty };
+    kresli();
+  } catch (e) { $("#zaci-seznam").innerHTML = `<p class="chyba">${esc(e.message)}</p>`; }
+}
+
+function souhrn(p) {
+  const st = data.stav.find((s) => s.uzivatel === p.id && s.aplikace === "matika"), d = st && st.data;
+  const body = cti(d, "body", {}).celkem || 0, vyr = Object.keys(cti(d, "vyreseno", {})).filter((k) => !k.startsWith("videl:")).length, posl = cti(d, "lekce-posledni", null), ur = cti(d, "urovne", {});
+  const dnes = new Date().toDateString(), akt = data.aktivita.filter((a) => a.uzivatel === p.id && a.udalost === "uceni");
+  return { body, vyr, posl, ur, ulozeno: st && st.upraveno, min7: akt.reduce((s, a) => s + (a.minuty || 0), 0), minDnes: akt.filter((a) => new Date(a.kdy).toDateString() === dnes).reduce((s, a) => s + (a.minuty || 0), 0) };
+}
+
+function kresli() {
+  const lidi = data.profily;
+  $("#zaci-seznam").innerHTML = lidi.length ? lidi.map((p) => { const s = souhrn(p), pr = data.pristupy.filter((x) => x.uzivatel === p.id), u = data.ucty.find((x) => x.id === p.id);
+    const temata = Object.entries(s.ur).filter(([, z]) => z && z.ok).map(([t, z]) => `<span class="tema" title="${z.ok}× správně">${esc(TEMATA[t] || t)} <b>${"●".repeat(uroven(z))}${"○".repeat(5 - uroven(z))}</b></span>`).join("");
+    return `<article class="zak" data-uid="${p.id}">
+      <div class="zak-hlava"><div><b>${esc(p.jmeno)}</b>${u ? `<small>přihlašuje se jako <code>${esc(u.prihlaseni)}</code></small>` : ""}</div><small>naposledy ${kdy(p.naposledy)}</small></div>
+      <div class="stitky">${pr.map((x) => `<span class="stitek">${APP[x.aplikace] || esc(x.aplikace)} – ${ROLE[x.role] || esc(x.role)}</span>`).join("") || `<span class="stitek">bez přístupu</span>`}${p.zablokovan ? `<span class="stitek ne">zablokovaný</span>` : ""}</div>
+      <dl class="cisla"><div><dt>Učení za 7 dní</dt><dd>${s.min7} min</dd></div><div><dt>Dnes</dt><dd>${s.minDnes} min</dd></div><div><dt>Body</dt><dd>${s.body}</dd></div><div><dt>Vyřešeno</dt><dd>${s.vyr}</dd></div></dl>
+      <p class="pozn">${s.posl ? `Naposledy v lekci <b>${esc(NAZEV[s.posl] || s.posl)}</b>.` : "Matika ještě nebyla otevřená."} ${s.ulozeno ? `Postup uložený ${kdy(s.ulozeno)}.` : ""}</p>
+      ${temata ? `<div class="temata">${temata}</div>` : ""}
+      <div class="radek">${pr.some((x) => x.aplikace === "matika" && x.role === "zak") ? `<button type="button" data-z="lekce">Lekce a odemykání</button>` : ""}${ja.spravce ? `<button type="button" data-z="heslo">Nové heslo</button>` : ""}</div>
+      <div class="panel" hidden></div></article>`; }).join("")
+    : `<p class="pozn">Zatím tu nikdo není.${ja.spravce ? " Přidej prvního žáka tlačítkem nahoře." : ""}</p>`;
+}
+
+// ---------- panel: lekce a odemykání ----------
+function panelLekce(karta, uid) {
+  const n = data.nastaveni.find((x) => x.uzivatel === uid && x.aplikace === "matika"), z = (n && n.data && n.data.zak) || VYCHOZI_ZAK(), od = (z.odemceni && z.odemceni.lekce) || {};
+  const stav = (k) => (!z.lekce.includes(k) ? "nema" : od[k] === "otevrit" ? "otevrit" : od[k] === "zavrit" ? "zavrit" : "postupne");
+  $(".panel", karta).innerHTML = `<form class="lekce-form"><table class="lekce-tab"><tbody>${LEKCE.map(([k, nazev]) => `<tr><th>${nazev}</th><td><select name="${k}" aria-label="${nazev}">
+      ${(k === "slovni" ? [["postupne", "otevřená"], ["nema", "nemá ji"]] : [["postupne", "postupně"], ["otevrit", "otevřená hned"], ["zavrit", "zavřená"], ["nema", "nemá ji"]]).map(([v, t]) => `<option value="${v}" ${stav(k) === v ? "selected" : ""}>${t}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table>
+    <label class="radek-pole">Denní cíl (body) <input name="cil" type="number" min="10" max="300" step="10" value="${z.cilDne || 50}"></label>
+    <div class="radek"><button type="button" data-z="zavrit">Zavřít</button><button type="submit" class="hlavni">Uložit</button></div><p class="pozn stav-panel" aria-live="polite">„Postupně“ = otevře se, až dokončí předchozí lekci.</p></form>`;
+  $("form", karta).addEventListener("submit", async (e) => { e.preventDefault(); const f = e.target, info = $(".stav-panel", karta);
+    const lekce = LEKCE.map(([k]) => k).filter((k) => f[k].value !== "nema"), odem = {}; lekce.forEach((k) => { if (f[k].value === "otevrit" || f[k].value === "zavrit") odem[k] = f[k].value; });
+    if (!lekce.length) { info.textContent = "Nech aspoň jednu lekci."; return; }
+    const nove = { ...z, lekce, odemceni: { ...(z.odemceni || {}), lekce: odem }, cilDne: Math.max(10, Math.min(300, +f.cil.value || 50)) };
+    info.textContent = "Ukládám…";
+    try { await zapsat("nastaveni", { aplikace: "matika", uzivatel: uid, upravil: ja.id, data: { ...((n && n.data) || {}), zak: nove } }, "aplikace,uzivatel");
+      if (n) n.data = { ...(n.data || {}), zak: nove }; else data.nastaveni.push({ uzivatel: uid, aplikace: "matika", data: { zak: nove } });
+      info.textContent = "Uloženo. Projeví se, až žák příště otevře Matiku."; } catch (x) { info.textContent = "Nepovedlo se uložit: " + x.message; } });
+}
+
+// ---------- panel: nové heslo (jen správce) ----------
+function panelHeslo(karta, uid) {
+  $(".panel", karta).innerHTML = `<form class="heslo-form" novalidate><label>Nové heslo (aspoň 8 znaků)<input name="heslo" type="text" autocomplete="new-password" spellcheck="false" minlength="8" required></label>
+    <div class="radek"><button type="button" data-z="zavrit">Zavřít</button><button type="submit" class="hlavni">Nastavit heslo</button></div><p class="pozn stav-panel" aria-live="polite">Heslo se uloží jen na serveru přihlašování. Řekni ho žákovi a v prohlížeči si ho může nechat zapamatovat.</p></form>`;
+  $("form", karta).addEventListener("submit", async (e) => { e.preventDefault(); const f = e.target, info = $(".stav-panel", karta);
+    if (f.heslo.value.length < 8) { info.textContent = "Heslo musí mít aspoň 8 znaků."; return; }
+    info.textContent = "Nastavuji…"; try { await spravaUctu("heslo", { uid, heslo: f.heslo.value }); f.heslo.value = ""; info.textContent = "Hotovo – nové heslo platí."; } catch (x) { info.textContent = x.message; } });
+}
+
+// ---------- přidat žáka (jen správce) ----------
+async function pridat(f) { const info = $("#pridat-stav");
+  const appky = [...f.querySelectorAll("[name=app]:checked")].map((c) => ({ id: c.value, role: "zak" }));
+  if (f.heslo.value.length < 8) { info.textContent = "Heslo musí mít aspoň 8 znaků."; return; }
+  info.textContent = "Zakládám…";
+  try { await spravaUctu("zalozit", { jmeno: f.jmeno.value, prihlaseni: f.prihlaseni.value, heslo: f.heslo.value, aplikace: appky });
+    info.textContent = `Hotovo. ${f.jmeno.value} se přihlásí jménem „${f.prihlaseni.value.trim().toLowerCase()}“ a heslem, které jsi zadal.`; f.reset(); delete f.prihlaseni.dataset.rucne; f.hidden = true; await nactiZaky(ja); }
+  catch (x) { info.textContent = x.message; } }
+
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-z]"); if (!b || !el() || !el().contains(b)) return; const karta = b.closest(".zak"), uid = karta && karta.dataset.uid;
+  if (b.dataset.z === "pridat") { const f = $("#form-pridat"); f.hidden = !f.hidden; if (!f.hidden) f.jmeno.focus(); return; }
+  if (b.dataset.z === "zavrit") { const p = b.closest(".panel"); p.hidden = true; p.innerHTML = ""; return; }
+  const p = $(".panel", karta); if (!p.hidden && p.dataset.co === b.dataset.z) { p.hidden = true; p.innerHTML = ""; return; }
+  p.dataset.co = b.dataset.z; p.hidden = false;
+  if (b.dataset.z === "lekce") panelLekce(karta, uid); if (b.dataset.z === "heslo") panelHeslo(karta, uid); });
+document.addEventListener("submit", (e) => { if (e.target.id === "form-pridat") { e.preventDefault(); pridat(e.target); } });
+// přihlašovací jméno z jména: „Petr Novák“ → „petr.novak“
+document.addEventListener("input", (e) => { if (e.target.name !== "jmeno" || !e.target.closest("#form-pridat")) return; const f = e.target.form;
+  if (f.prihlaseni.dataset.rucne) return; f.prihlaseni.value = e.target.value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim().replace(/\s+/g, ".").replace(/[^a-z0-9._-]/g, "").slice(0, 30); });
+document.addEventListener("input", (e) => { if (e.target.name === "prihlaseni") e.target.dataset.rucne = "1"; });

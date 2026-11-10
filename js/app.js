@@ -1,6 +1,7 @@
 // Učebna: přihlášení, dlaždice aplikací, spuštění aplikace se synchronizací a Správa souborů.
 import { relace, prihlasit, odhlasit, tabulka, funkce, souborText, souborZRepa, nahratSoubor, seznamSouboru } from "./server.js";
 import { stahnout, nahrat, serverNovejsi, smazMistni, mistni } from "./sync.js";
+import { nactiZaky } from "./zaci.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -26,6 +27,7 @@ function domu() {
     return `<button type="button" class="dlazdice" data-app="${esc(a.id)}" ${z.brzy ? "disabled" : ""}><span class="znak" aria-hidden="true">${z.znak}</span><b>${esc(a.nazev)}</b><small>${z.brzy ? "Připravujeme" : esc(z.popis)}</small></button>`; }).join("")
     : `<p class="pozn">Zatím nemáš přístup k žádné aplikaci. Napiš lektorovi.</p>`;
   $("#sprava").hidden = !ja.spravce; if (ja.spravce) nactiSoubory();
+  const lektor = ja.spravce || Object.values(ja.pristupy).includes("lektor"); $("#zaci").hidden = !lektor; if (lektor) nactiZaky(ja);
   if (appky.some((a) => a.id === "matika")) souborZRepa("matika/VERZE").then((v) => { const s = $('[data-app="matika"] small'); if (s && v) s.textContent = `${APLIKACE.matika.popis} · verze ${v.trim()}`; }).catch(() => null);
 }
 

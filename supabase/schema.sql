@@ -153,7 +153,7 @@ create policy "profily: přidá správce" on public.profily for insert to authen
 create policy "profily: upraví správce" on public.profily for update to authenticated using (privat.je_spravce()) with check (privat.je_spravce());
 create policy "profily: smaže správce" on public.profily for delete to authenticated using (privat.je_spravce());
 
-create policy "přístupy: čtení" on public.pristupy for select to authenticated using (uzivatel = (select auth.uid()) or privat.je_spravce());
+create policy "přístupy: čtení" on public.pristupy for select to authenticated using (uzivatel = (select auth.uid()) or privat.je_spravce() or privat.role_v(aplikace) = 'lektor');
 create policy "přístupy: přidá správce" on public.pristupy for insert to authenticated with check (privat.je_spravce());
 create policy "přístupy: upraví správce" on public.pristupy for update to authenticated using (privat.je_spravce()) with check (privat.je_spravce());
 create policy "přístupy: smaže správce" on public.pristupy for delete to authenticated using (privat.je_spravce());
@@ -172,7 +172,7 @@ create policy "nastavení: upraví lektor nebo správce" on public.nastaveni for
   with check (privat.je_spravce() or (privat.role_v(aplikace) = 'lektor' and privat.je_lektor_pro(uzivatel)));
 create policy "nastavení: smaže lektor nebo správce" on public.nastaveni for delete to authenticated using (privat.je_spravce() or (privat.role_v(aplikace) = 'lektor' and privat.je_lektor_pro(uzivatel)));
 
-create policy "aktivita: čtení" on public.aktivita for select to authenticated using (uzivatel = (select auth.uid()) or privat.je_spravce());
+create policy "aktivita: čtení" on public.aktivita for select to authenticated using (uzivatel = (select auth.uid()) or privat.je_spravce() or (privat.role_v(aplikace) = 'lektor' and privat.je_lektor_pro(uzivatel)));
 -- zápis aktivity jen přes funkci zapis_aktivitu (žádná insert policy)
 
 create policy "hry: jen hráči" on public.hry for all to authenticated using ((select auth.uid()) = any (hraci)) with check ((select auth.uid()) = any (hraci));

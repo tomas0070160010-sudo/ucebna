@@ -32,8 +32,21 @@
   <main class="obsah">
     <h2 id="pozdrav"></h2>
     <div id="dlazdice" class="mrizka"></div>
+    <section id="zaci" class="karta zaci" hidden>
+      <div class="zaci-hlava"><h3>Žáci</h3><button type="button" data-z="pridat">+ Přidat žáka</button></div>
+      <form id="form-pridat" class="pridat" hidden novalidate>
+        <label>Jméno (jak se ukáže)<input name="jmeno" maxlength="40" required autocomplete="off"></label>
+        <label>Přihlašovací jméno<input name="prihlaseni" maxlength="30" required autocapitalize="none" spellcheck="false" autocomplete="off"></label>
+        <label>Heslo (aspoň 8 znaků)<input name="heslo" type="text" minlength="8" required autocomplete="new-password" spellcheck="false"></label>
+        <fieldset><legend>Přístup</legend><label class="zaskrt"><input type="checkbox" name="app" value="matika" checked> Matika (žák)</label><label class="zaskrt"><input type="checkbox" name="app" value="hry" checked> Hry</label></fieldset>
+        <div class="radek"><button type="button" data-z="pridat">Zrušit</button><button type="submit" class="hlavni">Založit účet</button></div>
+        <p class="pozn">Žák nepotřebuje e-mail. Přihlásí se přihlašovacím jménem a heslem, které mu řekneš.</p>
+      </form>
+      <p id="pridat-stav" class="pozn" aria-live="polite"></p>
+      <div id="zaci-seznam" class="zaci-seznam"></div>
+    </section>
     <section id="sprava" class="karta sprava" hidden>
-      <h3>Správa</h3>
+      <h3>Záloha souborů</h3>
       <p class="pozn">Soubory aplikací leží v zamčeném úložišti. Vidí je jen přihlášení, kteří k aplikaci mají přístup.</p>
       <div id="soubory"></div>
       <p id="sprava-stav" class="pozn" aria-live="polite"></p>

@@ -54,4 +54,28 @@ input:focus { border-color: var(--modra); outline: none; }
 .lista.tenka button { padding: 6px 10px; font-size: 14px; }
 .stav-sync { color: var(--tuzka); font-size: 14px; } .stav-sync.ok { color: var(--zelena); } .stav-sync.ne { color: var(--cervena); font-weight: 700; }
 #ramec { flex: 1; width: 100%; border: 0; background: var(--papir); }
+/* žáci */
+.zaci { padding: 20px; display: grid; gap: 14px; }
+.zaci-hlava { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.zaci-seznam { display: grid; gap: 12px; }
+.zak { border: 1.5px solid var(--linka); border-radius: 14px; padding: 14px 16px; display: grid; gap: 10px; background: var(--papir); }
+.zak-hlava { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.zak-hlava > div { display: grid; } .zak-hlava b { font-size: 19px; } .zak-hlava small { color: var(--tuzka); font-size: 14px; }
+code { font: 600 14px ui-monospace, "Cascadia Mono", Consolas, monospace; background: var(--karta); border: 1px solid var(--linka); border-radius: 6px; padding: 1px 6px; }
+.stitky, .temata, .radek { display: flex; flex-wrap: wrap; gap: 6px; }
+.radek { gap: 8px; }
+.stitek { font-size: 13px; font-weight: 700; border: 1.5px solid var(--linka); background: var(--karta); border-radius: 999px; padding: 3px 10px; } .stitek.ne { color: var(--cervena); }
+.cisla { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin: 0; }
+.cisla div { background: var(--karta); border: 1px solid var(--linka); border-radius: 10px; padding: 8px 10px; }
+.cisla dt { font-size: 13px; color: var(--tuzka); } .cisla dd { margin: 0; font-size: 20px; font-weight: 700; }
+.tema { font-size: 13px; background: var(--karta); border: 1px solid var(--linka); border-radius: 8px; padding: 3px 8px; } .tema b { color: var(--modra); letter-spacing: 1px; font-size: 11px; }
+.zak button, .zaci-hlava button { padding: 8px 12px; font-size: 15px; }
+.panel { border-top: 1px solid var(--linka); padding-top: 12px; }
+.lekce-form, .heslo-form, .pridat { display: grid; gap: 12px; }
+.lekce-tab { border-collapse: collapse; width: 100%; } .lekce-tab select { max-width: 260px; } .lekce-tab th { text-align: left; font-weight: 600; font-size: 15px; padding: 5px 8px 5px 0; } .lekce-tab td { padding: 4px 0; }
+select { font: 15px system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--inkoust); background: var(--karta); border: 1.5px solid var(--linka); border-radius: 8px; padding: 7px 8px; width: 100%; }
+.radek-pole { display: flex; align-items: center; gap: 10px; } .radek-pole input { width: 110px; }
+.pridat { background: var(--papir); border: 1.5px solid var(--linka); border-radius: 14px; padding: 14px; }
+fieldset { border: 1.5px solid var(--linka); border-radius: 10px; padding: 8px 12px; display: flex; gap: 16px; flex-wrap: wrap; } legend { font-weight: 700; font-size: 15px; padding: 0 4px; }
+.zaskrt { display: flex; align-items: center; gap: 6px; font-weight: 600; } .zaskrt input { width: auto; }
 @media (prefers-reduced-motion: reduce) { .dlazdice:hover { transform: none; } }

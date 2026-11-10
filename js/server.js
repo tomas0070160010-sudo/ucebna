@@ -47,7 +47,7 @@ export async function api(cesta, volby = {}, znovu = true) {
   const r = await platnaRelace();
   const odp = await dotaz(cesta, { ...volby, headers: { apikey: KLIC, Authorization: "Bearer " + r.access_token, ...(volby.headers || {}) } });
   if (odp.status === 401 && znovu) { if (await obnovit()) return api(cesta, volby, false); uloz(null); throw new ChybaServeru("Přihlášení vypršelo. Přihlas se znovu.", "odhlaseno"); }
-  if (!odp.ok) { const t = await odp.text().catch(() => ""); throw new ChybaServeru("Server odmítl požadavek.", "odmitnuto " + odp.status + " " + t.slice(0, 120)); }
+  if (!odp.ok && !volby.vratitChybu) { const t = await odp.text().catch(() => ""); throw new ChybaServeru("Server odmítl požadavek.", "odmitnuto " + odp.status + " " + t.slice(0, 120)); }
   return odp;
 }
 
@@ -61,6 +61,14 @@ export const souborZRepa = async (cesta) => (await api("/functions/v1/soubor?ces
 export const souborText = async (cesta) => (await api("/storage/v1/object/authenticated/aplikace/" + cesta)).text();
 export const nahratSoubor = (cesta, soubor) => api("/storage/v1/object/aplikace/" + cesta, { method: "POST", headers: { "Content-Type": soubor.type || "text/html", "x-upsert": "true" }, body: soubor });
 export const seznamSouboru = async (slozka) => (await api("/storage/v1/object/list/aplikace", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ prefix: slozka, limit: 100 }) })).json();
+
+// správa účtů (jen správce): seznam přihlašovacích jmen, založení žáka, nové heslo – heslo jde jen na server přihlašování
+export async function spravaUctu(akce, data = {}) {
+  const odp = await api("/functions/v1/ucet", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ akce, ...data }), vratitChybu: true });
+  const d = await odp.json().catch(() => ({}));
+  if (!odp.ok) throw new ChybaServeru(d.chyba || "Server odmítl požadavek.", "ucet " + odp.status);
+  return d;
+}
 
 export async function odhlasit() {
   const r = cti(); uloz(null);
