@@ -373,6 +373,9 @@ details.proc-krok[open] > div { padding: 4px 0 0 12px; border-left: 3px solid va
 .pdf-stranky:has(iframe) { padding: 0; display: block; }
 .pdf-stranky iframe { width: 100%; height: 100%; border: 0; background: #fff; display: block; }
 .pdf-stranky canvas { display: block; background: #fff; border-radius: 4px; box-shadow: 0 2px 12px #0003; }
+/* dotyk: malá tlačítka aspoň 40 px na výšku, ať se trefí prstem */
+@media (pointer: coarse) { button.maly, a.tl, button.tl, button.hlavni, .chip-tema, .pozn-tl { min-height: 40px; } }
+.pdf-stranky:not(.arch-pane) { touch-action: pan-x pan-y; } .pdf-stranky.priblizeno { justify-items: start; } .pdf-stranky.priblizeno canvas { max-width: none; }
 html.pdf-otevreno { overflow: hidden; }
 .jen-uzke { display: none; }
 @media (max-width: 900px) { .pdf-telo.dva { grid-template-columns: minmax(0, 1fr); } .pdf-telo.dva .pdf-pane:not(.aktivni) { display: none; } .pdf-telo.dva .pdf-pane + .pdf-pane { border-left: 0; } .jen-uzke { display: inline-flex; } .jen-siroke { display: none; } }
@@ -442,6 +445,14 @@ html.pdf-otevreno { overflow: hidden; }
 .pauza-lista { justify-content: space-between; align-items: center; }
 .pauza-hra { display: grid; gap: 8px; justify-items: center; } .pauza-napis { margin: 0; text-align: center; min-height: 1.4em; }
 .pauza-platno { display: block; width: 100%; max-width: 720px; height: auto; aspect-ratio: 8 / 5; border: 1.5px solid var(--linka); border-radius: 12px; touch-action: none; }
+/* hra přes celou obrazovku (telefon): lišta s názvem a Zavřít nahoře, plocha se vejde na výšku */
+.pauza-plocha.cela { position: fixed; inset: 0; z-index: 70; border: 0; border-radius: 0; background: var(--papir); align-content: start; overflow-y: auto; overscroll-behavior: contain;
+  padding: max(8px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px)); }
+html.hra-cela, html.hra-cela body { overflow: hidden; }
+.pauza-plocha.cela .pauza-lista { position: sticky; top: 0; z-index: 3; background: var(--papir); padding-block: 4px; flex-wrap: nowrap; gap: 8px; }
+.pauza-plocha.cela .pauza-lista > b { font-size: 17px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pauza-plocha.cela .pauza-lista [data-pa="zavrit"] { min-height: 42px; padding-inline: 16px; font-size: 15px; flex: none; }
+.pauza-plocha.cela .pauza-platno { width: auto; max-width: 100%; max-height: calc(100dvh - 210px); margin-inline: auto; }
 .had-sipky { display: grid; grid-template-columns: repeat(3, 56px); grid-template-areas: ". u ." "l d r"; gap: 6px; }
 .had-sipky button { height: 48px; padding: 0; font-size: 20px; }
 .had-sipky [data-sm="ArrowUp"] { grid-area: u; } .had-sipky [data-sm="ArrowLeft"] { grid-area: l; } .had-sipky [data-sm="ArrowDown"] { grid-area: d; } .had-sipky [data-sm="ArrowRight"] { grid-area: r; }
@@ -2448,6 +2459,13 @@ function kresli() {
 }
 function stav() { const e = $("#pauza-stav", app); if (e && bezi()) e.innerHTML = `☕ Pauza běží – zbývá <b>${mmss(zbyva())}</b>`; const c = $("#pauza-cas", app); if (c) c.textContent = bezi() ? `☕ ${mmss(zbyva())}` : ZDARMA ? "" : "☕ 0:00"; }
 function zastav() { if (hra && hra.stop) hra.stop(); hra = null; }
+// na telefonu (úzká obrazovka, nebo dotyk na šířku) se hra otevře přes celou obrazovku – nic se neschová pod okraj; tlačítko Zpět v telefonu ji zavře
+const naCelou = () => matchMedia("(max-width: 720px), (pointer: coarse) and (max-height: 560px)").matches;
+let zpetHra = false;
+function celou(zap) { const pl = $("#pauza-plocha", app); if (!pl) return; pl.classList.toggle("cela", zap); document.documentElement.classList.toggle("hra-cela", zap);
+  if (zap && !zpetHra) { history.pushState({ hra: 1 }, "", location.href); zpetHra = true; }
+  if (!zap && zpetHra) { zpetHra = false; if (history.state && history.state.hra) history.back(); } }
+window.addEventListener("popstate", () => { if (!zpetHra) return; zpetHra = false; zastav(); const pl = $("#pauza-plocha", app); if (pl) { pl.hidden = true; pl.classList.remove("cela"); } document.documentElement.classList.remove("hra-cela"); kresli(); });
 function konecPauzy() { zastav(); const pl = $("#pauza-plocha", app); if (!pl) return;
   pl.hidden = false; pl.innerHTML = `<div class="hra-konec"><b>Pauza skončila 🙂</b><span>Odpočatá hlava počítá líp. Jdeme na to?</span>
     <div class="radek" style="justify-content:center"><a class="tl hlavni" href="${posledni}">Zpátky k příkladům</a><button type="button" data-pa="zavrit">Zavřít</button></div></div>`; kresli(); }
@@ -2457,7 +2475,7 @@ function otevri(id, opt = {}) {
   zastav(); const def = HRY_P.find((h) => h.id === id), pl = $("#pauza-plocha", app); pl.hidden = false;
   pl.innerHTML = `<div class="radek pauza-lista"><b>${def.ik} ${def.n}</b><span class="hra-cas" id="pauza-cas"></span>${["lode", "clovece", "piskvorky"].includes(id) ? "" : `<span>skóre <b id="pauza-skore">0</b></span>`}<button type="button" class="maly" data-pa="zavrit">Zavřít</button></div><div class="pauza-hra"></div>`;
   hra = ({ pingpong: (e, s) => pingpong(e, s, opt), had: (e, s) => Had.spust(e, s, opt, { W, H, platno, barvy, vidim, rekord }), zavod: (e, s) => Zavod.spust(e, s, opt, { rekord }), osa: (e, s) => Osa.spust(e, s, opt, { rekord }), delo: (e, s) => Delo.spust(e, s, opt, { W, H, platno, barvy, vidim, rekord }), tetris: (e, s) => Tetris.spust(e, s, opt, { rekord }), pexeso, lode: (e, s) => Lode.spust(e, s, opt), clovece: (e, s) => Clovece.spust(e, s), piskvorky: (e, s) => Piskvorky.spust(e, s, opt) })[id]($(".pauza-hra", pl), (n) => { const s = $("#pauza-skore", pl); if (s) s.textContent = n; });
-  hra.id = id; stav(); kresli(); pl.scrollIntoView({ block: window.__HRY_VEREJNE ? "start" : "nearest" });
+  hra.id = id; stav(); kresli(); if (naCelou()) { celou(true); $("#pauza-plocha", app).scrollTop = 0; } else $("#pauza-plocha", app).scrollIntoView({ block: window.__HRY_VEREJNE ? "start" : "nearest" });
 }
 const rekord = (id, n, mensi) => { const b = nacist("pauza-" + id, 0); if (!b || (mensi ? n < b : n > b)) { ulozit("pauza-" + id, n); return true; } return false; };
 function platno(el) { el.innerHTML = `<canvas width="${W * 2}" height="${H * 2}" class="pauza-platno" tabindex="0" aria-label="Herní plocha"></canvas><p class="pozn pauza-napis" aria-live="polite"></p>`;
@@ -2594,11 +2612,11 @@ app.addEventListener("click", (e) => { const b = e.target.closest("[data-pauza],
   if (b.dataset.pauza) { otevri(b.dataset.pauza); return; }
   if (b.dataset.pa === "rytmus") { const u = Math.max(5, Math.min(240, +$("#ryt-uceni").value || 60)), p = Math.max(5, Math.min(240, +$("#ryt-pauza").value || 60)); Rytmus.nastav(u, p); Body.oznam(`Rytmus uložen: ${u} min učení → ${p} min pauza.`); kresli(); return; }
   if (b.dataset.pa === "ukoncit") { Rytmus.ukonci(); konecPauzy(); return; }
-  if (b.dataset.pa === "zavrit") { zastav(); $("#pauza-plocha", app).hidden = true; kresli(); } });
+  if (b.dataset.pa === "zavrit") { zastav(); celou(false); $("#pauza-plocha", app).hidden = true; kresli(); } });
 document.addEventListener("den-zmena", () => { if (!$("#lekce-hry").hidden && !hra) kresli(); });
 document.addEventListener("odhaleni-zmena", () => { if (!hra) kresli(); });
 document.addEventListener("obtiznost-zmena", () => kresli());
-window.addEventListener("hashchange", () => { if (location.hash === "#hry") kresli(); else if (hra && hra.id !== "pexeso") { zastav(); const pl = $("#pauza-plocha", app); if (pl) pl.hidden = true; } });
+window.addEventListener("hashchange", () => { if (location.hash === "#hry") kresli(); else if (hra && hra.id !== "pexeso") { zastav(); celou(false); const pl = $("#pauza-plocha", app); if (pl) pl.hidden = true; } });
 kresli();
 // pozvánka odkazem / QR kódem: #hra-lode-K7QX → rovnou do místnosti (host nepotřebuje pauzu ani účet)
 function zOdkazu() { const m = (location.hash || "").match(/^#hra-(lode|piskvorky|pingpong|had|zavod|osa|tetris)-([A-Z0-9]{4})$/i); if (!m) return;
