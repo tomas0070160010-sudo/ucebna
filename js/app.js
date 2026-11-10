@@ -75,6 +75,7 @@ async function spustit(id) {
     let html = await souborAplikace(app, lektor);
     if (!html) { stavSync(lektor ? "Matika tu ještě není – nahraj ji ve Správě." : "Matika tu ještě není. Lektor ji brzy přidá.", "ne"); return; }
     if (!lektor) html = await zakovska(app, html, ja.id);
+    if (zd.hash === "#hry") html = vlozPred(html, `<script>window.__HRY = true;<\/script>\n`); // z dlaždice Hry: hry se ukážou hned
     zobraz(html, zd.hash, { app, predpona: z.predpona, nazev: $(`[data-app="${id}"] b`)?.textContent });
     stavSync("Postup se ukládá sám");
     funkce("zapis_aktivitu", { app, co: "otevreni" });
