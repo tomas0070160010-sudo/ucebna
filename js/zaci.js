@@ -9,6 +9,9 @@ const LEKCE = [["zlomky", "Zlomky"], ["uhly", "Úhly"], ["vyrazy", "Výrazy"], [
 const NAZEV = Object.fromEntries(LEKCE);
 const TEMATA = { ...NAZEV, cas: "Čas a jednotky" };
 const ROLE = { zak: "žák", lektor: "lektor", host: "host" }, APP = { matika: "Matika", hry: "Hry" };
+// odměny za ⭐ v Matice (c6-odmeny.js) – lektor je může dát dřív, než na ně žák nasbírá hvězdičky
+const ODMENY = [["masle", "Mašle", 150], ["snih", "Pixelový sníh", 200], ["konfety", "Konfety po hotové lekci", 250], ["ksiltovka", "Kšiltovka", 300], ["bubliny", "Bubliny", 400], ["bryle", "Brýle", 450], ["neon", "Kostky Neon", 500], ["noc", "Padající hvězdy", 600], ["sala", "Šála", 600],
+  ["drevo", "Kostky Dřevo", 700], ["rakety", "Rakety", 800], ["sluchatka", "Sluchátka", 800], ["ohnostroj-cil", "Ohňostroj za cíl dne", 900], ["akvarium", "Akvárium", 1000], ["klobouk", "Kouzelnický klobouk", 1100], ["vesmir", "Kostky Vesmír", 1200], ["ohnostroj", "Ohňostroj", 1250], ["zare", "Polární záře", 1500], ["plast", "Plášť superhrdiny", 1500]];
 const VYCHOZI_ZAK = () => ({ vytvoreno: new Date().toISOString().slice(0, 10), lekce: LEKCE.map(([k]) => k), odemceni: { lekce: {}, kroky: {} }, nastaveni: { postupne: true, klic: "po", casomira: true }, testy: [] });
 const kdy = (t) => { if (!t) return "zatím nikdy"; const d = new Date(t), dnes = new Date(), vcera = new Date(Date.now() - 864e5), h = d.toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" });
   return d.toDateString() === dnes.toDateString() ? `dnes ${h}` : d.toDateString() === vcera.toDateString() ? `včera ${h}` : d.toLocaleDateString("cs-CZ", { day: "numeric", month: "numeric" }) + " " + h; };
@@ -47,7 +50,7 @@ function kresli() {
       <p class="pozn">${s.posl ? `Naposledy v lekci <b>${esc(NAZEV[s.posl] || s.posl)}</b>.` : "Matika ještě nebyla otevřená."} ${s.ulozeno ? `Postup uložený ${kdy(s.ulozeno)}.` : ""}</p>
       ${temata ? `<div class="temata">${temata}</div>` : ""}
       ${pr.some((x) => x.aplikace === "matika" && x.role === "zak") ? `<div class="radek"><button type="button" class="hlavni" data-z="hodina" title="Všechno otevřené, nejdřív úlohy, které ještě nedělal(a). Nic se neuloží.">Hodina spolu</button><button type="button" data-z="zkouska" title="Přesně jeho / její verze. Body ani postup se neuloží.">Náhled žáka</button></div>` : ""}
-      <div class="radek">${pr.some((x) => x.aplikace === "matika" && x.role === "zak") ? `<button type="button" data-z="lekce">Lekce a odemykání</button><button type="button" data-z="body">Nastavit body</button>` : ""}${ja.spravce ? `<button type="button" data-z="pristupy">Přístupy</button><button type="button" data-z="heslo">Nové heslo</button>` : ""}</div>
+      <div class="radek">${pr.some((x) => x.aplikace === "matika" && x.role === "zak") ? `<button type="button" data-z="lekce">Lekce a odemykání</button><button type="button" data-z="body">Body a odměny</button>` : ""}${ja.spravce ? `<button type="button" data-z="pristupy">Přístupy</button><button type="button" data-z="heslo">Nové heslo</button>` : ""}</div>
       <div class="panel" hidden></div></article>`; }).join("")
     : `<p class="pozn">Zatím tu nikdo není.${ja.spravce ? " Přidej prvního žáka tlačítkem nahoře." : ""}</p>`;
 }
@@ -73,14 +76,17 @@ function panelLekce(karta, uid) {
 function panelBody(karta, uid) {
   const n = data.nastaveni.find((x) => x.uzivatel === uid && x.aplikace === "matika"), z = (n && n.data && n.data.zak) || VYCHOZI_ZAK(), ted = souhrn({ id: uid }).body;
   $(".panel", karta).innerHTML = `<form class="body-form" novalidate><label class="radek-pole">Body <input name="body" type="number" min="0" max="100000" step="1" value="${ted}" inputmode="numeric"></label>
-    <div class="radek"><button type="button" data-z="zavrit">Zavřít</button><button type="submit" class="hlavni">Nastavit</button></div>
+    <details class="odmeny-dariv"><summary>Dát odměnu dřív (${(z.odmeny || []).length})</summary><p class="pozn">Zaškrtnutá odměna se odemkne hned, i když na ni žák ještě nemá dost ⭐.</p>
+      <div class="odmeny-mrizka">${ODMENY.map(([id, n, b]) => `<label class="zaskrt"><input type="checkbox" name="odmena" value="${id}" ${(z.odmeny || []).includes(id) ? "checked" : ""}> ${esc(n)} <span class="pozn">${b} ⭐</span></label>`).join("")}</div></details>
+    <div class="radek"><button type="button" data-z="zavrit">Zavřít</button><button type="submit" class="hlavni">Uložit</button></div>
     <p class="pozn stav-panel" aria-live="polite">Teď má ${ted} bodů. Nové číslo se použije, až příště otevře Matiku – třeba když body z dřívějška zůstaly v jiném souboru.</p></form>`;
   $("form", karta).addEventListener("submit", async (e) => { e.preventDefault(); const info = $(".stav-panel", karta), v = e.target.body.value.trim();
     if (!/^\d{1,6}$/.test(v)) { info.textContent = "Napiš celé číslo 0 nebo víc."; return; }
-    const nove = { ...z, body: { celkem: +v, id: Date.now().toString(36) } }; info.textContent = "Ukládám…";
+    const odm = [...e.target.querySelectorAll('input[name="odmena"]:checked')].map((x) => x.value);
+    const nove = { ...z, odmeny: odm, ...(+v !== ted ? { body: { celkem: +v, id: Date.now().toString(36) } } : {}) }; info.textContent = "Ukládám…";
     try { await zapsat("nastaveni", { aplikace: "matika", uzivatel: uid, upravil: ja.id, data: { ...((n && n.data) || {}), zak: nove } }, "aplikace,uzivatel");
       if (n) n.data = { ...(n.data || {}), zak: nove }; else data.nastaveni.push({ uzivatel: uid, aplikace: "matika", data: { zak: nove } });
-      info.textContent = `Nastaveno na ${+v} bodů. Projeví se, až příště otevře Matiku.`; } catch (x) { info.textContent = "Nepovedlo se uložit: " + x.message; } });
+      info.textContent = `Uloženo${+v !== ted ? ` – ${+v} bodů` : ""}${odm.length ? `, odměny dřív: ${odm.length}` : ""}. Projeví se, až příště otevře Matiku.`; } catch (x) { info.textContent = "Nepovedlo se uložit: " + x.message; } });
 }
 
 // ---------- panel: přístupy a zablokování (jen správce) ----------
