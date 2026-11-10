@@ -1,0 +1,1709 @@
+<!doctype html>
+<!-- Hry na oddech: sestaveno ze stejných souborů her jako Matika (sestav-hry.py) – neupravovat ručně. Bez lekcí, testů a dat. -->
+<html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Hry na oddech – lodě, piškvorky, ping-pong online bez přihlášení."><meta name="robots" content="noindex"><title>Hry na oddech</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@500;700&family=STIX+Two+Text:ital,wght@0,500;1,500&display=swap">
+<style id="matika-css">
+/* Školní sešit: čtverečkovaný papír, modré pero, červená oprava, žlutý zvýrazňovač.
+   Každá lekce je cesta po krocích – vždy jedna myšlenka, jeden obrázek, se kterým si hraješ, a hned malý úkol. */
+:root {
+  --papir: #fbfcf7; --mrizka: #e4ebf1; --karta: #ffffff; --linka: #d5dce5;
+  --inkoust: #1d2946; --tuzka: #59647a; --cervena: #cf3f36; --zelena: #1f7f54; --zvyraz: #ffe27a;
+  --modra: #2e6cd0; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #d8483a; --hruska: #7fa21f; --fialova: #7b4fc4; --oranzova: #d9821e;
+  --f-text: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-nadpis: "Bricolage Grotesque", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --f-ruka: "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  --f-mat: "STIX Two Text", "Cambria Math", "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --papir: #131826; --mrizka: #1c2334; --karta: #1a2131; --linka: #2f394d;
+  --inkoust: #e6ebf6; --tuzka: #a4aec3; --cervena: #ff6c62; --zelena: #4dc690; --zvyraz: #6a5716;
+  --modra: #72a5ff; --cokolada: #c48a5c; --cokolada-s: #3a2b22; --jablko: #ff6b5b; --hruska: #b6d651; --fialova: #b28cff; --oranzova: #f0a24a; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --papir: #131826; --mrizka: #1c2334; --karta: #1a2131; --linka: #2f394d;
+  --inkoust: #e6ebf6; --tuzka: #a4aec3; --cervena: #ff6c62; --zelena: #4dc690; --zvyraz: #6a5716;
+  --modra: #72a5ff; --cokolada: #c48a5c; --cokolada-s: #3a2b22; --jablko: #ff6b5b; --hruska: #b6d651; --fialova: #b28cff; --oranzova: #f0a24a; color-scheme: dark; }
+
+/* Vzhledy za body – přebíjí světlý i tmavý režim (stejná síla pravidla, jsou později) */
+:root[data-skin="noc"] { --papir: #0f1530; --mrizka: #1a2246; --karta: #161d3d; --linka: #2b3561; --inkoust: #e9ecff; --tuzka: #a9b1d6; --modra: #7fb2ff; --zvyraz: #5a4a12; --cervena: #ff7a70; --zelena: #5fd3a0; --cokolada: #c48a5c; --cokolada-s: #3a2b22; --jablko: #ff6b5b; --hruska: #b6d651; --fialova: #b28cff; --oranzova: #f0a24a; color-scheme: dark; }
+:root[data-skin="les"] { --papir: #f1f6ec; --mrizka: #dfe9d6; --karta: #fbfdf8; --linka: #c9d8bd; --inkoust: #1f3a26; --tuzka: #566a58; --modra: #2f7a2b; --zvyraz: #f2df86; --cervena: #cf3f36; --zelena: #1f7f54; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #d8483a; --hruska: #7fa21f; --fialova: #7b4fc4; --oranzova: #d9821e; color-scheme: light; }
+:root[data-skin="more"] { --papir: #eef7f9; --mrizka: #d6eaef; --karta: #fbfeff; --linka: #bfdde6; --inkoust: #14354a; --tuzka: #4b6878; --modra: #137f9e; --zvyraz: #ffe9a6; --cervena: #cf3f36; --zelena: #1f7f54; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #d8483a; --hruska: #7fa21f; --fialova: #7b4fc4; --oranzova: #d9821e; color-scheme: light; }
+:root[data-skin="vesmir"] { --papir: #120c26; --mrizka: #1d1540; --karta: #1a1236; --linka: #3a2c68; --inkoust: #efe8ff; --tuzka: #b7aad9; --modra: #c38bff; --zvyraz: #5c3b7a; --cervena: #ff7aa2; --zelena: #63e0b5; --cokolada: #c48a5c; --cokolada-s: #3a2b22; --jablko: #ff6b5b; --hruska: #b6d651; --fialova: #b28cff; --oranzova: #f0a24a; color-scheme: dark; }
+:root[data-skin="vesmir"] body { background-image: radial-gradient(1.5px 1.5px at 20% 30%, #fff8 50%, transparent 51%), radial-gradient(1px 1px at 70% 80%, #fff6 50%, transparent 51%), radial-gradient(1.2px 1.2px at 45% 60%, #fff5 50%, transparent 51%), linear-gradient(var(--mrizka) 1px, transparent 1px), linear-gradient(90deg, var(--mrizka) 1px, transparent 1px); background-size: 140px 140px, 190px 190px, 230px 230px, 24px 24px, 24px 24px; }
+:root[data-skin="zlato"] { --papir: #fbf6e6; --mrizka: #efe4c4; --karta: #fffdf5; --linka: #e0cf9f; --inkoust: #3a2c08; --tuzka: #6f5f35; --modra: #9a6f05; --zvyraz: #ffd85a; --cervena: #cf3f36; --zelena: #1f7f54; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #d8483a; --hruska: #7fa21f; --fialova: #7b4fc4; --oranzova: #d9821e; color-scheme: light; }
+
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background-color: var(--papir); color: var(--inkoust); font: 18px/1.55 var(--f-text);
+  background-image: linear-gradient(var(--mrizka) 1px, transparent 1px), linear-gradient(90deg, var(--mrizka) 1px, transparent 1px);
+  background-size: 24px 24px; }
+.obal { max-width: 980px; margin: 0 auto; padding-block: 22px 90px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.hlava { display: grid; gap: 4px; margin-bottom: 10px; }
+.nadtitul { font: 700 13px/1.2 var(--f-text); letter-spacing: .12em; text-transform: uppercase; color: var(--cervena); }
+h1 { font: 800 clamp(34px, 6.4vw, 56px)/1 var(--f-nadpis); margin: 0; letter-spacing: -.01em; }
+h1 .podtrh { background: linear-gradient(transparent 62%, var(--zvyraz) 62%); padding: 0 .08em; }
+h2 { font: 800 28px/1.1 var(--f-nadpis); margin: 0; text-wrap: balance; }
+h3 { font: 800 clamp(23px, 4vw, 30px)/1.15 var(--f-nadpis); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+nav.zalozky { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; display: flex; gap: 5px; flex-wrap: wrap; padding: 10px 0; background: var(--papir); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--papir); }
+nav.zalozky a { text-decoration: none; color: var(--inkoust); border: 1.5px solid var(--linka); background: var(--karta); border-radius: 10px; padding: 8px 9px; font-weight: 700; font-size: 15px; }
+nav.zalozky a[aria-current="page"] { border-color: var(--inkoust); background: var(--inkoust); color: var(--papir); }
+.zal-zlom { flex-basis: 100%; height: 0; } nav.zalozky a.lektor, nav.zalozky .body-pill { margin-left: auto; } nav.zalozky a.lektor + .body-pill { margin-left: 0; }
+@media (max-width: 560px) { nav.zalozky a { padding: 8px 11px; font-size: 15px; flex: none; } nav.zalozky a.testy, nav.zalozky a.lektor, nav.zalozky .body-pill { margin-left: 0; } .zal-zlom { display: none; }
+  nav.zalozky { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scroll-padding-inline: 16px; } nav.zalozky::-webkit-scrollbar { display: none; } }
+
+/* cesta po krocích */
+section.lekce { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+.lekce-hlava { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding-top: 6px; }
+.lekce-hlava p { color: var(--tuzka); font-size: 16px; }
+.cesta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cesta button { width: 38px; height: 38px; padding: 0; border-radius: 50%; font: 700 15px/1 var(--f-text); display: grid; place-items: center; }
+.cesta button.byl { border-color: var(--zelena); color: var(--zelena); }
+.cesta button[aria-current="step"] { background: var(--modra); border-color: var(--modra); color: var(--karta); }
+.cesta .vse { width: auto; border-radius: 10px; padding: 0 12px; font-size: 14px; margin-left: 6px; }
+.krok { background: var(--karta); border: 1.5px solid var(--linka); border-radius: 16px; padding: 20px; display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+.krok-cislo { font: 700 13px/1 var(--f-text); letter-spacing: .1em; text-transform: uppercase; color: var(--modra); }
+.krok > header { display: grid; gap: 6px; }
+.uvod { color: var(--tuzka); max-width: 66ch; }
+.lekce:not(.vse) .krok:not(.ted) { display: none; }
+.listovani { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+.listovani span { font-size: 15px; color: var(--tuzka); text-align: center; }
+.listovani button { min-width: 120px; }
+.lekce.vse .listovani { display: none; }
+@media (max-width: 560px) { .krok { padding: 14px; border-radius: 14px; } .listovani button { min-width: 0; } }
+
+/* stavební kousky kroku */
+.viz { display: grid; justify-items: center; gap: 8px; }
+.viz svg { display: block; width: 100%; height: auto; touch-action: none; user-select: none; -webkit-user-select: none; }
+.viz.uzky svg { max-width: 560px; }
+.viz.stred svg { max-width: 660px; }
+.hlaska { font: 700 21px/1.4 var(--f-text); text-align: center; min-height: 1.4em; text-wrap: balance; }
+.hlaska .mat { font-size: 26px; }
+.ovl { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; justify-content: center; }
+.pocitadlo { display: inline-flex; align-items: center; border: 1.5px solid var(--linka); border-radius: 12px; overflow: hidden; background: var(--karta); }
+.pocitadlo span { padding: 6px 10px 6px 12px; font-size: 15px; color: var(--tuzka); }
+.pocitadlo b { font: 500 22px/1 var(--f-mat); min-width: 36px; text-align: center; }
+.pocitadlo button { border: 0; border-radius: 0; padding: 10px 15px; background: var(--papir); font-size: 20px; }
+button, select { font: 700 16px/1 var(--f-text); color: var(--inkoust); background: var(--karta); border: 1.5px solid var(--linka); border-radius: 10px; padding: 11px 15px; cursor: pointer; touch-action: manipulation; }
+button:hover:not(:disabled), select:hover { border-color: var(--modra); }
+button:disabled { opacity: .45; cursor: default; }
+button.hlavni { background: var(--inkoust); color: var(--papir); border-color: var(--inkoust); }
+button.hlavni:hover:not(:disabled) { border-color: var(--modra); }
+button.maly { padding: 8px 11px; font-size: 14px; }
+button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid var(--modra); outline-offset: 2px; }
+input[type="range"] { accent-color: var(--modra); width: min(320px, 70vw); height: 30px; }
+.posuvnik { display: grid; gap: 2px; justify-items: center; font-size: 15px; color: var(--tuzka); }
+.pravidlo { border-left: 5px solid var(--zvyraz); background: color-mix(in srgb, var(--zvyraz) 26%, transparent); padding: 12px 16px; border-radius: 0 12px 12px 0; font-size: 18px; }
+.pravidlo b { font-weight: 700; }
+.realne { font-size: 17px; color: var(--tuzka); padding: 2px 4px; }
+.realne::before { content: "V reálu"; font: 700 22px/1 var(--f-ruka); color: var(--zelena); display: inline-block; margin-right: 10px; }
+details.proc { border: 1.5px dashed var(--linka); border-radius: 12px; padding: 0 14px; }
+details.proc summary { cursor: pointer; padding: 11px 0; font-weight: 700; color: var(--modra); }
+details.proc[open] { padding-bottom: 12px; }
+details.proc > div { display: grid; gap: 8px; color: var(--inkoust); }
+.mat { font: 500 24px/1.6 var(--f-mat); }
+.mat i, i.v { font-family: var(--f-mat); font-style: italic; }
+.zl { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; line-height: 1.15; margin: 0 .12em; font-family: var(--f-mat); }
+.zl > span:first-child { border-bottom: 1.6px solid currentColor; padding: 0 .2em; }
+.zl > span:last-child { padding: 0 .2em; }
+.zl.velky { font-size: 1.35em; }
+.zl.velky > span:first-child { border-bottom-width: 2.4px; padding: 0 .35em .1em; }
+.zl.velky > span:last-child { padding: .1em .35em 0; }
+.c1 { color: var(--cokolada); } .c2 { color: var(--modra); } .c3 { color: var(--fialova); } .cok { color: var(--zelena); } .cne { color: var(--cervena); }
+.dve { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 680px) { .dve { grid-template-columns: minmax(0, 1fr); } }
+.ruka { font: 700 25px/1.1 var(--f-ruka); color: var(--cervena); }
+.tlumeny { color: var(--tuzka); }
+.pozn { font-size: 15px; color: var(--tuzka); }
+
+/* malý úkol „Zkus“ */
+.zkus { border: 2px solid var(--modra); border-radius: 14px; padding: 14px 16px; display: grid; gap: 10px; background: color-mix(in srgb, var(--modra) 5%, var(--karta)); }
+.zkus-hlava { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.zkus-hlava b { font: 700 24px/1 var(--f-ruka); color: var(--modra); }
+.zkus-hlava .skore { margin-left: auto; font-size: 14px; color: var(--tuzka); }
+.zadani { font: 500 25px/1.7 var(--f-mat); overflow-x: auto; }
+.zadani .text { font: 18px/1.5 var(--f-text); display: block; }
+.tx { font: 19px/1.5 var(--f-text); }
+.zl.slozeny > span { padding: .25em .35em; }
+.zl.slozeny > span:first-child { border-bottom-width: 2.6px; }
+.radek { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+input.odpoved { font: 24px var(--f-mat); padding: 8px 12px; border: 1.5px solid var(--linka); border-radius: 10px; background: var(--papir); color: var(--inkoust); width: 220px; max-width: 100%; }
+.zpetna { padding: 10px 14px; border-radius: 10px; font-weight: 700; }
+.zpetna.ok { background: color-mix(in srgb, var(--zelena) 16%, transparent); color: var(--zelena); }
+.zpetna.ne { background: color-mix(in srgb, var(--cervena) 13%, transparent); color: var(--cervena); }
+.zpetna.skoro { background: color-mix(in srgb, var(--zvyraz) 45%, transparent); color: var(--inkoust); }
+.postup { display: grid; gap: 4px; padding: 10px 14px; border-left: 3px solid var(--modra); background: var(--papir); border-radius: 0 10px 10px 0; }
+.postup .mat { font-size: 22px; overflow-x: auto; }
+.napoveda { font-size: 15px; color: var(--tuzka); }
+.volby { display: flex; flex-wrap: wrap; gap: 8px; }
+.volby button.vybrano { border-color: var(--modra); background: color-mix(in srgb, var(--modra) 14%, var(--karta)); }
+
+/* je to správně? */
+.pravda { display: grid; gap: 10px; }
+.pravda-karta { border: 1.5px solid var(--linka); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; background: var(--papir); }
+.pravda-karta .mat { font-size: 25px; overflow-x: auto; }
+.pravda-karta .proc-text { font-size: 17px; }
+.pravda-karta.ok { border-color: var(--zelena); } .pravda-karta.ne { border-color: var(--cervena); }
+
+/* krok za krokem */
+.krokovnik { display: grid; gap: 10px; }
+.krokovnik ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: k; }
+.krokovnik li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: start; counter-increment: k; }
+.krokovnik li::before { content: counter(k); font: 700 15px/1 var(--f-text); width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--modra); color: var(--modra); }
+.krokovnik li.ted::before { background: var(--modra); color: var(--karta); }
+.krokovnik li > div { display: grid; gap: 2px; }
+.krokovnik .mat { overflow-x: auto; }
+.krokovnik .co { font-size: 16px; color: var(--tuzka); }
+
+/* výrazy */
+.chipy { display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px; justify-content: center; }
+.chip { font: 500 23px/1 var(--f-mat); padding: 10px 14px; border-radius: 10px; border: 2px solid var(--linka); background: var(--papir); cursor: pointer; }
+.chip.vybrany { border-color: var(--modra); background: color-mix(in srgb, var(--modra) 16%, var(--papir)); transform: translateY(-2px); }
+.bedynky { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .bedynky { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bedynka { border: 2px solid var(--linka); border-radius: 12px; padding: 10px; display: grid; gap: 6px; align-content: start; min-height: 112px; background: var(--karta); cursor: pointer; text-align: left; font: inherit; color: inherit; }
+.bedynka header { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
+.bedynka header svg { width: 28px; height: 28px; }
+.bedynka .obsah { font: 500 21px/1.3 var(--f-mat); }
+.bedynka .soucet { font: 500 21px/1.3 var(--f-mat); color: var(--zelena); }
+.bedynka.trese { animation: trese .35s; border-color: var(--cervena); }
+@keyframes trese { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.kosik { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; min-height: 54px; padding: 8px; border: 2px dashed var(--linka); border-radius: 14px; width: min(100%, 520px); }
+.kosik svg { width: 40px; height: 40px; }
+.tabulka { border-collapse: collapse; font-size: 17px; }
+.tabulka th, .tabulka td { border: 1px solid var(--linka); padding: 6px 10px; text-align: center; }
+.tabulka td.mat { font-size: 20px; }
+
+/* testy */
+.test-karta { background: var(--karta); border: 1.5px solid var(--linka); border-radius: 16px; padding: 20px; display: grid; gap: 14px; }
+.test-hlava { display: grid; gap: 4px; }
+.test-hlava small { color: var(--tuzka); font-size: 15px; }
+.soubory { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 640px) { .soubory { grid-template-columns: minmax(0, 1fr); } }
+.soubor { border: 1.5px solid var(--linka); border-radius: 12px; padding: 14px; display: grid; gap: 10px; background: var(--papir); align-content: start; }
+.soubor b { font-size: 18px; }
+.soubor small { color: var(--tuzka); }
+.akce { display: flex; flex-wrap: wrap; gap: 8px; }
+a.tl { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font: 700 16px/1 var(--f-text); color: var(--inkoust); background: var(--karta); border: 1.5px solid var(--linka); border-radius: 10px; padding: 11px 15px; }
+a.tl.hlavni { background: var(--inkoust); color: var(--papir); border-color: var(--inkoust); }
+a.tl:hover { border-color: var(--modra); }
+.ulohy { display: grid; gap: 8px; }
+.uloha { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 4px 12px; align-items: center; padding: 10px 12px; border: 1.5px solid var(--linka); border-radius: 12px; background: var(--papir); }
+.uloha .cis { font: 800 22px/1 var(--f-nadpis); grid-row: span 2; align-self: start; padding-top: 6px; }
+.uloha .tema { font-size: 14px; color: var(--tuzka); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.uloha .tema a { color: var(--modra); font-weight: 700; }
+.uloha.ok { border-color: var(--zelena); } .uloha.ne { border-color: var(--cervena); }
+.uloha input.odpoved { width: 200px; font-size: 20px; padding: 6px 10px; }
+.uloha .vys { font-size: 16px; font-weight: 700; }
+.vysledky-souhrn { font: 700 20px/1.3 var(--f-text); }
+.klic { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.klic div { border: 1px solid var(--linka); border-radius: 8px; padding: 6px 10px; background: var(--papir); font-size: 16px; }
+.klic b { font-family: var(--f-nadpis); margin-right: 6px; }
+
+/* testy – lektor i žákyně */
+.stitek { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; padding: 4px 9px; border-radius: 999px; background: var(--papir); border: 1.5px solid var(--linka); color: var(--tuzka); white-space: nowrap; }
+.stitek.ukol { border-color: var(--oranzova); color: var(--oranzova); } .stitek.spolu { border-color: var(--modra); color: var(--modra); }
+.stitek.hotovo, .stitek.ok { border-color: var(--zelena); color: var(--zelena); } .stitek.sdil { border-color: var(--fialova); color: var(--fialova); }
+.stitek.pozor { border-color: var(--cervena); color: var(--cervena); }
+.test-karta.zamceno { opacity: .6; border-style: dashed; }
+.test-karta.hotovy { border-color: color-mix(in srgb, var(--zelena) 55%, var(--linka)); }
+.vzkaz { border-left: 4px solid var(--zvyraz); background: color-mix(in srgb, var(--zvyraz) 22%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font: 700 21px/1.3 var(--f-ruka); }
+.casomira { font: 700 22px/1 var(--f-text); color: var(--cervena); }
+.lk-lista { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.lk-lista .hlavni { margin-left: auto; }
+.lk-panel { background: var(--karta); border: 1.5px solid var(--linka); border-radius: 14px; padding: 0 16px; }
+.lk-panel summary { cursor: pointer; padding: 13px 0; font-weight: 700; }
+.lk-panel[open] { padding-bottom: 14px; }
+.lk-nast { display: grid; gap: 10px; }
+.lk-nast label, .lk-pole label, .lk-text { display: grid; gap: 4px; font-size: 15px; color: var(--tuzka); }
+label.check { display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--inkoust); cursor: pointer; }
+label.check input { width: 20px; height: 20px; accent-color: var(--modra); }
+.chip-tema { font: 700 15px/1 var(--f-text); padding: 9px 13px; border-radius: 999px; }
+.chip-tema.probrano { border-color: var(--zelena); color: var(--zelena); background: color-mix(in srgb, var(--zelena) 10%, var(--karta)); }
+.lk-seznam { display: grid; gap: 10px; }
+.test-karta.lk { padding: 14px 16px; gap: 10px; }
+.test-karta.sdileno { border-left: 5px solid var(--fialova); }
+.lk-hlava { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px 14px; align-items: center; }
+.lk-hlava .akce { grid-column: 1 / -1; }
+.lk-sipky { display: grid; gap: 4px; } .lk-sipky button { padding: 4px 9px; }
+.lk-nazev { display: grid; gap: 2px; } .lk-nazev b { font: 800 22px/1.1 var(--f-nadpis); } .lk-nazev small { color: var(--tuzka); font-size: 14px; }
+.lk-stitky { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.lk-detail { display: grid; gap: 12px; border-top: 1.5px dashed var(--linka); padding-top: 12px; }
+.lk-pole { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: end; }
+.lk-pole input[type=date], .lk-nast select, textarea { font: 16px var(--f-text); padding: 8px 10px; border: 1.5px solid var(--linka); border-radius: 10px; background: var(--papir); color: var(--inkoust); }
+textarea { width: 100%; resize: vertical; }
+.lk-ulohy { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 6px; }
+.lk-uloha { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 6px; align-items: center; padding: 5px 8px; border-radius: 10px; background: var(--papir); border: 1.5px solid transparent; }
+.lk-uloha.nepro { border-color: color-mix(in srgb, var(--cervena) 45%, transparent); }
+.lk-uloha select { font: 14px var(--f-text); padding: 6px; border-radius: 8px; min-width: 0; width: 100%; }
+.lk-uloha .volby { gap: 3px; flex-wrap: nowrap; } .lk-uloha .volby button { padding: 6px 8px; }
+dialog#lk-dialog { border: 1.5px solid var(--linka); border-radius: 16px; background: var(--karta); color: var(--inkoust); padding: 0; width: min(640px, calc(100vw - 32px)); max-height: calc(100vh - 40px); }
+dialog#lk-dialog::backdrop { background: rgba(10, 16, 30, .45); }
+.lk-okno { display: grid; gap: 12px; padding: 18px 20px; }
+.lk-okno fieldset { border: 1.5px solid var(--linka); border-radius: 12px; display: grid; gap: 6px; padding: 10px 14px; }
+.lk-okno legend { font-weight: 700; padding: 0 6px; }
+.lk-sdil-seznam { display: grid; gap: 6px; max-height: 40vh; overflow: auto; }
+@media (max-width: 560px) { .lk-hlava { grid-template-columns: minmax(0, 1fr); } .lk-stitky { justify-content: flex-start; } .lk-lista .hlavni { margin-left: 0; } }
+
+/* ⭐ body, poznámky a minihry */
+.body-pill { display: inline-flex; align-items: center; gap: 4px; border-color: var(--oranzova) !important; border-radius: 999px !important; font-variant-numeric: tabular-nums; }
+.body-pill[aria-current="page"] { background: var(--oranzova) !important; border-color: var(--oranzova) !important; color: var(--karta) !important; }
+.toast { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 40; max-width: min(92vw, 520px);
+  background: var(--inkoust); color: var(--papir); padding: 12px 18px; border-radius: 14px; font-weight: 700; box-shadow: 0 8px 28px #0004; animation: vyjed .25s ease-out; }
+@keyframes vyjed { from { transform: translate(-50%, 16px); opacity: 0; } }
+.plus-body { position: fixed; z-index: 41; pointer-events: none; transform: translateX(-50%); font: 800 24px/1 var(--f-nadpis); color: var(--oranzova); text-shadow: 0 1px 0 var(--karta); animation: leti 1.05s ease-out forwards; }
+@keyframes leti { 0% { opacity: 0; transform: translate(-50%, 6px) scale(.8); } 20% { opacity: 1; transform: translate(-50%, -6px) scale(1.15); } 100% { opacity: 0; transform: translate(-50%, -54px) scale(1); } }
+.pozn-tl { justify-self: start; margin-top: 4px; padding: 7px 11px; font-size: 14px; font-weight: 700; background: transparent; color: var(--tuzka); border-style: dashed; }
+.pozn-tl.ma { border-style: solid; border-color: var(--oranzova); color: var(--oranzova); }
+.moje-pozn { display: grid; gap: 8px; padding: 12px; border: 1.5px solid var(--oranzova); border-radius: 12px; background: var(--karta); }
+.moje-pozn textarea, .hry-app textarea { width: 100%; font: 17px/1.4 var(--f-text); color: var(--inkoust); background: var(--papir); border: 1.5px solid var(--linka); border-radius: 10px; padding: 10px; resize: vertical; }
+.body-hlava { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; justify-content: space-between; padding: 16px 18px; background: var(--karta); border: 1.5px solid var(--linka); border-radius: 16px; }
+.nad-maly { font: 700 12px/1 var(--f-text); letter-spacing: .1em; text-transform: uppercase; color: var(--tuzka); }
+.body-velke { font: 800 46px/1.05 var(--f-nadpis); font-variant-numeric: tabular-nums; }
+.k-odmene { flex: 1 1 240px; display: grid; gap: 6px; max-width: 420px; }
+.ukazatel { height: 12px; background: var(--mrizka); border-radius: 999px; overflow: hidden; }
+.ukazatel > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--oranzova), var(--zvyraz)); transition: width .4s; }
+#hry-app h3 { font-size: 22px; }
+.vzhledy { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
+.vzhled { display: grid; gap: 6px; padding: 10px; text-align: left; line-height: 1.2; }
+.vzhled small { font-weight: 400; font-size: 13px; color: var(--tuzka); }
+.vzhled.vybrany { border-color: var(--modra); box-shadow: inset 0 0 0 1.5px var(--modra); }
+.vz-nahled { display: flex; align-items: flex-end; justify-content: space-between; height: 56px; padding: 8px 10px; border-radius: 10px; font: 800 20px/1 var(--f-nadpis); border: 1px solid #0002; }
+.vz-nahled > span { width: 28px; height: 8px; border-radius: 4px; }
+.hry { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.hra-karta { display: grid; gap: 6px; align-content: start; padding: 14px; background: var(--karta); border: 1.5px solid var(--linka); border-radius: 14px; }
+.hra-karta p { margin: 0; } .hra-karta button { justify-self: start; margin-top: 4px; }
+.hra-karta.zamceno { opacity: .62; }
+.hra-plocha { display: grid; gap: 14px; padding: 16px; background: var(--karta); border: 2px solid var(--modra); border-radius: 16px; }
+.hra-otazka { display: grid; place-items: center; min-height: 150px; }
+.hra-volby { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 8px; }
+.hra-volby button { font-size: 20px; padding: 14px 10px; min-height: 58px; }
+.hra-volby button.dobre { background: var(--zelena); border-color: var(--zelena); color: var(--karta); }
+.hra-volby button.spatne { background: var(--cervena); border-color: var(--cervena); color: var(--karta); animation: zatres .3s; }
+@keyframes zatres { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.hra-cas { font-weight: 800; font-variant-numeric: tabular-nums; }
+.hra-konec { display: grid; gap: 8px; justify-items: center; text-align: center; padding: 8px; }
+.hra-konec b { font: 800 28px/1.1 var(--f-nadpis); }
+.poznamky { display: grid; gap: 8px; }
+.pozn-radek { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 10px 12px; background: var(--karta); border: 1.5px solid var(--linka); border-radius: 12px; }
+.pozn-radek a { font-weight: 700; color: var(--modra); text-decoration: none; } .pozn-radek p { margin: 0; grid-column: 1; }
+.pozn-radek button { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+details.verze { margin-top: 28px; font-size: 14px; color: var(--tuzka); }
+details.verze summary { cursor: pointer; font-weight: 700; }
+details.verze ol { margin: 8px 0 0; padding-left: 0; list-style: none; display: grid; gap: 4px; }
+details.verze b { color: var(--inkoust); font-variant-numeric: tabular-nums; }
+/* řešení úloh krok za krokem */
+.m { font-family: var(--f-mat); font-size: 1.12em; white-space: nowrap; }
+.m .zl { font-size: .9em; }
+details.reseni { grid-column: 1 / -1; border: 1.5px solid var(--modra); border-radius: 12px; background: var(--karta); padding: 0 12px; margin-top: 4px; }
+.uloha > details.reseni { grid-column: 2; }
+.lk-uloha:has(details.reseni[open]) { grid-column: 1 / -1; }
+details.reseni > summary { cursor: pointer; padding: 9px 0; font-weight: 700; color: var(--modra); font-size: 15px; }
+details.reseni[open] { padding-bottom: 12px; }
+.reseni-telo { display: grid; gap: 10px; font-size: 16px; line-height: 1.6; }
+.reseni-telo p { margin: 0; }
+.reseni-kroky { margin: 0; padding-left: 24px; display: grid; gap: 10px; }
+.reseni-kroky li::marker { font-weight: 800; color: var(--modra); }
+.reseni-telo { container-type: inline-size; }
+.rk { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
+@container (min-width: 700px) { .rk:not(.rk-bez) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
+.rk-obr { background: var(--papir); border: 1px solid var(--linka); border-radius: 12px; padding: 10px; }
+.rk-svg { width: 100%; height: auto; display: block; }
+.rk-pravo { display: grid; gap: 10px; }
+.rk-krok { border: 1.5px solid var(--modra); border-radius: 12px; padding: 10px 12px; display: grid; gap: 6px; background: var(--karta); }
+.rk-c { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--tuzka); }
+.rk-tl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.rk-tl .hlavni { margin-left: auto; }
+.rk-tecky { display: inline-flex; gap: 4px; } .rk-tecky i { width: 7px; height: 7px; border-radius: 50%; background: var(--linka); } .rk-tecky i.on { background: var(--modra); }
+details.rk-pred { font-size: 14px; color: var(--tuzka); } details.rk-pred summary { cursor: pointer; } details.rk-pred ol { margin: 6px 0 0; padding-left: 22px; display: grid; gap: 4px; }
+.slovni-ramec { width: 100%; height: calc(100vh - 170px); min-height: 560px; border: 1px solid var(--linka); border-radius: 14px; background: #F4F1EA; display: block; }
+.rk-dole { justify-content: space-between; align-items: center; }
+button.odkaz { border: 0; background: none; padding: 4px 0; color: var(--modra); font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; }
+details.proc-krok { margin-top: 4px; font-size: 14px; color: var(--tuzka); }
+details.proc-krok summary { cursor: pointer; font-weight: 700; display: inline; }
+details.proc-krok[open] > div { padding: 4px 0 0 12px; border-left: 3px solid var(--zvyraz); margin-top: 4px; }
+.reseni-vysl { padding: 8px 12px; border-radius: 10px; background: color-mix(in srgb, var(--zelena) 12%, transparent); }
+.reseni-pozor { padding: 8px 12px; border-radius: 10px; background: color-mix(in srgb, var(--oranzova) 14%, transparent); font-size: 15px; }
+@media (max-width: 560px) { .m { white-space: normal; } .uloha > details.reseni { grid-column: 1 / -1; } }
+/* vyplnitelný záznamový arch */
+.pdf-telo.dva.s-archem { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+@media (max-width: 900px) { .pdf-telo.dva.s-archem { grid-template-columns: minmax(0, 1fr); } }
+.arch-panel { grid-template-rows: minmax(0, 1fr); }
+.arch-pane { display: block; padding: 0; background: var(--papir); }
+.arch { display: grid; gap: 12px; padding: 0 16px 60px; max-width: 640px; margin: 0 auto; }
+.arch-hlava { display: grid; gap: 4px; position: sticky; top: 0; z-index: 1; background: var(--papir); padding: 12px 0 8px; border-bottom: 1.5px solid var(--linka); }
+.arch-hlava b { font: 800 20px var(--f-nadpis); }
+.arch-skore { display: flex; gap: 10px; align-items: baseline; } .arch-skore b { font: 800 26px var(--f-nadpis); color: var(--modra); }
+.arch-u { display: grid; gap: 8px; padding: 10px 12px; border: 1.5px solid var(--linka); border-radius: 12px; background: var(--karta); }
+.arch-u.ok { border-color: color-mix(in srgb, var(--zelena) 60%, var(--linka)); } .arch-u.cast { border-color: color-mix(in srgb, var(--oranzova) 60%, var(--linka)); } .arch-u.ne { border-color: color-mix(in srgb, var(--cervena) 55%, var(--linka)); }
+.arch-u h4 { margin: 0; font: 800 16px var(--f-text); display: flex; justify-content: space-between; gap: 8px; }
+.arch-b { font: 700 14px var(--f-text); color: var(--tuzka); font-variant-numeric: tabular-nums; }
+.arch-pole { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.arch-cis { font: 700 14px var(--f-text); min-width: 36px; color: var(--tuzka); font-variant-numeric: tabular-nums; }
+.arch-pole input { flex: 1 1 140px; min-width: 0; max-width: 260px; font: 20px var(--f-mat); padding: 6px 10px; border: 1.5px solid var(--linka); border-radius: 8px; background: var(--papir); color: var(--inkoust); }
+.arch-pred, .arch-jedn { font: 18px var(--f-mat); color: var(--tuzka); }
+.arch-volby { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.arch-volby button { min-width: 40px; padding: 7px 10px; font: 700 15px var(--f-text); }
+.arch-volby button.vybrano { background: var(--inkoust); color: var(--papir); border-color: var(--inkoust); }
+.arch-konstr { display: grid; gap: 6px; font-size: 14px; color: var(--tuzka); flex: 1 1 200px; }
+.arch-vys { flex-basis: 100%; padding-left: 44px; font-weight: 800; font-size: 16px; }
+.arch-vys small { font-weight: 500; font-size: 14px; color: var(--tuzka); }
+.arch-vys.ok { color: var(--zelena); } .arch-vys.cast { color: var(--oranzova); } .arch-vys.ne, .arch-vys.prazdne { color: var(--cervena); }
+.arch-post { font-size: 13px; }
+.arch-pata { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; }
+.arch .reseni { grid-column: auto; }
+/* prohlížeč PDF ve stránce – jeden dokument, nebo dva vedle sebe */
+.pdf-okno { position: fixed; inset: 0; z-index: 50; display: grid; grid-template-rows: auto minmax(0, 1fr); background: var(--papir); }
+.pdf-lista { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; padding: 8px max(16px, env(safe-area-inset-left, 0px)); padding-top: max(8px, env(safe-area-inset-top, 0px)); background: var(--karta); border-bottom: 1.5px solid var(--linka); }
+.prepinac-pdf { display: flex; gap: 6px; align-items: center; min-width: 0; } .prepinac-pdf b { font: 800 18px/1.2 var(--f-nadpis); }
+.prepinac-pdf button[aria-pressed="true"] { background: var(--inkoust); color: var(--papir); border-color: var(--inkoust); }
+.pdf-telo { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); }
+.pdf-telo.dva { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.pdf-pane { display: grid; grid-template-rows: auto minmax(0, 1fr); min-height: 0; min-width: 0; }
+.pdf-telo.dva .pdf-pane + .pdf-pane { border-left: 2px solid var(--linka); }
+.pdf-pane-hlava { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; justify-content: space-between; padding: 6px 12px; background: var(--karta); border-bottom: 1px solid var(--linka); font-size: 14px; }
+.pdf-pane-hlava .radek { gap: 6px; } .pdf-pane-hlava a.tl { padding: 6px 10px; font-size: 13px; }
+.pdf-stranky { overflow: auto; padding: 16px 12px 48px; display: grid; justify-items: center; align-content: start; gap: 14px; background: var(--mrizka); }
+.pdf-stranky:has(iframe) { padding: 0; display: block; }
+.pdf-stranky iframe { width: 100%; height: 100%; border: 0; background: #fff; display: block; }
+.pdf-stranky canvas { display: block; background: #fff; border-radius: 4px; box-shadow: 0 2px 12px #0003; }
+html.pdf-otevreno { overflow: hidden; }
+.jen-uzke { display: none; }
+@media (max-width: 900px) { .pdf-telo.dva { grid-template-columns: minmax(0, 1fr); } .pdf-telo.dva .pdf-pane:not(.aktivni) { display: none; } .pdf-telo.dva .pdf-pane + .pdf-pane { border-left: 0; } .jen-uzke { display: inline-flex; } .jen-siroke { display: none; } }
+@media print {
+  html.tisk-pdf, html.tisk-pdf body { overflow: visible !important; background: #fff !important; }
+  html.tisk-pdf body > :not(.pdf-okno), html.tisk-pdf .pdf-lista, html.tisk-pdf .pdf-pane-hlava, html.tisk-pdf .pdf-pane:not(.tisknout) { display: none !important; }
+  html.tisk-pdf .pdf-okno, html.tisk-pdf .pdf-telo, html.tisk-pdf .pdf-pane { position: static; display: block !important; background: none; }
+  html.tisk-pdf .pdf-stranky { display: block; overflow: visible; padding: 0; background: none; }
+  html.tisk-pdf .pdf-stranky canvas { width: auto !important; height: auto; max-width: 100% !important; max-height: 98vh; margin: 0 auto; box-shadow: none; border-radius: 0; break-after: page; }
+}
+@media print {
+  body { background: #fff; } nav.zalozky, .cesta, .listovani, .zkus .radek button { display: none !important; }
+  .lekce .krok { display: grid !important; break-inside: avoid; }
+}
+/* ===== 3.0: férové body, výzvy, zvířátka, pauza, zámky kroků ===== */
+.body-pill { position: relative; overflow: hidden; }
+.body-pill::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: var(--cil, 0%); background: var(--oranzova); transition: width .4s; }
+.body-pill.splneno::after { background: var(--zelena); }
+.pill-plamen { font-size: .88em; margin-right: 3px; }
+.zisk { display: inline-block; margin-left: 6px; font-weight: 800; color: var(--oranzova); }
+.zisk small { font-weight: 600; }
+.zisk.nic { font-weight: 500; color: var(--tuzka); font-size: .9em; }
+.den-app { display: grid; gap: 12px; } .den-app h3 { margin: 4px 0 0; }
+.ukazatel.plny > span { background: var(--zelena); }
+.vyzvy { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.vyzva { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; background: var(--karta); border: 1.5px solid var(--linka); border-radius: 14px; }
+.vyzva > div { flex: 1; display: grid; gap: 6px; } .vyzva small { color: var(--tuzka); } .vyzva .ukazatel { height: 8px; }
+.vyzva.hotovo { border-color: var(--zelena); } .vyzva-ik { font-size: 22px; line-height: 1; }
+/* zvířátka */
+.zvire { display: block; width: 100%; height: auto; overflow: visible; }
+.zv-app { display: grid; gap: 12px; }
+.zv-uvod { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; padding: 14px 16px; background: var(--karta); border: 1.5px solid var(--linka); border-radius: 16px; }
+.zv-uvod > div:first-child { width: 120px; } .zv-uvod > div:last-child { flex: 1 1 220px; display: grid; gap: 6px; } .zv-uvod h3, .zv-uvod p { margin: 0; }
+.zv-pruh { height: 10px; background: var(--mrizka); border-radius: 999px; overflow: hidden; }
+.zv-pruh i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--oranzova), var(--zvyraz)); }
+.zv-mrizka { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+.zv-karta { display: grid; gap: 4px; justify-items: center; padding: 8px 6px 10px; border-radius: 14px; font: 600 13px/1.2 var(--f-text); height: auto; }
+.zv-karta .zvire { width: 84px; } .zv-karta:disabled { cursor: default; color: var(--tuzka); opacity: 1; } .zv-karta:disabled .zvire { opacity: .4; }
+.zv-karta.vybrano { border-color: var(--oranzova); box-shadow: 0 0 0 2px var(--oranzova) inset; }
+.zv-karta:not(:disabled):hover .zvire { animation: zv-skok .5s ease-out; }
+.zv-klid .zv-ocas, .zv-radost .zv-ocas { animation: zv-vrt .45s ease-in-out infinite alternate; }
+.zv-klid .zv-hlava, .zv-klid .zv-telo { animation: zv-dych 2.8s ease-in-out infinite; }
+.zv-klid .zv-oci, .zv-radost .zv-oci { transform-box: fill-box; transform-origin: center; animation: zv-mrk 4.5s infinite; }
+.zv-radost { animation: zv-skok .55s ease-out 3; } .zv-radost .zv-jazyk { animation: zv-jaz .25s ease-in-out infinite alternate; }
+.zv-klid .zv-kridlo, .zv-radost .zv-kridlo { animation: zv-mav .3s ease-in-out infinite alternate; }
+.zv-klid .zv-kridlo { animation-duration: 1.4s; }
+@keyframes zv-vrt { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
+@keyframes zv-dych { 50% { transform: translateY(1.5px) rotate(-2deg); } }
+@keyframes zv-skok { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-12%); } }
+@keyframes zv-mav { from { transform: rotate(0); } to { transform: rotate(-20deg); } }
+@keyframes zv-mrk { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+@keyframes zv-jaz { to { transform: translateY(1.6px); } }
+.zv-pochvala { position: fixed; right: 12px; bottom: 76px; z-index: 42; display: flex; align-items: flex-end; gap: 4px; pointer-events: none; }
+.zv-pochvala .zvire { width: 96px; }
+.zv-bublina { display: grid; gap: 2px; background: var(--karta); border: 2px solid var(--oranzova); border-radius: 14px 14px 14px 4px; padding: 8px 12px; margin-bottom: 44px; font: 700 16px/1.2 var(--f-nadpis); color: var(--inkoust); box-shadow: 0 6px 18px rgb(0 0 0 / .15); }
+.zv-bublina span { color: var(--oranzova); } .zv-bublina small { font: 600 12px var(--f-text); color: var(--tuzka); }
+.zv-pochvala.ven { animation: zv-prijezd 2.6s ease both; }
+@keyframes zv-prijezd { 0% { transform: translateY(130%); opacity: 0; } 12%, 84% { transform: none; opacity: 1; } 100% { transform: translateY(130%); opacity: 0; } }
+.zv-novy { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px; background: rgb(0 0 0 / .38); }
+.zv-novy-karta { display: grid; gap: 8px; justify-items: center; text-align: center; width: 100%; max-width: 340px; padding: 20px 22px; background: var(--karta); border-radius: 20px; box-shadow: 0 20px 50px rgb(0 0 0 / .3); animation: zv-pop .45s cubic-bezier(.2, 1.4, .4, 1); }
+.zv-novy-karta .zvire { width: 170px; } .zv-novy-karta h3, .zv-novy-karta p { margin: 0; }
+.zv-novy .nad { font: 800 13px var(--f-nadpis); letter-spacing: .08em; text-transform: uppercase; color: var(--oranzova); }
+@keyframes zv-pop { from { transform: scale(.6); opacity: 0; } }
+/* pauza */
+.pauza-app { display: grid; gap: 10px; } .pauza-app h3, .pauza-app > p { margin: 0; } .pauza-stav { font-weight: 600; } .pauza-ukazatel { height: 8px; }
+.pauza-plocha { display: grid; gap: 10px; padding: 12px; background: var(--karta); border: 1.5px solid var(--linka); border-radius: 16px; }
+.pauza-lista { justify-content: space-between; align-items: center; }
+.pauza-hra { display: grid; gap: 8px; justify-items: center; } .pauza-napis { margin: 0; text-align: center; min-height: 1.4em; }
+.pauza-platno { display: block; width: 100%; max-width: 720px; height: auto; aspect-ratio: 8 / 5; border: 1.5px solid var(--linka); border-radius: 12px; touch-action: none; }
+.had-sipky { display: grid; grid-template-columns: repeat(3, 56px); grid-template-areas: ". u ." "l d r"; gap: 6px; }
+.had-sipky button { height: 48px; padding: 0; font-size: 20px; }
+.had-sipky [data-sm="ArrowUp"] { grid-area: u; } .had-sipky [data-sm="ArrowLeft"] { grid-area: l; } .had-sipky [data-sm="ArrowDown"] { grid-area: d; } .had-sipky [data-sm="ArrowRight"] { grid-area: r; }
+@media (hover: hover) and (pointer: fine) { .had-sipky { display: none; } }
+.uvod-karta { max-width: 420px; text-align: left; justify-items: stretch; } .uvod-karta .zvire { width: 110px; justify-self: center; } .uvod-karta h3 { text-align: center; }
+.uvod-kroky { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 12px; }
+.uvod-kroky li { display: flex; gap: 12px; align-items: flex-start; } .uvod-kroky li > span { font-size: 24px; line-height: 1.1; }
+.uvod-kroky p { margin: 2px 0 0; color: var(--tuzka); font-size: 15px; } .uvod-karta .hlavni { justify-self: end; }
+.pex-druh { justify-content: center; }
+.pexeso { display: grid; grid-template-columns: repeat(4, minmax(0, 92px)); gap: 8px; justify-content: center; width: 100%; perspective: 600px; }
+.pex { position: relative; display: grid; place-items: center; aspect-ratio: 1; height: auto; padding: 0; overflow: hidden; border-radius: 12px; border: 1.5px solid var(--inkoust);
+  background: var(--inkoust) repeating-linear-gradient(45deg, transparent 0 9px, rgb(255 255 255 / .07) 9px 10px); }
+.pex::after { content: ""; width: 14px; height: 14px; border: 2px solid rgb(255 255 255 / .45); transform: rotate(45deg); border-radius: 2px; }
+.pex-lic { position: absolute; inset: 0; display: none; place-items: center; padding: 14%; background: var(--karta); }
+.pex.lic .pex-lic { display: grid; } .pex.lic { animation: pex-otoc .22s ease-out; border-color: var(--linka); }
+.pex.par { border-color: var(--zelena); box-shadow: 0 0 0 2px var(--zelena) inset; } .pex.par .pex-lic { opacity: .8; }
+.pex-ikona { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.pex-mat { font: 700 clamp(18px, 5vw, 26px)/1 var(--f-mat, var(--f-text)); color: var(--inkoust); } .pex-mat .zl { font-size: 1.15em; }
+@keyframes pex-otoc { from { transform: rotateY(90deg); } }
+/* přehled */
+nav.zalozky a.prehled { border-color: var(--modra); } nav.zalozky a.lektor { font-size: 14px; color: var(--tuzka); } nav.zalozky a.lektor[aria-current="page"] { color: var(--papir); }
+nav.zalozky a.zamceno { opacity: .5; } nav.zalozky a.zamceno::after { content: " 🔒"; font-size: 12px; }
+.prehled-app, .lektor-app, .vyvoj-app { display: grid; gap: 16px; } .prehled-app h3, .lektor-app h3 { margin: 6px 0 0; }
+.ph-hero { display: flex; gap: 18px; align-items: center; justify-content: space-between; padding: 22px 24px; border-radius: 20px; background: var(--karta); border: 1.5px solid var(--linka); }
+.ph-hero h2 { margin: 6px 0 4px; font-size: clamp(26px, 5vw, 34px); } .ph-hero p { margin: 0 0 14px; color: var(--tuzka); font-size: 17px; }
+.ph-hero-text { display: grid; justify-items: start; } .ph-hlavni { font-size: 18px; padding: 14px 22px; border-radius: 12px; }
+.ph-partak { width: 130px; flex: none; } @media (max-width: 560px) { .ph-partak { width: 84px; } .ph-hero { padding: 18px; align-items: flex-start; } }
+.ph-dlazdice { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+@media (max-width: 560px) { .ph-dl { flex-direction: column; padding: 12px; gap: 6px; align-items: flex-start; } .ph-dl b { font-size: 16px; } .ph-kruh { width: 34px; height: 34px; } .ph-ik { width: auto; font-size: 22px; text-align: left; } }
+.ph-dl { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 16px; background: var(--karta); border: 1.5px solid var(--linka); text-decoration: none; color: var(--inkoust); }
+.ph-dl > div { display: grid; gap: 3px; } .ph-dl b { font-size: 18px; } .ph-dl small { color: var(--tuzka); font-size: 13px; }
+.ph-odkaz:hover { border-color: var(--oranzova); } .ph-ik { font-size: 26px; width: 44px; text-align: center; }
+.ph-kruh { width: 52px; height: 52px; flex: none; transform: rotate(-90deg); } .ph-kruh circle { fill: none; stroke-width: 7; }
+.ph-kruh-pod { stroke: var(--mrizka); } .ph-kruh-nad { stroke: var(--oranzova); stroke-linecap: round; transition: stroke-dashoffset .5s; } .ph-kruh-nad.ok { stroke: var(--zelena); }
+.ph-mrizka { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+.ph-lekce { display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 16px; background: var(--karta); border: 1.5px solid var(--linka); }
+.ph-lekce p { margin: 0; flex: 1; } .ph-lekce.zamcena { opacity: .6; } .ph-lekce.hotova { border-color: var(--zelena); }
+.ph-lekce-hlava { display: flex; justify-content: space-between; align-items: center; gap: 8px; } .ph-lekce-hlava b { font-size: 18px; }
+.ph-stitek { font: 700 12px var(--f-text); color: var(--tuzka); background: var(--mrizka); border-radius: 999px; padding: 4px 9px; white-space: nowrap; }
+.ph-lekce.hotova .ph-stitek { background: color-mix(in srgb, var(--zelena) 18%, var(--karta)); color: var(--zelena); }
+.ph-segmenty { display: flex; gap: 3px; } .ph-segmenty span { flex: 1; height: 8px; border-radius: 3px; background: var(--mrizka); }
+.ph-segmenty .hotovo { background: var(--zelena); } .ph-segmenty .otevreny { background: color-mix(in srgb, var(--modra) 35%, var(--karta)); }
+.ph-lekce-pata { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 2px; } .ph-lekce-pata .tl { padding: 9px 14px; font-size: 15px; }
+.ph-testy { display: flex; flex-wrap: wrap; gap: 8px; } .ph-test { display: grid; gap: 2px; padding: 10px 14px; border-radius: 12px; border: 1.5px solid var(--oranzova); background: var(--karta); color: var(--inkoust); text-decoration: none; } .ph-test span { font-size: 13px; color: var(--tuzka); }
+.ph-poslat { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 16px; border: 1.5px dashed var(--linka); }
+.ph-poslat p { margin: 2px 0 0; } .ph-kod { width: 100%; font: 12px/1.3 var(--f-mono, monospace); }
+/* úrovně témat, oslava, odhalování */
+.ur-mrizka { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.ur-karta { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; background: var(--karta); border: 1.5px solid var(--linka); }
+.ur-karta > div { display: grid; gap: 4px; } .ur-karta small { color: var(--tuzka); font-size: 13px; line-height: 1.3; }
+.ur-pipy { display: flex; gap: 3px; } .ur-pipy span { width: 16px; height: 5px; border-radius: 3px; background: var(--mrizka); } .ur-pipy .ano { background: var(--modra); }
+.odznak { width: 48px; height: 48px; flex: none; } .odznak.velky { width: 120px; height: 120px; }
+.odznak circle { fill: none; stroke-width: 6; } .odz-pod { stroke: var(--mrizka); } .odz-nad { stroke: var(--modra); stroke-linecap: round; }
+.odznak text { font: 800 22px var(--f-nadpis); fill: var(--inkoust); }
+.odznak.u0 text { fill: var(--tuzka); } .odznak.u4 .odz-nad { stroke: var(--fialova); } .odznak.u5 .odz-nad { stroke: var(--oranzova); }
+.odznak.velky { animation: zv-pop .5s cubic-bezier(.2, 1.4, .4, 1); }
+.oslava-ikona { display: grid; place-items: center; width: 92px; height: 92px; border-radius: 28px; font-size: 46px; background: color-mix(in srgb, var(--modra) 12%, var(--karta)); animation: zv-pop .5s cubic-bezier(.2, 1.4, .4, 1); }
+.oslava-karta .radek { justify-content: center; } .oslava-karta p { max-width: 300px; }
+.odhal-tip { padding: 12px 14px; border-radius: 12px; border: 1.5px dashed var(--linka); }
+/* okno lektora a vývoj */
+.lw-karta { display: grid; gap: 10px; padding: 16px 18px; border-radius: 16px; background: var(--karta); border: 1.5px solid var(--linka); } .lw-karta h3, .lw-karta h4, .lw-karta p { margin: 0; } .lw-karta h4 { margin-top: 6px; }
+.lw-karta-hlava { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.lw-vlozit summary { cursor: pointer; color: var(--modra); font-weight: 700; } .lw-vlozit textarea { flex: 1 1 260px; font: 12px var(--f-mono, monospace); }
+.lw-prazdne { padding: 14px; border-radius: 12px; background: var(--mrizka); } .lw-prazdne p { margin: 4px 0 0; }
+.lw-dlazdice .ph-dl { background: var(--papir); }
+.lw-radek { display: grid; grid-template-columns: minmax(90px, 140px) 1fr auto; gap: 10px; align-items: center; } .lw-radek .ukazatel { height: 8px; }
+.lw-pozn { padding: 8px 12px; border-left: 3px solid var(--oranzova); background: var(--papir); border-radius: 0 10px 10px 0; } .lw-pozn p { margin: 2px 0; } .lw-pozn small { color: var(--tuzka); }
+.lw-log { display: grid; grid-template-columns: auto auto 1fr; gap: 3px 12px; font-size: 13px; } .lw-log b { color: var(--modra); }
+.lw-tabulka { display: grid; gap: 8px; } .lw-th, .lw-tr { display: grid; grid-template-columns: minmax(80px, 1fr) minmax(150px, 1.4fr) minmax(130px, 1.2fr); gap: 10px; align-items: center; }
+.lw-th { font: 700 12px var(--f-text); text-transform: uppercase; letter-spacing: .06em; color: var(--tuzka); }
+.lw-nast { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; } .lw-nast label { display: grid; gap: 6px; font-weight: 600; }
+.lw-nast input, .lw-vlozit textarea, #vy-text { padding: 9px 11px; border: 1.5px solid var(--linka); border-radius: 10px; background: var(--karta); color: var(--inkoust); font: 600 16px var(--f-text); }
+.lw-nast input { width: 5.5em; } .lw-nast input:focus, .lw-vlozit textarea:focus, #vy-text:focus { outline: none; border-color: var(--modra); }
+.lw-pata { text-align: right; margin: 0; } .lw-pata a { color: var(--tuzka); }
+.vy-tlacitka { display: flex; flex-wrap: wrap; gap: 8px; } .vy-klice { display: grid; gap: 6px; }
+.vy-klic { display: grid; grid-template-columns: 1fr auto auto auto; gap: 8px; align-items: center; } .vy-klic code { font-size: 13px; overflow-wrap: anywhere; }
+.vy-pre { max-height: 260px; overflow: auto; margin: 0; padding: 10px; font-size: 12px; background: var(--papir); border-radius: 10px; }
+.vy-log { max-height: 320px; overflow: auto; } #vy-text { width: 100%; font: 12px var(--f-mono, monospace); }
+button.nebezpecne { color: var(--cervena); border-color: color-mix(in srgb, var(--cervena) 40%, var(--linka)); margin-left: auto; }
+@media (max-width: 560px) { .lw-th { display: none; } .lw-tr { grid-template-columns: 1fr; gap: 4px; padding-bottom: 8px; border-bottom: 1px solid var(--mrizka); } .lw-radek { grid-template-columns: 1fr auto; } .lw-radek .ukazatel { grid-column: 1 / -1; grid-row: 2; } }
+/* lodě */
+.lo-volba { display: grid; gap: 12px; justify-items: center; text-align: center; width: 100%; max-width: 760px; } .lo-volba > .maly { justify-self: start; }
+.lo-volby { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); width: 100%; }
+.lo-rezim { display: grid; gap: 4px; align-content: start; justify-items: start; text-align: left; height: auto; padding: 14px 16px; border-radius: 14px; }
+.lo-rezim b { font-size: 17px; } .lo-rezim span { font-weight: 400; color: var(--tuzka); font-size: 14px; } .lo-rezim:disabled { opacity: .55; }
+div.lo-rezim { background: var(--karta); border: 1.5px solid var(--linka); } .lo-kod { width: 7.5em; font: 700 20px var(--f-text); letter-spacing: .2em; text-transform: uppercase; }
+.lo-velky-kod { font: 800 56px/1 var(--f-nadpis); letter-spacing: .18em; color: var(--modra); }
+.lo-cekani p { margin: 0; } .lo-spojeni { font-size: 13px; color: var(--tuzka); } .lo-spojeni.ok { color: var(--zelena); }
+.lo-hlava { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; width: 100%; }
+.lo-tah.ja { color: var(--zelena); } .lo-hlaska { margin: 0; min-height: 1.4em; text-align: center; font-weight: 600; } .lo-navod { margin: 0; text-align: center; }
+.lo-lode { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.lo-chip { height: auto; padding: 4px 10px; border-radius: 8px; font-size: 13px; letter-spacing: 1px; color: var(--inkoust); }
+.lo-chip.vybrano { border-color: var(--modra); box-shadow: 0 0 0 2px var(--modra) inset; color: var(--modra); } .lo-chip.hotova { opacity: .45; }
+.lo-mini { display: block; width: calc(var(--d) * 13px); height: 10px; border-radius: 0 5px 5px 0; background: linear-gradient(180deg, #8d9aa8, #3b4652); clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%); }
+.lo-chip { display: grid; place-items: center; min-height: 30px; } .lo-chip.vybrano .lo-mini { background: linear-gradient(180deg, #7fb2ff, #2e6cd0); }
+.pryc .lo-mini { background: linear-gradient(180deg, #7a4a3c, #4a2a22); }
+.lo-flotila { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 8px; }
+.lo-flotila .lo-chip { border: 1.5px solid var(--linka); border-radius: 8px; } .lo-flotila .pryc { text-decoration: line-through; opacity: .4; }
+.lo-boj { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: flex-start; width: 100%; } .lo-boj h4 { margin: 0 0 6px; text-align: center; }
+.lo-pole { --b: min(34px, calc((100vw - 64px) / 11)); --more: color-mix(in srgb, var(--modra) 22%, var(--karta)); --more2: color-mix(in srgb, var(--modra) 34%, var(--karta));
+  display: grid; grid-template-columns: repeat(11, var(--b)); gap: 1px; justify-content: center; }
+.lo-pole.maly { --b: min(26px, calc((100vw - 64px) / 11)); }
+.lo-os { display: grid; place-items: center; font: 600 11px var(--f-text); color: var(--tuzka); }
+.lo-b { position: relative; width: var(--b); height: var(--b); min-width: 0; padding: 0; border: 0; border-radius: 3px; overflow: visible;
+  background: linear-gradient(160deg, var(--more), var(--more2));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12'%3E%3Cpath d='M0 8 q3 -3 6 0 t6 0 t6 0 t6 0' fill='none' stroke='white' stroke-opacity='.45' stroke-width='1.2'/%3E%3C/svg%3E"), linear-gradient(160deg, var(--more), var(--more2));
+  background-size: 60% auto, 100% 100%; background-repeat: repeat, no-repeat; background-position: 0 30%, 0 0; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .28); }
+.lo-pole.strilim .lo-b:not(:disabled):hover { box-shadow: inset 0 0 0 2px var(--oranzova); cursor: crosshair; }
+/* trup lodi: ::before přes celou buňku a mezeru, příď a záď tvarované */
+.lo-b.lod::before { content: ""; position: absolute; z-index: 1; background: linear-gradient(180deg, #8d9aa8 0%, #5e6b79 45%, #3b4652 100%); box-shadow: 0 1px 2px rgb(0 0 0 / .35); }
+.lo-b.lod-v::before { background: linear-gradient(90deg, #8d9aa8 0%, #5e6b79 45%, #3b4652 100%); }
+.lo-b.lod-h::before { top: 20%; bottom: 20%; left: -1px; right: -1px; } .lo-b.lod-v::before { left: 20%; right: 20%; top: -1px; bottom: -1px; }
+.lo-b.lod-h.lod-pr::before { left: 4%; clip-path: polygon(45% 0, 100% 0, 100% 100%, 45% 100%, 0 50%); }
+.lo-b.lod-h.lod-zd::before { right: 10%; border-radius: 0 35% 35% 0 / 0 50% 50% 0; }
+.lo-b.lod-v.lod-pr::before { top: 4%; clip-path: polygon(0 45%, 50% 0, 100% 45%, 100% 100%, 0 100%); }
+.lo-b.lod-v.lod-zd::before { bottom: 10%; border-radius: 0 0 50% 50% / 0 0 35% 35%; }
+.lo-b.lod-h.lod-pr.lod-zd::before, .lo-b.lod-v.lod-pr.lod-zd::before { border-radius: 0; }
+.lo-b > i { position: absolute; z-index: 2; inset: 0; margin: auto; display: block; }
+.lo-kab { width: 46%; height: 34%; border-radius: 3px; background: #d7dee6; box-shadow: inset 0 -2px 0 #9aa6b2; }
+.lo-pok { width: 22%; height: 22%; border-radius: 50%; background: #2c3640; box-shadow: 0 0 0 2px #7c8996; }
+.lo-b.vrak::before, .lo-b.lod.potopena::before { background: linear-gradient(180deg, #7a4a3c, #4a2a22); filter: saturate(.8); }
+.lo-b.vrak > i, .lo-b.lod.potopena > i { opacity: .35; }
+/* voda: kroužky; zásah: plamínek; potopená: tmavý trup a plamínek */
+.lo-b.voda::after, .lo-b.okoli::after { content: ""; position: absolute; z-index: 3; inset: 0; margin: auto; width: 70%; height: 70%; border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 14%, transparent 16% 38%, rgb(255 255 255 / .85) 40% 46%, transparent 48%); }
+.lo-b.okoli::after { width: 30%; height: 30%; background: rgb(255 255 255 / .55); }
+.lo-b.zasah::after, .lo-b.potopena::after { content: ""; position: absolute; z-index: 3; inset: 0; margin: auto; width: 78%; height: 78%; border-radius: 50% 50% 45% 45%;
+  background: radial-gradient(circle at 50% 62%, #fff6c8 0 12%, #ffcc33 22%, #ff7a1a 42%, rgb(220 40 20 / .85) 58%, transparent 70%); animation: lo-ohen 1.1s ease-in-out infinite alternate; }
+.lo-b.potopena::after { width: 56%; height: 56%; opacity: .85; animation: none; }
+.lo-b.ceka::after { content: ""; position: absolute; z-index: 3; inset: 0; margin: auto; width: 34%; height: 34%; border-radius: 50%; background: var(--oranzova); animation: lo-ceka .6s ease-in-out infinite alternate; }
+.lo-b.nova.voda::after { animation: lo-splach .6s ease-out; } .lo-b.nova.zasah::after { animation: lo-vybuch .5s ease-out, lo-ohen 1.1s .5s ease-in-out infinite alternate; }
+.lo-b.nova.lod.potopena::before, .lo-b.nova.vrak::before { animation: lo-potop .9s ease-in-out; }
+@keyframes lo-ohen { from { transform: scale(.92) rotate(-4deg); } to { transform: scale(1.06) rotate(4deg); } }
+@keyframes lo-splach { from { transform: scale(.2); opacity: 0; } 60% { transform: scale(1.25); opacity: 1; } to { transform: scale(1); } }
+@keyframes lo-vybuch { from { transform: scale(.2); filter: brightness(2); } 50% { transform: scale(1.4); } to { transform: scale(1); } }
+@keyframes lo-potop { 0%, 100% { transform: none; } 30% { transform: rotate(-4deg) translateY(1px); } 60% { transform: rotate(3deg) translateY(2px); } }
+@keyframes lo-ceka { to { transform: scale(1.4); opacity: .5; } }
+.lo-b.nahled-ok { box-shadow: inset 0 0 0 2px var(--zelena); background: color-mix(in srgb, var(--zelena) 40%, var(--karta)); }
+.lo-b.nahled-ne { box-shadow: inset 0 0 0 2px var(--cervena); background: color-mix(in srgb, var(--cervena) 35%, var(--karta)); }
+.lo-b:disabled { opacity: 1; cursor: default; }
+.lo-kryt { display: grid; gap: 10px; justify-items: center; text-align: center; padding: 48px 16px; width: 100%; background: var(--inkoust); color: var(--karta); border-radius: 14px; }
+.lo-kryt b { font: 800 22px var(--f-nadpis); } .lo-kryt span { opacity: .8; }
+.lo-tlacitka { justify-content: center; }
+.pozvanka { display: flex; gap: 14px; align-items: center; text-align: left; padding: 12px; border-radius: 14px; border: 1.5px solid var(--linka); background: var(--karta); max-width: 420px; }
+.pozvanka .qr { width: 132px; height: 132px; flex: none; border-radius: 8px; } .pozvanka p { margin: 4px 0 8px; }
+/* člověče, nezlob se */
+.cl-volba { display: grid; gap: 12px; justify-items: center; text-align: center; width: 100%; max-width: 560px; }
+.cl-hraci { display: grid; gap: 8px; width: 100%; } .cl-hrac { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+.cl-hrac input { padding: 9px 11px; border: 1.5px solid var(--linka); border-radius: 10px; background: var(--karta); color: var(--inkoust); font: 600 16px var(--f-text); min-width: 0; }
+.cl-tecka { display: inline-block; width: 16px; height: 16px; border-radius: 50%; flex: none; box-shadow: inset 0 -2px 0 rgb(0 0 0 / .2); }
+.cl-prepinac { display: flex; gap: 8px; align-items: center; font-weight: 600; }
+.cl-hra { position: relative; display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; align-items: flex-start; width: 100%; }
+.cl-deska-obal { flex: 1 1 340px; max-width: 520px; } .cl-deska { display: block; width: 100%; height: auto; }
+.cl-podklad { fill: color-mix(in srgb, var(--oranzova) 8%, var(--karta)); stroke: var(--linka); stroke-width: 2; }
+.cl-pole { fill: var(--karta); stroke: color-mix(in srgb, var(--inkoust) 35%, transparent); stroke-width: 2; }
+.cl-pole.otazka { fill: color-mix(in srgb, var(--modra) 16%, var(--karta)); } .cl-pole.vyzva { fill: color-mix(in srgb, var(--fialova) 16%, var(--karta)); }
+.cl-znak { font: 800 15px var(--f-nadpis); text-anchor: middle; fill: var(--modra); pointer-events: none; } .cl-pole.vyzva + .cl-znak { fill: var(--fialova); }
+.cl-stred { fill: var(--inkoust); opacity: .12; }
+.cl-stin { fill: rgb(0 0 0 / .18); } .cl-fig { transition: transform .25s; } .cl-fig.muze { cursor: pointer; } .cl-fig.muze:hover, .cl-fig.muze:focus { transform: scale(1.12); outline: none; }
+.cl-zar { fill: none; stroke-width: 3; animation: cl-pulz 1s ease-in-out infinite; } .cl-fig.posledni circle:last-child { stroke-width: 2.5; }
+@keyframes cl-pulz { 50% { stroke-opacity: .25; } }
+.cl-panel { flex: 0 1 240px; display: grid; gap: 12px; align-content: start; }
+.cl-na-tahu { display: flex; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 12px; border: 2px solid var(--b); } .cl-na-tahu .cl-tecka { background: var(--b); }
+.cl-hod { display: flex; gap: 12px; align-items: center; height: auto; padding: 10px 14px; border-radius: 14px; } .cl-hod span { font-size: 15px; text-align: left; }
+.cl-kostka { width: 58px; height: 58px; flex: none; } .cl-kostka-tvar { fill: var(--karta); stroke: var(--inkoust); stroke-width: 4; } .cl-kostka circle { fill: var(--inkoust); }
+.cl-kostka.hazi { animation: cl-hazi .5s ease-out; } @keyframes cl-hazi { 0% { transform: rotate(0) scale(1); } 40% { transform: rotate(200deg) scale(.8); } 100% { transform: rotate(360deg) scale(1); } }
+.cl-zprava { margin: 0; min-height: 2.6em; font-weight: 600; }
+.cl-poradi { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; } .cl-poradi li { display: grid; grid-template-columns: auto 1fr; column-gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px; }
+.cl-poradi li.ted { background: var(--mrizka); } .cl-poradi small { grid-column: 2; color: var(--tuzka); }
+.cl-otazka { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; padding: 12px; background: rgb(0 0 0 / .25); border-radius: 16px; }
+.cl-otazka-karta { display: grid; gap: 12px; justify-items: center; text-align: center; max-width: 420px; padding: 20px; border-radius: 18px; background: var(--karta); box-shadow: 0 18px 40px rgb(0 0 0 / .25); animation: zv-pop .35s cubic-bezier(.2, 1.4, .4, 1); }
+.cl-otazka-karta .nad { font: 800 12px var(--f-nadpis); letter-spacing: .1em; text-transform: uppercase; color: var(--modra); } .cl-otazka-karta b { font-size: 19px; }
+.cl-moznosti { display: grid; gap: 8px; width: 100%; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+/* piškvorky */
+.pi-obal { width: 100%; max-width: 540px; } .pi-deska { display: block; width: 100%; height: auto; touch-action: manipulation; }
+.pi-podklad { fill: var(--karta); stroke: var(--linka); stroke-width: 2; } .pi-cara { stroke: var(--mrizka); stroke-width: 1.2; }
+.pi-volne { fill: transparent; } .pi-deska.hraje .pi-volne { cursor: pointer; } .pi-deska.hraje .pi-volne:hover { fill: color-mix(in srgb, var(--modra) 12%, transparent); }
+.pi-x path, .pi-o circle { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.pi-x path { stroke: var(--modra); } .pi-o circle { stroke: var(--oranzova); }
+.pi-x.posl path, .pi-o.posl circle { animation: pi-kresli .35s ease-out; } @keyframes pi-kresli { from { stroke-dashoffset: 1; } }
+.pi-x.vyhra path, .pi-o.vyhra circle { stroke-width: 5.5; } .pi-cara-vyhra { stroke: var(--zelena); stroke-width: 5; stroke-linecap: round; opacity: .55; stroke-dasharray: 1; animation: pi-kresli .6s ease-out; }
+.pi-znak.x { color: var(--modra); } .pi-znak.o { color: var(--oranzova); }
+/* lekce rovnice – váhy */
+.vahy { display: block; width: 100%; max-width: 420px; margin: 0 auto; height: auto; }
+.vh-stojan { fill: var(--cokolada-s, var(--tuzka)); } .vh-tyc { stroke: var(--tuzka); stroke-width: 5; stroke-linecap: round; }
+.vh-rameno { stroke: var(--inkoust); stroke-width: 6; stroke-linecap: round; } .vh-osa { fill: var(--oranzova); }
+.vh-lanko { stroke: var(--tuzka); stroke-width: 1.5; fill: none; } .vh-misa { fill: var(--mrizka); stroke: var(--tuzka); stroke-width: 1.5; }
+.vh-x rect { fill: var(--modra); } .vh-x text, .vh-j text { font: 700 13px var(--f-text); text-anchor: middle; fill: var(--karta); } .vh-x text { font-style: italic; }
+.vh-j circle { fill: var(--oranzova); }
+/* ---------- Obvody a obsahy ---------- */
+.cobv { color: var(--cervena); } .cobs { color: var(--modra); }
+.g-pop { font: 600 16px var(--f-text); fill: var(--inkoust); } .g-pop .g-it, .g-it { font-family: var(--f-mat); font-style: italic; font-size: 19px; }
+.g-tucne { font-weight: 700; } .g-cerv { fill: var(--cervena); } .g-fial { fill: var(--fialova); }
+.g-pop { paint-order: stroke; stroke: var(--karta); stroke-width: 4px; stroke-linejoin: round; } .g-slaby { fill: var(--tuzka); } .g-oranz { fill: var(--oranzova); }
+@media (max-width: 560px) { .viz .g-pop { font-size: 21px; } .viz .g-pop .g-it { font-size: 24px; } }
+.g-mriz { stroke: var(--linka); stroke-width: 1; }
+.g-ctv { fill: color-mix(in srgb, var(--modra) 20%, transparent); stroke: color-mix(in srgb, var(--modra) 45%, transparent); stroke-width: 1; }
+.g-obvod { fill: none; stroke: var(--cervena); stroke-width: 4; stroke-linejoin: round; } .g-obvod.tenky { stroke-width: 2.5; stroke: var(--inkoust); }
+.g-uchop { fill: var(--modra); fill-opacity: .22; stroke: var(--modra); stroke-width: 2.5; cursor: grab; }
+.g-ram { fill: color-mix(in srgb, var(--tuzka) 7%, transparent); stroke: var(--tuzka); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.g-troj { fill: color-mix(in srgb, var(--oranzova) 32%, transparent); stroke: var(--oranzova); stroke-width: 3; stroke-linejoin: round; }
+.g-vyska, .g-prodl { stroke: var(--inkoust); stroke-width: 2; stroke-dasharray: 5 4; fill: none; } .g-prodl { stroke: var(--tuzka); }
+.g-prav { fill: none; stroke: var(--inkoust); stroke-width: 1.6; }
+.g-tvar { fill: color-mix(in srgb, var(--modra) 22%, transparent); stroke: var(--modra); stroke-width: 3; stroke-linejoin: round; }
+.g-kus-b { fill: color-mix(in srgb, var(--oranzova) 38%, transparent); stroke: var(--oranzova); }
+.g-kus-f { fill: color-mix(in srgb, var(--fialova) 28%, transparent); stroke: var(--fialova); }
+.g-kus { transition: transform .9s cubic-bezier(.6,.05,.3,1), opacity .4s; }
+.g-strih { stroke: var(--cervena); stroke-width: 2.5; stroke-dasharray: 7 5; }
+.g-dil { stroke: var(--karta); stroke-width: 1.5; transition: transform 1s cubic-bezier(.6,.05,.3,1); }
+.g-dil.a { fill: color-mix(in srgb, var(--modra) 72%, var(--karta)); } .g-dil.b { fill: color-mix(in srgb, var(--oranzova) 78%, var(--karta)); }
+.g-popisy { transition: opacity .5s .5s; } .g-pr { opacity: 0; } svg.rozlozeno .g-pr { opacity: 1; } svg.rozlozeno .g-pk { opacity: 0; transition-delay: 0s; }
+.g-car { stroke: var(--inkoust); stroke-width: 2.5; } .g-bod { fill: var(--inkoust); }
+.g-zavorka { fill: none; stroke: var(--inkoust); stroke-width: 1.8; }
+.g-cast { stroke: var(--karta); stroke-width: 3; } .g-cast.a { fill: color-mix(in srgb, var(--modra) 26%, transparent); stroke: var(--modra); stroke-width: 2.5; }
+.g-cast.b { fill: color-mix(in srgb, var(--oranzova) 34%, transparent); stroke: var(--oranzova); stroke-width: 2.5; } .g-cast.slaby { fill: color-mix(in srgb, var(--modra) 12%, transparent); stroke: none; }
+.g-chybi { fill: url(#g5-sraf); stroke: var(--cervena); stroke-width: 2.5; stroke-dasharray: 6 4; } .g-sraf { stroke: var(--cervena); stroke-width: 2.5; opacity: .5; }
+.g-obvod-c { fill: none; stroke: var(--cervena); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+.g-posun { transition: transform .9s cubic-bezier(.6,.05,.3,1); }
+.g-jeden { fill: color-mix(in srgb, var(--oranzova) 55%, transparent); stroke: var(--oranzova); stroke-width: 2; }
+.g-ctv.male { transform-box: fill-box; transform-origin: center; } svg.plni .g-ctv.male { animation: g-plneni .35s both; }
+@keyframes g-plneni { from { opacity: 0; transform: scale(.3); } }
+.g-schody { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; font: 700 17px var(--f-text); }
+.g-schody span { background: var(--karta); border: 1.5px solid var(--linka); border-radius: 10px; padding: 6px 11px; }
+.g-schody i { font: 600 13px var(--f-text); font-style: normal; color: var(--tuzka); }
+.mini-obr { display: block; width: 100%; max-width: 300px; height: auto; margin: 10px auto 2px; overflow: visible; }
+.mini-obr .g-pop { font-size: 15px; }
+.m-tvar { fill: color-mix(in srgb, var(--modra) 16%, transparent); stroke: var(--modra); stroke-width: 2.5; stroke-linejoin: round; }
+.m-vyska { stroke: var(--inkoust); stroke-width: 1.6; stroke-dasharray: 5 4; } .m-prav { fill: none; stroke: var(--inkoust); stroke-width: 1.4; }
+.m-car { stroke: var(--inkoust); stroke-width: 2; } .m-bod { fill: var(--inkoust); } .m-kota { fill: none; stroke: var(--tuzka); stroke-width: 1.3; }
+.m-trava { fill: color-mix(in srgb, var(--zelena) 30%, transparent); stroke: var(--zelena); stroke-width: 2.5; }
+.m-voda { fill: color-mix(in srgb, var(--modra) 40%, transparent); stroke: var(--modra); stroke-width: 2.5; }
+
+/* ---------- Tělesa (izometrie) ---------- */
+.k-skryta { stroke: var(--tuzka); stroke-width: 1.4; stroke-dasharray: 5 4; fill: none; }
+.k-st { stroke-width: 2.2; stroke-linejoin: round; transition: opacity .25s; }
+.k-st.ab { fill: color-mix(in srgb, var(--modra) 24%, transparent); stroke: var(--modra); }
+.k-st.ac { fill: color-mix(in srgb, var(--oranzova) 30%, transparent); stroke: var(--oranzova); }
+.k-st.bc { fill: color-mix(in srgb, var(--zelena) 26%, transparent); stroke: var(--zelena); }
+.k-st.slaby { fill-opacity: .55; stroke-width: 2; } .k-st.tlumit { opacity: .2; } .k-st.vybrano { stroke-width: 3.5; }
+.k-mriz { stroke: color-mix(in srgb, var(--tuzka) 45%, transparent); stroke-width: .8; }
+.k-m1, .k-m2, .k-m3 { stroke: var(--modra); stroke-width: 2; stroke-linejoin: round; }
+.k-m1 { fill: color-mix(in srgb, var(--modra) 12%, transparent); } .k-m2 { fill: color-mix(in srgb, var(--modra) 24%, transparent); } .k-m3 { fill: color-mix(in srgb, var(--modra) 36%, transparent); }
+.k-k { stroke: color-mix(in srgb, var(--inkoust) 35%, transparent); stroke-width: .8; stroke-linejoin: round; }
+.k-k.ab { fill: color-mix(in srgb, var(--modra) 30%, var(--karta)); } .k-k.ac { fill: color-mix(in srgb, var(--modra) 55%, var(--karta)); } .k-k.bc { fill: color-mix(in srgb, var(--modra) 78%, var(--karta)); }
+.k-k.jo1 { fill: color-mix(in srgb, var(--oranzova) 45%, var(--karta)); } .k-k.jo2 { fill: color-mix(in srgb, var(--oranzova) 70%, var(--karta)); } .k-k.jo3 { fill: var(--oranzova); }
+.k-obrys { fill: none; stroke: var(--inkoust); stroke-width: 2; stroke-linejoin: round; }
+svg.plni .k-kostka { animation: k-pad .5s both cubic-bezier(.3,.8,.4,1); }
+@keyframes k-pad { from { opacity: 0; transform: translateY(-34px); } }
+.k-mince { fill: none; stroke: color-mix(in srgb, var(--oranzova) 70%, transparent); stroke-width: 1.2; }
+.t-mal { font-size: 13px; } .viz .g-pop.t-mal { font-size: 13px; } .g-pop.t-vz { font-family: var(--f-mat); font-weight: 500; fill: var(--tuzka); }
+.t-ab { color: var(--modra); } .t-ac { color: var(--oranzova); } .t-bc { color: var(--zelena); } span.tlumit { opacity: .35; }
+button.t-ab, button.t-ac, button.t-bc { border-left-width: 6px; } button.t-ab { border-left-color: var(--modra); } button.t-ac { border-left-color: var(--oranzova); } button.t-bc { border-left-color: var(--zelena); }
+.t-podstava { fill: color-mix(in srgb, var(--zelena) 45%, transparent); stroke: var(--zelena); stroke-width: 2.4; stroke-linejoin: round; }
+.t-sipka { fill: none; stroke: var(--oranzova); stroke-width: 1.8; }
+.t-voda { fill: color-mix(in srgb, var(--modra) 42%, transparent); stroke: none; } .t-voda-b { fill: color-mix(in srgb, var(--modra) 55%, transparent); } .t-voda-h { fill: color-mix(in srgb, var(--modra) 25%, transparent); stroke: var(--modra); stroke-width: 1; }
+.t-sklo { fill: color-mix(in srgb, var(--modra) 6%, transparent); stroke: var(--inkoust); stroke-width: 2; stroke-linejoin: round; } .t-hrana { stroke: var(--inkoust); stroke-width: 1.4; }
+/* ---------- Konstrukce ---------- */
+.k-bod { fill: var(--inkoust); } .k-bod.ok { fill: var(--zelena); } .k-bod.male { r: 3px; }
+.g-uchop.ok { fill: var(--zelena); stroke: var(--zelena); }
+.k-jm { font-family: var(--f-mat); font-style: italic; font-size: 19px; } .k-cerv { fill: var(--cervena); } .k-modr { fill: var(--modra); } .k-oranz { fill: var(--oranzova); } .k-tuz { fill: var(--tuzka); }
+.g-pop.k-delka { font-size: 14px; fill: var(--tuzka); }
+.k-tusena { fill: none; stroke: var(--tuzka); stroke-width: 1.2; stroke-dasharray: 3 7; opacity: .7; }
+.k-vysl { fill: none; stroke: var(--modra); stroke-width: 3; stroke-linecap: round; }
+.k-mer { stroke: var(--tuzka); stroke-width: 1.6; stroke-dasharray: 6 4; } .k-mer.ok { stroke: var(--zelena); stroke-width: 2.4; stroke-dasharray: none; }
+.k-kruh { fill: none; stroke-width: 2.2; } .k-kruh.a { stroke: var(--modra); fill: color-mix(in srgb, var(--modra) 6%, transparent); } .k-kruh.b { stroke: var(--oranzova); fill: color-mix(in srgb, var(--oranzova) 7%, transparent); }
+.k-hled { fill: none; stroke: var(--cervena); stroke-width: 3; stroke-linecap: round; } .k-pomoc { fill: none; stroke: var(--tuzka); stroke-width: 2; stroke-linecap: round; }
+.k-konst { fill: none; stroke: var(--tuzka); stroke-width: 1.7; stroke-linecap: round; }
+.k-zakl { fill: none; stroke: var(--inkoust); stroke-width: 3; stroke-linecap: round; }
+.k-troj { fill: color-mix(in srgb, var(--modra) 12%, transparent); stroke: none; }
+.k-thal { fill: none; stroke: var(--fialova); stroke-width: 2; stroke-dasharray: 7 5; }
+.k-pravy { fill: color-mix(in srgb, var(--cervena) 25%, transparent); stroke: var(--cervena); stroke-width: 2; }
+.k-uhel { fill: color-mix(in srgb, var(--oranzova) 30%, transparent); stroke: var(--oranzova); stroke-width: 1.5; }
+.k-kresli { stroke-dasharray: 1; stroke-dashoffset: 1; animation: k-kresli .7s ease-out forwards; } @keyframes k-kresli { to { stroke-dashoffset: 0; } }
+.k-objev { opacity: 0; animation: k-objev .4s ease-out forwards; } @keyframes k-objev { to { opacity: 1; } }
+.bez-animace .k-kresli, .k-hotove .k-kresli { animation: none; stroke-dashoffset: 0; } .bez-animace .k-objev, .bez-animace li { animation: none !important; opacity: 1 !important; }
+
+.k-konstrukce { display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, 230px); gap: 16px; align-items: center; }
+.k-konstrukce .viz svg { max-width: 560px; }
+.k-zapis { margin: 0; padding: 12px 14px; list-style: none; display: grid; gap: 6px; background: var(--karta); border: 1.5px solid var(--linka); border-radius: 12px; font-size: 16px; }
+.k-zapis li { opacity: 0; animation: k-objev .4s ease-out forwards; } .k-zapis li b { color: var(--tuzka); font-weight: 600; margin-right: 4px; } .k-zapis li .mat { font-size: 19px; }
+.k-zapis li.nejde { text-decoration: line-through; color: var(--cervena); }
+.k-konstrukce.k-dve { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+@media (max-width: 700px) { .k-konstrukce, .k-konstrukce.k-dve { grid-template-columns: 1fr; } }
+/* ---------- Grafy a tabulky ---------- */
+.gr-mriz { stroke: var(--linka); stroke-width: 1; } .gr-osy { stroke: var(--inkoust); stroke-width: 2; }
+.g-pop.gr-osa { font-size: 13px; fill: var(--tuzka); } .viz .g-pop.gr-osa { font-size: 14px; }
+.gr-sl { fill: color-mix(in srgb, var(--modra) 70%, var(--karta)); cursor: pointer; transition: y .8s cubic-bezier(.5,.1,.3,1), height .8s cubic-bezier(.5,.1,.3,1); } .gr-sl:hover { fill: var(--modra); }
+.gr-sl.vybrano { fill: var(--oranzova); }
+.g-pop.gr-hod { font-weight: 700; font-size: 14px; }
+.gr-chybi { fill: none; stroke: var(--tuzka); stroke-width: 1.5; stroke-dasharray: 5 4; } .g-pop.gr-otaz { font-size: 22px; font-weight: 700; fill: var(--tuzka); }
+.gr-prum { stroke: var(--cervena); stroke-width: 2.4; stroke-dasharray: 8 5; } .g-pop.gr-prum-t { fill: var(--cervena); font-weight: 700; font-size: 14px; }
+.gr-cil { stroke: var(--zelena); stroke-width: 2; } .g-pop.gr-cil-t { fill: var(--zelena); font-weight: 700; font-size: 13px; }
+.gr-cteni { stroke: var(--oranzova); stroke-width: 1.6; stroke-dasharray: 4 4; }
+.gr-pozde { opacity: 0; animation: k-objev .4s .8s forwards; }
+.gr-obal { overflow-x: auto; display: flex; justify-content: center; }
+.gr-tab { border-collapse: collapse; font-size: 17px; background: var(--karta); margin: 6px auto; }
+.gr-tab th, .gr-tab td { border: 1.5px solid var(--linka); padding: 8px 10px; text-align: center; white-space: nowrap; } .gr-tab th { background: var(--papir); font-weight: 700; }
+.gr-tab.male { font-size: 16px; } .gr-tab.male th, .gr-tab.male td { padding: 5px 10px; }
+.gr-tab td b { display: inline-block; min-width: 1.6em; }
+.gr-pm { padding: 2px 8px; font-size: 15px; border-radius: 8px; }
+.gr-rad td, .gr-rad th { color: transparent; } .gr-rad td b { color: transparent; } .gr-rad.videt td, .gr-rad.videt th, .gr-rad.videt td b { color: var(--inkoust); } .gr-rad.videt td b { color: var(--modra); }
+.gr-vys { stroke: var(--karta); stroke-width: 2; } .gr-vys.a { fill: var(--modra); } .gr-vys.b { fill: var(--oranzova); } .gr-vys.c { fill: var(--zelena); } .gr-vys.d { fill: color-mix(in srgb, var(--tuzka) 55%, var(--karta)); }
+.g-pop.gr-vys-t { fill: var(--karta); stroke: none; font-weight: 700; }
+.gr-k::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: 0; }
+.gr-k.a::before { background: var(--modra); } .gr-k.b::before { background: var(--oranzova); } .gr-k.c::before { background: var(--zelena); }
+.pocitadlo.male span { padding: 6px 8px; font-size: 14px; } .pocitadlo.male button { padding: 8px 12px; font-size: 18px; }
+/* Procenta a poměr */
+.po-c { fill: var(--karta); stroke: var(--linka); stroke-width: 1; transition: fill .22s, stroke .22s; cursor: pointer; }
+.po-c.plne { fill: color-mix(in srgb, var(--modra) 78%, var(--karta)); stroke: color-mix(in srgb, var(--modra) 60%, var(--karta)); }
+.mini-obr .po-c { cursor: default; }
+.g-pop.po-velke { font: 700 42px var(--f-nadpis); fill: var(--modra); }
+.g-pop.po-zl { font-family: var(--f-mat); font-size: 23px; } .po-zl-cara { stroke: var(--inkoust); stroke-width: 1.6; }
+.g-pop.po-des { fill: var(--modra); font-weight: 700; }
+.g-pop.po-mala { font-size: 12px; fill: var(--tuzka); } .viz .g-pop.po-mala { font-size: 13px; } .g-pop.po-vnitr { font-size: 15px; }
+@media (max-width: 560px) { .viz .g-pop.po-mala { font-size: 15px; } .viz .g-pop.po-mala.lich { display: none; } }
+.g-pop.po-tucne { font-weight: 700; } .g-pop.po-modra { fill: var(--modra); } .g-pop.po-oranz { fill: color-mix(in srgb, var(--oranzova) 85%, var(--inkoust)); } .g-pop.po-cervena { fill: var(--cervena); font-weight: 700; }
+.g-pop.po-bila { fill: var(--karta); font-weight: 700; stroke: none; font-size: 15px; }
+.po-pruh { fill: var(--karta); stroke: var(--inkoust); stroke-width: 1.6; }
+.po-cast { fill: color-mix(in srgb, var(--modra) 72%, var(--karta)); transition: width .45s cubic-bezier(.5,.1,.3,1); pointer-events: none; }
+.po-tick { stroke: var(--tuzka); stroke-width: 1; } .po-tick.jemna { stroke: color-mix(in srgb, var(--tuzka) 45%, var(--karta)); }
+.po-jedno { fill: var(--oranzova); } .po-vodit { fill: none; stroke: var(--oranzova); stroke-width: 1.3; stroke-dasharray: 3 3; }
+.po-znacka { stroke: var(--modra); stroke-width: 2.5; }
+.po-zavorka { fill: none; stroke: var(--tuzka); stroke-width: 1.5; }
+.po-puv { fill: color-mix(in srgb, var(--modra) 62%, var(--karta)); transition: x .55s cubic-bezier(.5,.1,.3,1), width .55s cubic-bezier(.5,.1,.3,1); }
+.po-plus { fill: var(--zelena); transition: x .55s cubic-bezier(.5,.1,.3,1), width .55s cubic-bezier(.5,.1,.3,1); }
+.po-minus { fill: color-mix(in srgb, var(--cervena) 10%, var(--karta)); stroke: var(--cervena); stroke-width: 1.8; stroke-dasharray: 6 4; transition: x .55s cubic-bezier(.5,.1,.3,1), width .55s cubic-bezier(.5,.1,.3,1); }
+.po-ref { stroke: var(--tuzka); stroke-width: 1.2; stroke-dasharray: 4 4; }
+.po-rad.r3 { opacity: 0; transition: opacity .3s; } .po-rad.r3.videt { opacity: 1; }
+.po-a { fill: var(--modra); transition: x .5s cubic-bezier(.5,.1,.3,1), width .5s cubic-bezier(.5,.1,.3,1); }
+.po-b { fill: color-mix(in srgb, var(--oranzova) 88%, var(--inkoust)); transition: x .5s cubic-bezier(.5,.1,.3,1), width .5s cubic-bezier(.5,.1,.3,1); }
+.po-obrys { fill: none; stroke: var(--inkoust); stroke-width: 1.6; } .po-del { stroke: var(--karta); stroke-width: 2.5; }
+.po-mapa { fill: color-mix(in srgb, var(--zelena) 9%, var(--karta)); stroke: var(--linka); stroke-width: 1.5; }
+.po-reka { fill: none; stroke: color-mix(in srgb, var(--modra) 40%, var(--karta)); stroke-width: 8; stroke-linecap: round; }
+.po-vrst { fill: none; stroke: color-mix(in srgb, var(--cokolada) 45%, var(--karta)); stroke-width: 1.2; }
+.po-les { fill: color-mix(in srgb, var(--zelena) 26%, var(--karta)); stroke: color-mix(in srgb, var(--zelena) 45%, var(--karta)); stroke-width: 1.2; } .po-strom { fill: none; stroke: color-mix(in srgb, var(--zelena) 70%, var(--karta)); stroke-width: 1.4; stroke-linecap: round; }
+.po-bod { fill: var(--cervena); stroke: var(--karta); stroke-width: 2.5; } .po-bod.tah { cursor: grab; }
+.po-vzd { stroke: var(--cervena); stroke-width: 2.2; stroke-dasharray: 7 4; }
+.po-prav { fill: color-mix(in srgb, var(--zvyraz) 50%, var(--karta)); stroke: color-mix(in srgb, var(--tuzka) 60%, var(--karta)); stroke-width: 1.2; }
+.po-rys { stroke: var(--inkoust); stroke-width: 1; } .po-zvyr { fill: var(--cervena); }
+/* Řady obrazců */
+.ra-c { fill: color-mix(in srgb, var(--modra) 70%, var(--karta)); stroke: color-mix(in srgb, var(--modra) 55%, var(--inkoust)); stroke-width: 1; }
+.ra-c.nove { fill: var(--oranzova); stroke: color-mix(in srgb, var(--oranzova) 70%, var(--inkoust)); }
+/* dlaždice jsou opravdu tmavé a světlé – stejné v obou režimech */
+.ra-c.tmave { fill: #4a5878; stroke: #2b3550; } .ra-c.svetle { fill: #f4f6fa; stroke: #c3cbd8; }
+.ra-c.ra-s1 { fill: var(--modra); } .ra-c.ra-s2 { fill: var(--oranzova); } .ra-c.ra-s3 { fill: var(--zelena); } .ra-c.ra-s4 { fill: var(--fialova); }
+.ra-c.oranz { fill: color-mix(in srgb, var(--oranzova) 80%, var(--karta)); stroke: color-mix(in srgb, var(--oranzova) 60%, var(--inkoust)); }
+.ra-oranz { opacity: 0; transition: transform .9s cubic-bezier(.5,.1,.3,1), opacity .4s; } .ra-oranz.videt { opacity: 1; }
+.ra-sirka line { stroke: color-mix(in srgb, var(--cokolada) 45%, var(--karta)); stroke-width: 5; stroke-linecap: round; } .ra-sirka circle { fill: color-mix(in srgb, var(--cervena) 80%, var(--inkoust)); }
+.ra-sirka.stala line { stroke: color-mix(in srgb, var(--tuzka) 70%, var(--karta)); } .ra-sirka.roste line { stroke: color-mix(in srgb, var(--modra) 75%, var(--karta)); }
+.ra-t-stala { fill: var(--tuzka); font-weight: 700; } .ra-t-roste { fill: var(--modra); font-weight: 700; } .g-pop.ra-t-tmave { fill: var(--inkoust); }
+.ra-predch { opacity: .3; } .ra-oblouk { fill: none; stroke: var(--oranzova); stroke-width: 1.5; }
+.ra-carka { stroke-width: 2.4; stroke-linecap: round; } .ra-carka.stala { stroke: var(--tuzka); } .ra-carka.roste { stroke: var(--modra); } .ra-carka.roste.b { stroke: color-mix(in srgb, var(--modra) 50%, var(--karta)); } .ra-carka.zbytek { stroke: var(--cervena); }
+/* Smíšené opakování */
+.op-volby { display: grid; gap: 8px; margin-bottom: 14px; } .op-pocet { margin: 0; color: var(--tuzka); font-size: 15px; }
+.op-odkud { font-size: 15px; color: var(--tuzka); } .op-odkud a { color: var(--modra); font-weight: 700; }
+/* Čas a rychlost */
+.ca-cif { fill: var(--karta); stroke: var(--inkoust); stroke-width: 2.5; }
+.ca-vysec { fill: color-mix(in srgb, var(--modra) 30%, var(--karta)); }
+.ca-ryska { stroke: var(--tuzka); stroke-width: 1.2; } .ca-ryska.velka { stroke: var(--inkoust); stroke-width: 2.2; }
+.ca-rucicka { stroke: var(--modra); stroke-width: 4; stroke-linecap: round; } .ca-knofl { fill: var(--modra); stroke: var(--karta); stroke-width: 3; cursor: grab; } .ca-stred { fill: var(--inkoust); }
+.ca-osa { stroke: var(--inkoust); stroke-width: 2; } .ca-skok { fill: none; stroke: var(--oranzova); stroke-width: 2.2; }
+.ca-bod.zac { fill: var(--modra); stroke: var(--karta); stroke-width: 2.5; } .ca-bod.kon { fill: var(--cervena); stroke: var(--karta); stroke-width: 2.5; }
+.ca-cesta { stroke: color-mix(in srgb, var(--tuzka) 45%, var(--karta)); stroke-width: 14; stroke-linecap: round; }
+.ca-auto { fill: var(--cervena); stroke: var(--karta); stroke-width: 3; }
+.ca-tr { fill: color-mix(in srgb, var(--zvyraz) 35%, var(--karta)); stroke: var(--inkoust); stroke-width: 1.8; stroke-linejoin: round; } .ca-tr-cara { stroke: var(--inkoust); stroke-width: 1.5; }
+.ca-pism { cursor: pointer; } .ca-pism circle { fill: transparent; stroke: none; transition: fill .2s; } .ca-pism:hover circle { fill: color-mix(in srgb, var(--modra) 14%, transparent); }
+.ca-pism.kryte circle { fill: var(--modra); } .ca-pism.kryte .g-pop { fill: var(--karta); stroke: none; }
+.ca-draha { fill: color-mix(in srgb, var(--cervena) 10%, var(--karta)); stroke: color-mix(in srgb, var(--cervena) 30%, var(--karta)); stroke-width: 1.2; }
+.ca-km { stroke: color-mix(in srgb, var(--tuzka) 40%, var(--karta)); stroke-width: 1; stroke-dasharray: 3 4; } .ca-cil { stroke: var(--inkoust); stroke-width: 3; stroke-dasharray: 6 4; }
+.ca-bezec { stroke: var(--karta); stroke-width: 3; } .ca-bezec.a { fill: var(--modra); } .ca-bezec.b { fill: var(--oranzova); }
+.ca-pr.a { fill: color-mix(in srgb, var(--modra) 75%, var(--karta)); } .ca-pr.b { fill: color-mix(in srgb, var(--oranzova) 80%, var(--karta)); }
+.ca-potkani { stroke: var(--inkoust); stroke-width: 2.5; }
+.g-pop.gr-leg { font-size: 14px; } .g-pop.ra-txt { font-size: 17px; }
+#lekce-telesa .viz svg, #lekce-geometrie .viz svg, #lekce-telesa .mini-obr, #lekce-geometrie .mini-obr { overflow: visible; } /* popisky kót kousek za okrajem obrázku */ .g-pop.ca-stit { font-size: 16px; } .ca-pozadi { fill: var(--karta); }
+@media (prefers-reduced-motion: reduce) { .g-kus, .g-dil, .g-posun, .g-popisy, .gr-sl, .ra-oranz, .po-c, .po-cast, .po-puv, .po-plus, .po-minus, .po-a, .po-b, .po-rad.r3 { transition: none !important; } .k-kresli { animation: none !important; stroke-dashoffset: 0; } .k-objev, .k-zapis li { animation: none !important; opacity: 1; } svg.plni .g-ctv.male, svg.plni .k-kostka { animation: none; } .k-st { transition: none; } }
+/* úlohy z testů podle témat */
+.temata-app { display: grid; gap: 14px; }
+.tm-nahoda { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 16px; background: color-mix(in srgb, var(--modra) 9%, var(--karta)); border: 1.5px solid color-mix(in srgb, var(--modra) 35%, var(--linka)); }
+.tm-nahoda p { margin: 2px 0 0; } .tm-vylosovano { display: grid; gap: 6px; }
+.tm-temata { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.tm-tema { display: flex; gap: 10px; align-items: center; text-align: left; height: auto; padding: 8px 10px; border-radius: 14px; font-weight: 600; }
+.tm-tema .odznak { width: 38px; height: 38px; } .tm-tema span { display: grid; gap: 2px; } .tm-tema small { font-weight: 400; color: var(--tuzka); font-size: 13px; }
+.tm-tema.vybrano { border-color: var(--modra); box-shadow: 0 0 0 2px var(--modra) inset; }
+.tm-seznam { display: grid; gap: 10px; } .tm-seznam-hlava { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; } .tm-seznam-hlava h3 { margin: 0; } .tm-seznam-hlava .tl { margin-left: auto; padding: 8px 12px; font-size: 14px; }
+.tu { display: grid; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--karta); border: 1.5px solid var(--linka); }
+.tu.ok { border-color: color-mix(in srgb, var(--zelena) 55%, var(--linka)); } .tu.cast { border-color: color-mix(in srgb, var(--oranzova) 55%, var(--linka)); } .tu.otevrena { box-shadow: 0 6px 18px rgb(0 0 0 / .06); }
+.tu.zamcena { color: var(--tuzka); border-style: dashed; text-align: center; }
+.tu-hlava { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; } .tu-stav { font: 600 13px var(--f-text); color: var(--tuzka); }
+.tu.ok .tu-stav { color: var(--zelena); } .tu.cast .tu-stav { color: var(--oranzova); } .tu.ne .tu-stav { color: var(--cervena); }
+.tu-akce { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; } .tu-akce .tl, .tu-akce button { padding: 9px 13px; font-size: 15px; }
+.tu-pole { display: grid; gap: 10px; padding-top: 10px; border-top: 1px dashed var(--linka); }
+.tm-bonus { display: grid; gap: 2px; padding: 14px 16px; border-radius: 16px; border: 1.5px dashed var(--linka); color: var(--inkoust); text-decoration: none; } .tm-bonus:hover { border-color: var(--modra); }
+.arch-str { padding: 2px 8px; margin-left: 6px; font-size: 12px; border-radius: 999px; vertical-align: middle; }
+/* postupné odemykání kroků */
+.cesta button.zamceno { opacity: .45; border-style: dashed; }
+.lekce.vse .krok.zamceny { display: none; }
+.zamek-info { margin: 0; padding: 12px; text-align: center; color: var(--tuzka); border: 1.5px dashed var(--linka); border-radius: 12px; }
+.lekce:not(.vse) .zamek-info { display: none; }
+.listovani .ceka { opacity: .7; } .listovani .odemceno { animation: zv-pop .5s; }
+.cesta .odemknout { width: auto; border-radius: 10px; padding: 0 10px; font-size: 12px; margin-left: auto; }
+.blik { animation: blik 1.1s ease 2; border-radius: 12px; }
+@keyframes blik { 50% { box-shadow: 0 0 0 4px var(--oranzova); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+</head><body>
+<div class="obal">
+  <header class="hlava hry-hlava">
+    <h1>Hry <span class="podtrh">na oddech</span></h1>
+    <p class="pozn">Lodě, piškvorky, ping-pong a další. Online si zahraješ s kamarádem – každý na svém telefonu nebo počítači, bez přihlášení. Jeden založí místnost, druhý načte QR kód nebo napíše kód.</p>
+    <button type="button" class="maly hry-tema" data-tema aria-label="Přepnout světlý a tmavý režim">🌓 Světle / tmavě</button>
+  </header>
+  <section class="lekce vse" id="lekce-hry" data-lekce="hry" aria-label="Hry">
+    <div id="pauza-app" class="pauza-app"></div>
+  </section>
+  <p class="pozn hry-pata">Nic se tu neukládá na server – spojení jde jen mezi dvěma otevřenými stránkami. Rekordy a rozehraná hra zůstávají jen v tomhle prohlížeči.</p>
+</div>
+<style>
+.hry-hlava { position: relative; }
+.hry-tema { justify-self: start; margin-top: 4px; }
+.hry-pata { margin-top: 24px; text-align: center; }
+#lekce-hry[hidden] { display: grid !important; }
+</style>
+
+<script id="hry-js">
+(() => {
+"use strict";
+// ================= základ veřejné stránky her (Učebna › hry): jen to, co hry potřebují – bez lekcí, testů a bodů =================
+// Hry se skládají ze stejných souborů jako v Matice (h-qr, h-spojeni, h-otazky, h-lode, h-clovece, h-piskvorky, h-pauza).
+const zl = (n, d, cls = "") => `<span class="zl ${cls}"><span>${n}</span><span>${d}</span></span>`;
+const nah = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const vyber = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const ulozit = (k, v) => { try { localStorage.setItem("hry-" + k, JSON.stringify(v)); } catch (e) { /* bez úložiště */ } };
+const nacist = (k, z) => { try { const v = localStorage.getItem("hry-" + k); return v == null ? z : JSON.parse(v); } catch (e) { return z; } };
+const ZAK = null; window.__HRY_VEREJNE = true;
+const Zaznam = { pis() {}, vse: () => [] };
+const Odhaleni = { je: () => true };
+const Rytmus = { vypnuty: true, zbyva: 0, bezi: () => false, zacni: () => true, nastav() {}, ukonci() {} };
+const Body = (() => { const toast = document.createElement("div"); toast.className = "toast"; toast.setAttribute("role", "status"); toast.hidden = true; document.body.append(toast);
+  let c = 0; return { oznam(t) { toast.innerHTML = t; toast.hidden = false; clearTimeout(c); c = setTimeout(() => (toast.hidden = true), 3600); } }; })();
+// tmavý režim: podle systému, přepínač v liště si pamatuje volbu
+(() => { const b = $("[data-tema]"), nast = (v) => { if (v) document.documentElement.dataset.theme = v; else delete document.documentElement.dataset.theme; };
+  nast(nacist("tema", "")); if (b) b.addEventListener("click", () => { const tmave = document.documentElement.dataset.theme ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    const v = tmave ? "light" : "dark"; nast(v); ulozit("tema", v); }); })();
+
+// ================= QR kód (vlastní, bez knihovny): bajtový režim, oprava chyb M, verze 1–10 (do ~210 znaků) =================
+// QR.svg(text) → <svg>. Slouží pro odkaz do hry: host naskenuje telefonem a je rovnou v místnosti.
+const QR = (() => {
+  const BLOKY = [null, [10, [[1, 16]]], [16, [[1, 28]]], [26, [[1, 44]]], [18, [[2, 32]]], [24, [[2, 43]]], [16, [[4, 27]]], [18, [[4, 31]]], [22, [[2, 38], [2, 39]]], [22, [[3, 36], [2, 37]]], [26, [[4, 43], [1, 44]]]];
+  const ZAROV = [null, [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34], [6, 22, 38], [6, 24, 42], [6, 26, 46], [6, 28, 50]];
+  const EXP = new Array(512), LOG = new Array(256); { let x = 1; for (let i = 0; i < 255; i++) { EXP[i] = x; LOG[x] = i; x <<= 1; if (x & 256) x ^= 0x11d; } for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255]; }
+  const nas = (a, b) => (a && b ? EXP[LOG[a] + LOG[b]] : 0);
+  function rsEcc(data, n) { let g = [1]; for (let i = 0; i < n; i++) { const ng = new Array(g.length + 1).fill(0); g.forEach((c, j) => { ng[j] ^= c; ng[j + 1] ^= nas(c, EXP[i]); }); g = ng; }
+    const r = new Array(n).fill(0); for (const d of data) { const f = d ^ r[0]; r.shift(); r.push(0); if (f) for (let j = 0; j < n; j++) r[j] ^= nas(g[j + 1], f); } return r; }
+  const bch = (val, poly, st) => { let r = val; for (let i = 0; i < st; i++) r = (r << 1) ^ ((r >>> (st - 1)) * poly); return (val << st) | (r & ((1 << st) - 1)); };
+  const MASKY = [(x, y) => (x + y) % 2 === 0, (x, y) => y % 2 === 0, (x) => x % 3 === 0, (x, y) => (x + y) % 3 === 0, (x, y) => (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0,
+    (x, y) => ((x * y) % 2) + ((x * y) % 3) === 0, (x, y) => (((x * y) % 2) + ((x * y) % 3)) % 2 === 0, (x, y) => (((x + y) % 2) + ((x * y) % 3)) % 2 === 0];
+  function matice(text) {
+    const b = [...new TextEncoder().encode(text)]; let ver = 1;
+    for (; ver <= 10; ver++) { const dat = BLOKY[ver][1].reduce((s, [n, d]) => s + n * d, 0); if (dat * 8 >= 4 + (ver < 10 ? 8 : 16) + b.length * 8) break; }
+    if (ver > 10) throw new Error("Text je na QR kód moc dlouhý");
+    const [ec, sk] = BLOKY[ver], dat = sk.reduce((s, [n, d]) => s + n * d, 0), bity = [];
+    const pis = (v, n) => { for (let i = n - 1; i >= 0; i--) bity.push((v >>> i) & 1); };
+    pis(4, 4); pis(b.length, ver < 10 ? 8 : 16); b.forEach((x) => pis(x, 8)); pis(0, Math.min(4, dat * 8 - bity.length)); while (bity.length % 8) bity.push(0);
+    const cw = []; for (let i = 0; i < bity.length; i += 8) cw.push(parseInt(bity.slice(i, i + 8).join(""), 2)); for (let p = 0; cw.length < dat; p++) cw.push(p % 2 ? 0x11 : 0xec);
+    const bloky = []; let k = 0; sk.forEach(([n, d]) => { for (let i = 0; i < n; i++) { const dd = cw.slice(k, k + d); k += d; bloky.push({ d: dd, e: rsEcc(dd, ec) }); } });
+    const vys = [], maxD = Math.max(...bloky.map((x) => x.d.length)); for (let i = 0; i < maxD; i++) bloky.forEach((x) => { if (i < x.d.length) vys.push(x.d[i]); }); for (let i = 0; i < ec; i++) bloky.forEach((x) => vys.push(x.e[i]));
+    const N = ver * 4 + 17, M = Array.from({ length: N }, () => new Array(N).fill(false)), F = Array.from({ length: N }, () => new Array(N).fill(false));
+    const set = (x, y, v) => { M[y][x] = v; F[y][x] = true; };
+    for (let i = 0; i < N; i++) { set(6, i, i % 2 === 0); set(i, 6, i % 2 === 0); }
+    const najdi = (x, y) => { for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= N || yy >= N) continue; const d = Math.max(Math.abs(dx), Math.abs(dy)); set(xx, yy, d !== 2 && d !== 4); } };
+    najdi(3, 3); najdi(N - 4, 3); najdi(3, N - 4);
+    const Z = ZAROV[ver], nz = Z.length; Z.forEach((a, i) => Z.forEach((c, j) => { if ((i === 0 && j === 0) || (i === 0 && j === nz - 1) || (i === nz - 1 && j === 0)) return; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) set(a + dx, c + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1); }));
+    const format = (mask) => { const f = bch((0 << 3) | mask, 0x537, 10) ^ 0x5412, bit = (i) => ((f >>> i) & 1) === 1; // úroveň M = 00
+      for (let i = 0; i <= 5; i++) set(8, i, bit(i)); set(8, 7, bit(6)); set(8, 8, bit(7)); set(7, 8, bit(8)); for (let i = 9; i < 15; i++) set(14 - i, 8, bit(i));
+      for (let i = 0; i < 8; i++) set(N - 1 - i, 8, bit(i)); for (let i = 8; i < 15; i++) set(8, N - 15 + i, bit(i)); set(8, N - 8, true); };
+    format(0);
+    if (ver >= 7) { const v = bch(ver, 0x1f25, 12); for (let i = 0; i < 18; i++) { const bit = ((v >>> i) & 1) === 1, a = N - 11 + (i % 3), c = Math.floor(i / 3); set(a, c, bit); set(c, a, bit); } }
+    let i = 0;
+    for (let r = N - 1; r >= 1; r -= 2) { if (r === 6) r = 5; for (let v = 0; v < N; v++) for (let j = 0; j < 2; j++) { const x = r - j, y = ((r + 1) & 2) === 0 ? N - 1 - v : v;
+      if (!F[y][x] && i < vys.length * 8) { M[y][x] = ((vys[i >>> 3] >>> (7 - (i & 7))) & 1) === 1; i++; } } }
+    let nejlepsi = null, nejmin = Infinity;
+    for (let m = 0; m < 8; m++) { const K = M.map((r, y) => r.map((v, x) => (F[y][x] ? v : v !== MASKY[m](x, y)))), zal = M.map((r) => r.slice()); for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) M[y][x] = K[y][x];
+      format(m); const p = trest(M, N); if (p < nejmin) { nejmin = p; nejlepsi = M.map((r) => r.slice()); } for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) M[y][x] = zal[y][x]; }
+    return nejlepsi;
+  }
+  function trest(M, N) { let p = 0, tmave = 0;
+    const radky = [...M, ...M[0].map((_, x) => M.map((r) => r[x]))];
+    for (const r of radky) { let delka = 1; for (let i = 1; i <= N; i++) { if (i < N && r[i] === r[i - 1]) delka++; else { if (delka >= 5) p += 3 + delka - 5; delka = 1; } }
+      const s = r.map((v) => (v ? 1 : 0)).join(""); for (const vz of ["10111010000", "00001011101"]) { let k = s.indexOf(vz); while (k >= 0) { p += 40; k = s.indexOf(vz, k + 1); } } }
+    for (let y = 0; y < N - 1; y++) for (let x = 0; x < N - 1; x++) { const c = M[y][x]; if (c === M[y][x + 1] && c === M[y + 1][x] && c === M[y + 1][x + 1]) p += 3; }
+    M.forEach((r) => r.forEach((v) => { if (v) tmave++; })); p += 10 * (Math.ceil(Math.abs(tmave * 20 - N * N * 10) / (N * N)) - 1); return p; }
+  function svg(text, popis) { const M = matice(text), N = M.length, o = 4; let d = "";
+    M.forEach((r, y) => r.forEach((v, x) => { if (v) d += `M${x + o} ${y + o}h1v1h-1z`; }));
+    return `<svg viewBox="0 0 ${N + 2 * o} ${N + 2 * o}" class="qr" role="img" aria-label="${popis || "QR kód"}" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#000"/></svg>`; }
+  return { svg, matice };
+})();
+
+// ================= 🌐 spojení pro hry dvou hráčů (Supabase Realtime, kanál = kód místnosti) =================
+// Nic se neukládá: zprávy jdou jen mezi dvěma otevřenými stránkami. Server Učebny (projekt ucebna), veřejný klíč je určený pro prohlížeč.
+// verejnaAdresa = veřejná stránka jen s hrami v Učebně (bez přihlášení, bez dat): QR kód a odkaz pro soupeře bez účtu.
+const SPOJENI = { url: "https://lioqktkvjghckboyvsfj.supabase.co", klic: "sb_publishable_mc5yK14EDBd-v1jFMzXG5Q_LjGoDhu5", verejnaAdresa: "https://tomas0070160010-sudo.github.io/ucebna/hry/" };
+const Spojeni = (() => {
+  const cfg = () => window.__SPOJENI || SPOJENI;
+  const ABC = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  const novyKod = () => Array.from({ length: 4 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join("");
+  // pripoj(hra, kod, { zprava(obj), stav(text, ok) }) → { posli(obj), zavri() }
+  function pripoj(hra, kod, h) {
+    const { url, klic } = cfg(), topic = `realtime:${hra}-${kod}`;
+    let ws = null, ref = 0, joinRef = null, pripojeno = false, zavreno = false, srdce = null, pokus = 0; const fronta = [];
+    const adresa = (url.startsWith("ws") ? url : url.replace(/^http/, "ws")) + `/realtime/v1/websocket?apikey=${encodeURIComponent(klic)}&vsn=1.0.0`;
+    const odesli = (o) => { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); };
+    function otevri() {
+      h.stav(pokus ? "Obnovuji spojení…" : "Připojuji…", false);
+      try { ws = new WebSocket(adresa); } catch (e) { h.stav("Spojení se nepovedlo.", false); return; }
+      ws.onopen = () => { joinRef = String(++ref);
+        odesli({ topic, event: "phx_join", payload: { config: { broadcast: { self: false, ack: false }, presence: { key: "" }, postgres_changes: [], private: false }, ...(klic.startsWith("sb_") ? {} : { access_token: klic }) }, ref: joinRef, join_ref: joinRef });
+        clearInterval(srdce); srdce = setInterval(() => odesli({ topic: "phoenix", event: "heartbeat", payload: {}, ref: String(++ref) }), 25000); };
+      ws.onmessage = (e) => { let m; try { m = JSON.parse(e.data); } catch (x) { return; }
+        if (m.event === "phx_reply" && m.ref === joinRef) { if (m.payload && m.payload.status === "ok") { pripojeno = true; pokus = 0; h.stav("Připojeno", true); while (fronta.length) posli(fronta.shift()); } else h.stav("Server místnost odmítl.", false); return; }
+        if (m.event === "broadcast" && m.topic === topic && m.payload && m.payload.event === "hra") h.zprava(m.payload.payload || {}); };
+      ws.onclose = () => { pripojeno = false; clearInterval(srdce); if (zavreno) return; pokus++; h.stav("Spojení přerušeno – zkouším znovu…", false); setTimeout(otevri, Math.min(8000, 800 * pokus)); };
+      ws.onerror = () => {};
+    }
+    function posli(obj) { if (!pripojeno) { fronta.push(obj); return; } odesli({ topic, event: "broadcast", payload: { type: "broadcast", event: "hra", payload: obj }, ref: String(++ref), join_ref: joinRef }); }
+    otevri();
+    return { posli, zavri() { zavreno = true; clearInterval(srdce); try { if (ws) ws.close(); } catch (e) { /* už zavřené */ } } };
+  }
+  // pozvánka do místnosti: QR kód a odkaz, když má hra veřejnou adresu; jinak jen kód
+  function pozvanka(hra, kod) { const a = cfg().verejnaAdresa; if (!a) return "";
+    const odkaz = `${a.replace(/#.*$/, "")}#hra-${hra}-${kod}`;
+    return `<div class="pozvanka">${QR.svg(odkaz, "QR kód pro připojení do hry")}<div><b>Naskenuj telefonem</b><p class="pozn">Soupeř nepotřebuje účet – otevře odkaz a je rovnou ve hře.</p>
+      <button type="button" class="maly" data-kopiruj-odkaz="${odkaz}">Kopírovat odkaz</button></div></div>`; }
+  document.addEventListener("click", (e) => { const b = e.target.closest("[data-kopiruj-odkaz]"); if (!b) return; const t = b.dataset.kopirujOdkaz;
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => Body.oznam("Odkaz zkopírovaný"), () => Body.oznam(t)); });
+  return { lze: () => !!cfg().url, novyKod, pripoj, pozvanka };
+})();
+
+// ================= otázky do her: matika (generovaná) a výzvy (hádanky, co je pravda, emoji) – vlastní znění =================
+const OtazkyHer = (() => {
+  const mix = (a) => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const moznosti = (sp, kolem) => { const s = new Set([sp]); for (const k of mix(kolem)) { if (s.size >= 4) break; if (k !== sp) s.add(k); } return mix([...s]).map(String); };
+  const MAT = [
+    () => { const p = vyber([10, 20, 25, 50, 75]), n = vyber([40, 60, 80, 120, 200, 240]), sp = (p * n) / 100; return { t: `Kolik je ${p} % z ${n}?`, sp: String(sp), m: moznosti(sp, [sp + 10, sp - 10, sp * 2, sp / 2, n - sp, sp + 5].filter((x) => x > 0 && Number.isInteger(x))) }; },
+    () => { const a = nah(2, 9), b = nah(2, 9), sp = a * b; return { t: `${a} · ${b} = ?`, sp: String(sp), m: moznosti(sp, [sp + a, sp - b, sp + 1, sp - 1, sp + 10]) }; },
+    () => { const x = nah(2, 12), a = nah(3, 15), sp = x; return { t: `x + ${a} = ${x + a}. Kolik je x?`, sp: String(sp), m: moznosti(sp, [x + 1, x - 1, x + a, a, x + 2].filter((y) => y > 0)) }; },
+    () => { const u = 5 * nah(2, 16), sp = 90 - u; return { t: `Kolik stupňů chybí ${u}° do pravého úhlu?`, sp: sp + "°", m: moznosti(sp + "°", [180 - u, sp + 10, sp - 10, 90 + u].filter((y) => y > 0 && y !== sp).map((y) => y + "°")) }; },
+    () => { const d = vyber([4, 5, 8, 10]), n = d * nah(2, 9), k = nah(1, d - 1), sp = (n / d) * k; return { t: `Kolik je ${k}/${d} z ${n}?`, sp: String(sp), m: moznosti(sp, [n / d, sp + n / d, sp - n / d, n - sp, sp + 1].filter((y) => y > 0 && Number.isInteger(y))) }; },
+    () => { let a, b, c, dd, n = 0; do { a = nah(1, 5); b = a + nah(1, 4); c = nah(1, 5); dd = c + nah(1, 4); } while (a === c && b === dd && n++ < 20); if (a === c && b === dd) { c = a + 1; dd = b + 1; } const sp = a / b > c / dd ? `${a}/${b}` : a / b < c / dd ? `${c}/${dd}` : "jsou stejné"; return { t: `Který zlomek je větší: ${a}/${b}, nebo ${c}/${dd}?`, sp, m: mix([`${a}/${b}`, `${c}/${dd}`, "jsou stejné"]) }; },
+    () => { const s = nah(3, 12), sp = 4 * s; return { t: `Čtverec má stranu ${s} cm. Jaký má obvod?`, sp: sp + " cm", m: moznosti(sp + " cm", [s * s, 2 * s, sp + 4, sp - 4].map((y) => y + " cm")) }; },
+    () => { const a = nah(2, 9), sp = a * a; return { t: `Kolik je ${a}²?`, sp: String(sp), m: moznosti(sp, [2 * a, sp + a, sp - a, sp + 1]) }; },
+  ];
+  const VYZVY = [
+    ["Co je těžší: kilo peří, nebo kilo železa?", "Váží stejně", ["Železo", "Peří"]],
+    ["Kolik měsíců v roce má 28 dní?", "Všech 12", ["Jeden", "Dva"]],
+    ["Která planeta je nejblíž Slunci?", "Merkur", ["Venuše", "Mars"]],
+    ["Kolik polí má šachovnice?", "64", ["36", "100"]],
+    ["Pravda, nebo mýtus: chobotnice má tři srdce.", "Pravda", ["Mýtus"]],
+    ["Pravda, nebo mýtus: banán je z pohledu botaniky bobule.", "Pravda", ["Mýtus"]],
+    ["Pravda, nebo mýtus: zlatá rybka si pamatuje jen 3 sekundy.", "Mýtus", ["Pravda"]],
+    ["Čím víc z toho odebereš, tím je to větší. Co to je?", "Díra", ["Hromada", "Stín"]],
+    ["Mám klávesy, ale žádný zámek. Co jsem?", "Klávesnice", ["Trezor", "Dveře"]],
+    ["Co patří tobě, ale ostatní to používají víc než ty?", "Tvoje jméno", ["Tvůj mobil", "Tvoje mikina"]],
+    ["Kolik nul má jeden milion?", "6", ["5", "9"]],
+    ["Které zvíře prospí nejvíc hodin denně?", "Koala", ["Kůň", "Žirafa"]],
+    ["Kolik kostí má dospělý člověk zhruba?", "206", ["120", "350"]],
+    ["🍕 + 🇮🇹 – odkud pochází pizza?", "Itálie", ["Řecko", "Francie"]],
+    ["⏰ + 😴 + 📱 = ?", "Odložený budík", ["Ranní běh", "Oběd"]],
+    ["🌧️ + ☀️ = ?", "Duha", ["Bouřka", "Mlha"]],
+    ["Kolik hran má krychle?", "12", ["8", "6"]],
+    ["Pravda, nebo mýtus: blesk nikdy neudeří dvakrát do stejného místa.", "Mýtus", ["Pravda"]],
+    ["Který oceán je největší?", "Tichý", ["Atlantský", "Indický"]],
+    ["Jakou barvu má krev chobotnice?", "Modrou", ["Zelenou", "Červenou"]],
+    ["Když předběhneš druhého v závodě, kolikátá jsi?", "Druhá", ["První", "Třetí"]],
+    ["Kolik minut má jeden den?", "1440", ["1200", "2400"]],
+    ["Pravda, nebo mýtus: med se při správném uložení prakticky nezkazí.", "Pravda", ["Mýtus"]],
+    ["Co jde nahoru i dolů, ale nikdy se nehne?", "Schody", ["Výtah", "Míč"]],
+    ["Kolik nohou má pavouk?", "8", ["6", "10"]],
+    ["Které písmeno je v abecedě po Q?", "R", ["P", "S"]],
+    ["🐝 + 🌸 = ?", "Med", ["Džem", "Sirup"]],
+    ["Kolik je hodin, když velká ručička je na 12 a malá na 3?", "3:00", ["12:15", "9:00"]],
+  ];
+  let posledni = [];
+  function vyzva() { let i; do { i = Math.floor(Math.random() * VYZVY.length); } while (posledni.includes(i) && posledni.length < VYZVY.length); posledni = [i, ...posledni].slice(0, 12);
+    const [t, sp, spatne] = VYZVY[i]; return { t, sp, m: mix([sp, ...spatne]) }; }
+  const matika = () => vyber(MAT)();
+  return { matika, vyzva };
+})();
+
+// ================= ⚓ Lodě: proti počítači, dvě hráčky u jednoho zařízení, online (kód místnosti) =================
+// Pole 10×10, flotila 5-4-3-3-2, lodě se nedotýkají ani rohem. Zásah = střílíš znovu. Kolem potopené lodi se ukáže voda.
+const Lode = (() => {
+const N = 10, FLOTILA = [5, 4, 3, 3, 2], PIS = "ABCDEFGHIJ";
+const jm = (c) => PIS[c % N] + (Math.floor(c / N) + 1);
+const okoli = (c) => { const x = c % N, y = Math.floor(c / N), v = []; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const a = x + dx, b = y + dy; if ((dx || dy) && a >= 0 && b >= 0 && a < N && b < N) v.push(b * N + a); } return v; };
+function bunky(x, y, d, svisle) { const v = []; for (let i = 0; i < d; i++) { const a = x + (svisle ? 0 : i), b = y + (svisle ? i : 0); if (a >= N || b >= N) return null; v.push(b * N + a); } return v; }
+function lzePolozit(lode, b, krome) { if (!b) return false; const obs = new Set(); lode.forEach((l, i) => { if (i !== krome && l) l.b.forEach((c) => { obs.add(c); okoli(c).forEach((o) => obs.add(o)); }); }); return b.every((c) => !obs.has(c)); }
+function nahodne() { for (let t = 0; t < 200; t++) { const lode = []; let ok = true;
+    for (const d of FLOTILA) { let p = null; for (let k = 0; k < 300 && !p; k++) { const sv = Math.random() < 0.5, b = bunky(Math.floor(Math.random() * N), Math.floor(Math.random() * N), d, sv); if (lzePolozit(lode, b, -1)) p = { d, b, sv }; } if (!p) { ok = false; break; } lode.push(p); }
+    if (ok) return lode; } return null; }
+// vyhodnotí střelu do mé flotily: { r: voda | zasah | potopena, b: buňky potopené lodi, konec }
+function zasah(hrac, c) { const l = hrac.lode.find((x) => x.b.includes(c)); if (!l) return { r: "voda" }; hrac.trefy.add(c);
+  if (l.b.every((x) => hrac.trefy.has(x))) return { r: "potopena", b: l.b, d: l.d, konec: hrac.lode.every((x) => x.b.every((y) => hrac.trefy.has(y))) }; return { r: "zasah" }; }
+// zápis výsledku do mapy střel (u potopené lodi dopíše vodu kolem)
+function zapis(mapa, c, v) { if (v.r === "potopena") { v.b.forEach((x) => mapa.set(x, "potopena")); v.b.forEach((x) => okoli(x).forEach((o) => { if (!mapa.has(o)) mapa.set(o, "okoli"); })); } else mapa.set(c, v.r); }
+// počítač: hledá šachovnicově, po zásahu dorazí loď po řadě
+function pocitacStrela(mapa) {
+  const nezn = (c) => c >= 0 && c < N * N && !mapa.has(c), zas = [...mapa].filter(([, r]) => r === "zasah").map(([c]) => c);
+  if (zas.length) { let kand = [];
+    if (zas.length > 1) { const sv = zas[0] % N === zas[1] % N, s = [...zas].sort((a, b) => a - b), krok = sv ? N : 1;
+      kand = [s[0] - krok, s[s.length - 1] + krok].filter((c) => nezn(c) && (sv || Math.floor(c / N) === Math.floor(s[0] / N))); }
+    if (!kand.length) zas.forEach((h) => [h - N, h + N, h % N ? h - 1 : -1, h % N < N - 1 ? h + 1 : -1].forEach((c) => { if (nezn(c)) kand.push(c); }));
+    if (kand.length) return kand[Math.floor(Math.random() * kand.length)]; }
+  let vol = []; for (let c = 0; c < N * N; c++) if (!mapa.has(c) && (c % N + Math.floor(c / N)) % 2 === 0) vol.push(c);
+  if (!vol.length) for (let c = 0; c < N * N; c++) if (!mapa.has(c)) vol.push(c);
+  return vol[Math.floor(Math.random() * vol.length)];
+}
+const novyHrac = (jmeno) => ({ jmeno, lode: [], trefy: new Set(), strely: new Map() }); // strely = kam jsem střílela já
+function pole(o) { // o: { lode (moje lodě nebo vraky soupeře), vraky, prijate / strely (Map), klik, maly, popis, nove (Set nových buněk) }
+  const casti = new Map(); (o.lode || []).forEach((l) => { if (!l) return; const sv = l.b.length > 1 ? l.b[1] - l.b[0] === N : !!l.sv; l.b.forEach((c, i) => casti.set(c, { i, d: l.b.length, sv })); });
+  let h = `<div class="lo-pole${o.maly ? " maly" : ""}${o.klik ? " strilim" : ""}" role="grid" aria-label="${o.popis}"><span></span>${[...PIS].map((p) => `<span class="lo-os">${p}</span>`).join("")}`;
+  for (let y = 0; y < N; y++) { h += `<span class="lo-os">${y + 1}</span>`;
+    for (let x = 0; x < N; x++) { const c = y * N + x, k = casti.get(c), st = (o.strely || o.prijate || new Map()).get(c);
+      const tr = [k ? `lod lod-${k.sv ? "v" : "h"} ${k.i === 0 ? "lod-pr" : k.i === k.d - 1 ? "lod-zd" : "lod-st"}${o.vraky ? " vrak" : ""}` : "", st || "", o.nove && o.nove.has(c) ? "nova" : ""].join(" ").trim();
+      const vnitrek = k && k.i > 0 && k.i < k.d - 1 ? (k.i === Math.floor((k.d - 1) / 2) ? '<i class="lo-kab"></i>' : '<i class="lo-pok"></i>') : "";
+      const txt = { voda: "voda", okoli: "voda", zasah: "zásah", potopena: "potopená" }[st] || (k ? "loď" : "");
+      h += `<button type="button" class="lo-b ${tr}" data-c="${c}" aria-label="${jm(c)}${txt ? " – " + txt : ""}" ${o.klik && st ? "disabled" : ""}>${vnitrek}</button>`; } }
+  return h + "</div>";
+}
+function flotilaHtml(souper) { const pot = souper.lode.filter((l) => l && l.b.every((c) => souper.trefy.has(c))).map((l) => l.d);
+  return `<div class="lo-flotila" aria-label="Soupeřovy lodě">${FLOTILA.map((d) => { const i = pot.indexOf(d), p = i >= 0; if (p) pot.splice(i, 1);
+    return `<span class="lo-chip${p ? " pryc" : ""}" title="${d} políčka${p ? " – potopená" : ""}"><i class="lo-mini" style="--d:${d}"></i></span>`; }).join("")}</div>`; }
+
+function spust(el, skore, opt = {}) {
+  let nove = new Set(), rezim = null, H = [], na = 0, faze = "volba", vybrana = 0, svisle = false, hover = null, kryt = null, spoj = null, kod = "", ja = 0, souperPripraven = false, jaPripraven = false, hlaska = "", konec = false, kodVstup = "";
+  const online = () => rezim === "online";
+  function volba() { faze = "volba"; if (spoj) { spoj.posli({ t: "odchod" }); spoj.zavri(); spoj = null; }
+    el.innerHTML = `<div class="lo-volba"><p class="pozn">Vyber, s kým hraješ. Pak rozmístíš lodě a střílíte na střídačku – kdo dřív potopí všechny, vyhrává.</p>
+      <div class="lo-volby"><button type="button" class="lo-rezim" data-lo="pocitac"><b>🤖 Proti počítači</b><span>Rychlá hra o samotě.</span></button>
+      <button type="button" class="lo-rezim" data-lo="dva"><b>👥 Dva u jednoho zařízení</b><span>Střídáte se, obrazovka se mezi tahy zakryje.</span></button>
+      <button type="button" class="lo-rezim" data-lo="online" ${Spojeni.lze() ? "" : "disabled"}><b>🌐 Online</b><span>${Spojeni.lze() ? "Každá na svém zařízení – spojíte se kódem." : "Bude dostupné po zapnutí serveru."}</span></button></div></div>`; }
+  function start(r) { rezim = r; H = [novyHrac(r === "dva" ? "Hráč 1" : "Ty"), novyHrac(r === "dva" ? "Hráč 2" : "Soupeř")]; konec = false; hlaska = "";
+    if (r === "pocitac") H[1].lode = nahodne();
+    if (r === "online") { faze = "mistnost"; kresli(); return; }
+    rozmistuj(0); }
+  function rozmistuj(p) { na = p; faze = "rozmisteni"; vybrana = 0; svisle = false; H[p].lode = []; H[p].trefy = new Set(); H[p].strely = new Map(); kresli(); }
+  const hotovoRozm = () => FLOTILA.every((d, i) => H[na].lode[i]);
+  function polozeni(c) { const p = H[na], i = vybrana; if (i == null || i >= FLOTILA.length) return;
+    const b = bunky(c % N, Math.floor(c / N), FLOTILA[i], svisle); if (!lzePolozit(p.lode, b, i)) { hlaska = "Sem se nevejde – lodě se nesmí dotýkat ani rohem."; kresli(); return; }
+    p.lode[i] = { d: FLOTILA[i], b, sv: svisle }; hlaska = ""; const dalsi = FLOTILA.findIndex((d, j) => !p.lode[j]); vybrana = dalsi < 0 ? null : dalsi; kresli(); }
+  function dokonciRozm() { if (!hotovoRozm()) return;
+    if (rezim === "dva" && na === 0) { kryt = { t: "Předej zařízení – teď hráč 2", s: "Ať nevidí lodě hráče 1.", pak: () => rozmistuj(1) }; kresli(); return; }
+    if (online()) { jaPripraven = true; spoj.posli({ t: "pripraven" }); if (souperPripraven) zacniBoj(); else { faze = "cekam"; kresli(); } return; }
+    if (rezim === "dva") { kryt = { t: "Předej zařízení – teď hráč 1", s: "Začíná hráč 1.", pak: () => zacniBoj() }; kresli(); return; }
+    zacniBoj(); }
+  function zacniBoj() { faze = "boj"; na = online() ? (ja === 0 ? 0 : 1) : 0; hlaska = online() ? (ja === 0 ? "Začínáš ty." : "Začíná soupeř.") : ""; kresli(); }
+  // na = kdo je na tahu (index v H); v online je H[0] vždy „já“, H[1] soupeř; ja = 0 když jsem místnost založila (začínám)
+  function strilej(c) { if (faze !== "boj" || konec) return;
+    if (online()) { if (na !== 0 || [...H[0].strely.values()].includes("ceka")) return; H[0].strely.set(c, "ceka"); spoj.posli({ t: "strela", c }); hlaska = "Letí…"; kresli(); return; }
+    const st = H[na], cil = H[1 - na]; if (st.strely.has(c)) return; const v = zasah(cil, c); zapis(st.strely, c, v); vysledek(na, c, v); }
+  function vysledek(kdo, c, v) { const moje = kdo === 0 || rezim === "dva"; nove = new Set(v.r === "potopena" ? v.b : [c]);
+    hlaska = v.r === "voda" ? `${jm(c)}: voda.` : v.r === "zasah" ? `${jm(c)}: zásah! Střílí znovu ${rezim === "dva" ? H[kdo].jmeno.toLowerCase() : moje ? "ty" : "soupeř"}.` : `${jm(c)}: potopená loď (${v.d})!`;
+    if (v.konec) { konec = true; const vyhra = rezim === "dva" ? `🎉 Vítězí ${H[kdo].jmeno.toLowerCase()}!` : kdo === 0 ? "🎉 Výhra! Všechny lodě soupeře jsou na dně." : "Tentokrát vyhrál soupeř. Zkus to znovu!";
+      hlaska = vyhra; skore(kdo === 0 ? "výhra" : "–"); kresli(); return; }
+    if (v.r === "voda") { na = 1 - kdo; if (rezim === "dva") { kryt = { t: `Předej zařízení – hraje ${H[na].jmeno.toLowerCase()}`, s: hlaska, pak: () => kresli() }; } }
+    kresli(); if (rezim === "pocitac" && na === 1 && !konec) setTimeout(tahPocitace, 750); }
+  function tahPocitace() { if (faze !== "boj" || konec || na !== 1) return; const c = pocitacStrela(H[1].strely), v = zasah(H[0], c); zapis(H[1].strely, c, v); vysledek(1, c, v); }
+  // ---------- online ----------
+  function mistnost(zalozit) { kod = zalozit ? Spojeni.novyKod() : kodVstup.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4); if (kod.length !== 4) { hlaska = "Kód má 4 znaky."; kresli(); return; }
+    ja = zalozit ? 0 : 1; souperPripraven = jaPripraven = false; faze = "cekam-soupere"; hlaska = "";
+    spoj = Spojeni.pripoj("lode", kod, { stav: (t, ok) => { const s = el.querySelector(".lo-spojeni"); if (s) { s.textContent = t; s.classList.toggle("ok", ok); } }, zprava: prijato });
+    spoj.posli({ t: "ahoj", ja }); kresli(); }
+  function prijato(m) {
+    if (m.t === "ahoj") { if (m.ja === ja) ja = 1 - m.ja; if (faze === "cekam-soupere") { spoj.posli({ t: "ahoj", ja }); rozmistuj(0); hlaska = "Soupeř je tady. Rozmísti lodě."; kresli(); } return; }
+    if (m.t === "pripraven") { souperPripraven = true; if (jaPripraven && faze === "cekam") zacniBoj(); else kresli(); return; }
+    if (m.t === "strela") { const v = zasah(H[0], m.c); zapis(H[1].strely, m.c, v); spoj.posli({ t: "vysledek", c: m.c, v }); vysledek(1, m.c, v); return; }
+    if (m.t === "vysledek") { H[0].strely.delete(m.c); zapis(H[0].strely, m.c, m.v); if (m.v.r === "potopena") H[1].lode.push({ d: m.v.d, b: m.v.b }), m.v.b.forEach((x) => H[1].trefy.add(x)); vysledek(0, m.c, m.v); return; }
+    if (m.t === "znovu") { H = [novyHrac("Ty"), novyHrac("Soupeř")]; konec = false; souperPripraven = jaPripraven = false; ja = 1 - ja; rozmistuj(0); hlaska = "Soupeř chce hrát znovu. Rozmísti lodě."; kresli(); return; }
+    if (m.t === "odchod") { hlaska = "Soupeř odešel ze hry."; konec = true; kresli(); }
+  }
+  // ---------- kreslení ----------
+  function kresli() {
+    if (faze === "volba") { volba(); return; }
+    if (kryt) { el.innerHTML = `<div class="lo-kryt"><b>${kryt.t}</b><span>${kryt.s}</span><button type="button" class="hlavni" data-lo="kryt">Můžu hrát</button></div>`; el.querySelector("[data-lo='kryt']").focus({ preventScroll: true }); return; }
+    const zpet = `<button type="button" class="maly" data-lo="zpet">← Jiná hra</button>`;
+    if (faze === "mistnost") { el.innerHTML = `<div class="lo-volba">${zpet}<p class="pozn">Jeden založí místnost a pošle kód. Druhý ho napíše a připojí se.</p>
+      <div class="lo-volby"><button type="button" class="lo-rezim" data-lo="zalozit"><b>Založit místnost</b><span>Dostaneš kód, který pošleš soupeři.</span></button>
+      <div class="lo-rezim lo-pripojit"><b>Mám kód</b><div class="radek"><input class="lo-kod" maxlength="4" autocomplete="off" spellcheck="false" placeholder="např. K7QX" aria-label="Kód místnosti" value="${kodVstup}"><button type="button" class="hlavni" data-lo="pripojit">Připojit</button></div></div></div>
+      ${hlaska ? `<p class="lo-hlaska">${hlaska}</p>` : ""}</div>`; return; }
+    if (faze === "cekam-soupere") { el.innerHTML = `<div class="lo-volba lo-cekani">${zpet}<span class="pozn">Kód místnosti</span><b class="lo-velky-kod">${kod}</b>
+      <p>${ja === 0 ? "Pošli kód soupeři. Hra začne, jakmile se připojí." : "Čekám na spojení se soupeřem…"}</p>${ja === 0 ? Spojeni.pozvanka("lode", kod) : ""}<span class="lo-spojeni">Připojuji…</span></div>`; return; }
+    const p = H[na], hr = rezim === "dva";
+    if (faze === "rozmisteni") { const ok = hotovoRozm();
+      el.innerHTML = `<div class="lo-hlava">${zpet}<b>${hr ? p.jmeno + " – " : ""}Rozmísti lodě</b>${online() ? `<span class="lo-spojeni ok">Místnost ${kod}</span>` : ""}</div>
+        <p class="pozn lo-navod">Klepni do moře, kam chceš loď. Lodě se nesmí dotýkat ani rohem.</p>
+        <div class="lo-lode" role="group" aria-label="Lodě k rozmístění">${FLOTILA.map((d, i) => `<button type="button" class="lo-chip${vybrana === i ? " vybrano" : ""}${p.lode[i] ? " hotova" : ""}" data-lod="${i}" aria-label="Loď ${d}${p.lode[i] ? " – položená, klepni a polož jinam" : ""}"><i class="lo-mini" style="--d:${d}"></i></button>`).join("")}</div>
+        <div class="lo-plocha">${pole({ lode: p.lode, klik: false, popis: "Moje moře – rozmístění lodí" })}</div>
+        <div class="radek lo-tlacitka"><button type="button" data-lo="otocit">↻ Otočit (${svisle ? "svisle" : "vodorovně"})</button><button type="button" data-lo="nahodne">🎲 Náhodně</button>
+          <button type="button" class="hlavni" data-lo="hotovo" ${ok ? "" : "disabled"}>${ok ? "Hotovo ✓" : `Zbývá ${FLOTILA.filter((d, i) => !p.lode[i]).length}`}</button></div>
+        ${hlaska ? `<p class="lo-hlaska">${hlaska}</p>` : ""}`; nahled(); return; }
+    if (faze === "cekam") { el.innerHTML = `<div class="lo-volba lo-cekani"><b>Lodě jsou na místě ✓</b><p>Čekám, až soupeř rozmístí svoje…</p><span class="lo-spojeni ok">Místnost ${kod}</span></div>`; return; }
+    // boj: střílí H[strelec] do H[1 - strelec]; u dvou na zařízení vidí ten, kdo je na tahu
+    const strelec = hr ? na : 0, cil = H[1 - strelec], mujTah = hr || na === 0;
+    el.innerHTML = `<div class="lo-hlava">${zpet}<b class="lo-tah${mujTah && !konec ? " ja" : ""}">${konec ? "Konec hry" : hr ? `Střílí ${H[na].jmeno.toLowerCase()}` : mujTah ? "Tvůj tah – střílej" : "Střílí soupeř…"}</b>${online() ? `<span class="lo-spojeni ok">Místnost ${kod}</span>` : ""}</div>
+      <p class="lo-hlaska" aria-live="polite">${hlaska || "Klepni do soupeřova moře."}</p>
+      <div class="lo-boj"><section><h4>Soupeřovo moře</h4>${pole({ strely: H[strelec].strely, lode: cil.lode.filter((l) => l && l.b.every((c) => cil.trefy.has(c))), vraky: true, nove, klik: mujTah && !konec, popis: "Soupeřovo moře – sem střílíš" })}${flotilaHtml(cil)}</section>
+        <section class="lo-moje"><h4>Moje moře</h4>${pole({ lode: H[strelec].lode, prijate: cil.strely, nove, maly: true, popis: "Moje moře" })}</section></div>
+      ${konec ? `<div class="radek lo-tlacitka"><button type="button" class="hlavni" data-lo="znovu">Hrát znovu</button></div>` : ""}`;
+  }
+  el.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b || !el.contains(b)) return; const a = b.dataset.lo;
+    if (a === "pocitac" || a === "dva" || a === "online") { start(a); return; }
+    if (a === "zpet") { rezim = null; kryt = null; volba(); return; }
+    if (a === "kryt") { const k = kryt; kryt = null; k.pak(); return; }
+    if (a === "zalozit") { mistnost(true); return; } if (a === "pripojit") { kodVstup = el.querySelector(".lo-kod").value; mistnost(false); return; }
+    if (a === "otocit") { svisle = !svisle; kresli(); return; }
+    if (a === "nahodne") { H[na].lode = nahodne(); vybrana = null; hlaska = ""; kresli(); return; }
+    if (a === "hotovo") { dokonciRozm(); return; }
+    if (a === "znovu") { if (online()) { spoj.posli({ t: "znovu" }); H = [novyHrac("Ty"), novyHrac("Soupeř")]; konec = false; souperPripraven = jaPripraven = false; ja = 1 - ja; rozmistuj(0); return; } start(rezim); return; }
+    if (b.dataset.lod != null) { const i = +b.dataset.lod; if (H[na].lode[i]) H[na].lode[i] = null; vybrana = i; kresli(); return; }
+    if (b.dataset.c != null) { const c = +b.dataset.c; if (faze === "rozmisteni") { const l = H[na].lode.findIndex((x) => x && x.b.includes(c)); if (l >= 0 && vybrana == null) { H[na].lode[l] = null; vybrana = l; kresli(); return; } polozeni(c); } else if (faze === "boj") strilej(c); } });
+  // náhled lodi pod myší jen přepíná třídy (na dotykové obrazovce se loď položí rovnou klepnutím)
+  function nahled() { el.querySelectorAll(".nahled-ok, .nahled-ne").forEach((x) => x.classList.remove("nahled-ok", "nahled-ne")); if (hover == null || vybrana == null || faze !== "rozmisteni") return;
+    const b = bunky(hover % N, Math.floor(hover / N), FLOTILA[vybrana], svisle) || bunky(hover % N, Math.floor(hover / N), 1, svisle), ok = b.length === FLOTILA[vybrana] && lzePolozit(H[na].lode, b, vybrana);
+    b.forEach((c) => { const x = el.querySelector(`.lo-b[data-c="${c}"]`); if (x) x.classList.add(ok ? "nahled-ok" : "nahled-ne"); }); }
+  el.addEventListener("pointermove", (e) => { if (faze !== "rozmisteni" || e.pointerType !== "mouse") return; const b = e.target.closest(".lo-b"), c = b ? +b.dataset.c : null; if (c !== hover) { hover = c; nahled(); } });
+  el.addEventListener("pointerleave", () => { if (hover != null) { hover = null; nahled(); } });
+  el.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.matches(".lo-kod")) { kodVstup = e.target.value; mistnost(false); } if ((e.key === "r" || e.key === "R") && faze === "rozmisteni" && !e.target.matches("input")) { svisle = !svisle; kresli(); } });
+  el.addEventListener("input", (e) => { if (e.target.matches(".lo-kod")) { e.target.value = e.target.value.toUpperCase(); kodVstup = e.target.value; } });
+  volba(); skore("–");
+  if (opt.kod && Spojeni.lze()) { rezim = "online"; H = [novyHrac("Ty"), novyHrac("Soupeř")]; kodVstup = opt.kod; mistnost(false); } // připojení odkazem / QR kódem
+  return { stop() { if (spoj) { spoj.posli({ t: "odchod" }); spoj.zavri(); } }, get stav() { return { rezim, faze, na, konec, H, kod, ja }; } };
+}
+return { spust, nahodne, zasah, pocitacStrela, lzePolozit, FLOTILA };
+})();
+
+// ================= 🎲 Člověče, nezlob se: 2–4 hráči u jednoho zařízení, počítač za chybějící, políčka Otázka a Výzva =================
+// Pravidla: z domečku jen šestkou, po šestce háže znovu, bez figurky v poli až 3 pokusy; skok na soupeře ho pošle domů; do cíle jen přesným hodem.
+// Otázka (matika): správně = hoď znovu, špatně = o 2 pole zpět. Výzva (hádanky, pravda / mýtus): správně = hoď znovu. Rozehraná hra se ukládá.
+const Clovece = (() => {
+const DRAHA = [[4,10],[4,9],[4,8],[4,7],[4,6],[3,6],[2,6],[1,6],[0,6],[0,5],[0,4],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[4,1],[4,0],[5,0],[6,0],[6,1],[6,2],[6,3],[6,4],[7,4],[8,4],[9,4],[10,4],[10,5],[10,6],[9,6],[8,6],[7,6],[6,6],[6,7],[6,8],[6,9],[6,10],[5,10]];
+const CIL = [[[5,9],[5,8],[5,7],[5,6]], [[1,5],[2,5],[3,5],[4,5]], [[5,1],[5,2],[5,3],[5,4]], [[9,5],[8,5],[7,5],[6,5]]];
+const DOM = [[[0,9],[1,9],[0,10],[1,10]], [[0,0],[1,0],[0,1],[1,1]], [[9,0],[10,0],[9,1],[10,1]], [[9,9],[10,9],[9,10],[10,10]]];
+const BARVY = [["Červená", "#e5484d", "#a3262b"], ["Modrá", "#3e7bfa", "#1f4fb3"], ["Zelená", "#30a46c", "#18794e"], ["Žlutá", "#f5b301", "#a66f00"]];
+const OTAZKA = new Set([5, 15, 25, 35]), VYZVA = new Set([8, 18, 28, 38]), C = 40, KLIC = "hra-clovece";
+const abs = (h, rel) => (h * 10 + rel) % 40;
+function spust(el, skore) {
+  let g = nacist(KLIC, null), hodim = false, cekej = null;
+  const ulozHru = () => ulozit(KLIC, g);
+  function novaHra(nast) { g = { hraci: nast.hraci.map((h, i) => ({ ...h, fig: [-1, -1, -1, -1] })), na: 0, hod: null, pokusy: 0, stav: "hod", otazky: nast.otazky, zprava: "", konec: null, tah: 0 }; dalsiPlatny(true); ulozHru(); kresli(); auto(); }
+  const hraje = () => g.hraci[g.na], vPoli = (h) => h.fig.some((p) => p >= 0 && p < 40);
+  function dalsiPlatny(prvni) { if (!prvni) g.na = (g.na + 1) % g.hraci.length; let n = 0; while (!g.hraci[g.na].aktivni && n++ < 4) g.na = (g.na + 1) % g.hraci.length; g.hod = null; g.pokusy = 0; g.stav = "hod"; }
+  function obsazeno(a) { for (let h = 0; h < g.hraci.length; h++) { if (!g.hraci[h].aktivni) continue; const f = g.hraci[h].fig.findIndex((p) => p >= 0 && p < 40 && abs(g.hraci[h].barva, p) === a); if (f >= 0) return { h, f }; } return null; }
+  function cil(h, rel) { if (rel < 40 || rel > 43) return false; return !g.hraci[h].fig.includes(rel); }
+  function tahy(h, k) { const hr = g.hraci[h], v = [];
+    hr.fig.forEach((p, f) => { let n;
+      if (p === -1) { if (k !== 6) return; n = 0; } else n = p + k;
+      if (n > 43) return;
+      if (n >= 40) { if (!cil(h, n)) return; for (let x = 40; x < n; x++) if (hr.fig.includes(x)) return; v.push({ f, n }); return; }
+      const o = obsazeno(abs(hr.barva, n)); if (o && o.h === h) return; v.push({ f, n, sebrat: o }); });
+    return v; }
+  function hod() { if (g.stav !== "hod" || hodim) return; hodim = true; const k = 1 + Math.floor(Math.random() * 6);
+    const kostka = el.querySelector(".cl-kostka"); if (kostka) { kostka.classList.remove("hazi"); void kostka.offsetWidth; kostka.classList.add("hazi"); }
+    setTimeout(() => { hodim = false; g.hod = k; g.pokusy++; const m = tahy(g.na, k), hr = hraje();
+      if (!m.length) { const bezPole = !vPoli(hr);
+        if (k === 6) { g.zprava = `${hr.jmeno}: šestka, ale není kam táhnout – hází znovu.`; g.stav = "hod"; }
+        else if (bezPole && g.pokusy < 3) { g.zprava = `${hr.jmeno}: ${k} – potřebuje šestku (pokus ${g.pokusy} ze 3).`; g.stav = "hod"; }
+        else { g.zprava = `${hr.jmeno}: ${k} – není kam táhnout.`; dalsiPlatny(); }
+        ulozHru(); kresli(); auto(); return; }
+      g.stav = "tah"; g.zprava = `${hr.jmeno}: padla ${k}.`; ulozHru(); kresli();
+      if (hr.pc) { setTimeout(() => tahni(vyberPC(m).f), 650); } else if (new Set(m.map((t) => hr.fig[t.f] + ">" + t.n)).size === 1) setTimeout(() => g.stav === "tah" && tahni(m[0].f), 650); }, 520); } // jediná možnost (i víc figurek v domečku) = táhne se samo
+  function vyberPC(m) { const sk = (t) => (t.sebrat ? 100 : 0) + (t.n >= 40 ? 60 : 0) + (g.hraci[g.na].fig[t.f] === -1 ? 40 : 0) + t.n * 0.5 + (OTAZKA.has(abs(g.hraci[g.na].barva, t.n)) ? -5 : 0);
+    return m.slice().sort((a, b) => sk(b) - sk(a))[0]; }
+  function tahni(f) { if (g.stav !== "tah") return; const m = tahy(g.na, g.hod).find((t) => t.f === f); if (!m) return; const hr = hraje();
+    if (m.sebrat) { g.hraci[m.sebrat.h].fig[m.sebrat.f] = -1; g.zprava = `${hr.jmeno} posílá ${g.hraci[m.sebrat.h].jmeno.toLowerCase()} figurku domů. Nezlob se!`; }
+    hr.fig[f] = m.n; g.tah++; g.posledni = { h: g.na, f };
+    if (hr.fig.every((p) => p >= 40)) { g.konec = g.na; g.stav = "konec"; g.zprava = `🎉 ${hr.jmeno} vyhrává!`; ulozHru(); kresli(); skore(hr.jmeno); return; }
+    const a = m.n < 40 ? abs(hr.barva, m.n) : -1;
+    if (g.otazky && !hr.pc && (OTAZKA.has(a) || VYZVA.has(a))) { g.stav = "otazka"; g.otazka = { druh: OTAZKA.has(a) ? "otazka" : "vyzva", f, ...(OTAZKA.has(a) ? OtazkyHer.matika() : OtazkyHer.vyzva()), sest: g.hod === 6 }; ulozHru(); kresli(); return; }
+    poTahu(g.hod === 6); }
+  function poTahu(znovu) { if (znovu) { g.stav = "hod"; g.pokusy = 0; g.hod = null; g.zprava += g.zprava ? " Hází znovu." : ""; } else dalsiPlatny(); ulozHru(); kresli(); auto(); }
+  function odpoved(o) { const q = g.otazka, ok = o === q.sp, hr = hraje(); g.otazka = null;
+    if (ok) { g.zprava = "✓ Správně!"; Zaznam.pis("hra", "otázka správně"); poTahu(true); return; }
+    if (q.druh === "otazka") { const p = hr.fig[q.f], n = Math.max(0, p - 2), o2 = obsazeno(abs(hr.barva, n)); if (!o2) hr.fig[q.f] = n; g.zprava = `✗ Správně bylo ${q.sp}. ${o2 ? "Zpátky nejde, pole je obsazené." : "Figurka jde o 2 pole zpět."}`; }
+    else g.zprava = `✗ Správně bylo: ${q.sp}.`;
+    poTahu(q.sest); }
+  function auto() { clearTimeout(cekej); if (!g || !hraje().pc) return;
+    if (g.stav === "hod") cekej = setTimeout(hod, 700); else if (g.stav === "tah") cekej = setTimeout(() => { const m = tahy(g.na, g.hod); if (m.length) tahni(vyberPC(m).f); else poTahu(false); }, 650); }
+  // ---------- kreslení ----------
+  const B = 40, kruh = (x, y, r, tr) => `<circle cx="${x * B + 20}" cy="${y * B + 20}" r="${r}" ${tr}/>`;
+  function deska(tahyNyni) {
+    let s = `<svg viewBox="0 0 440 440" class="cl-deska" role="img" aria-label="Hrací deska"><defs>${BARVY.map((b, i) => `<radialGradient id="clf${i}" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="${b[1]}"/><stop offset="1" stop-color="${b[2]}"/></radialGradient>`).join("")}</defs>`;
+    s += `<rect x="2" y="2" width="436" height="436" rx="22" class="cl-podklad"/>`;
+    DOM.forEach((d, i) => { const [x, y] = d[0]; s += `<rect x="${x * B + 2}" y="${y * B + 2}" width="${2 * B - 4}" height="${2 * B - 4}" rx="16" fill="${BARVY[i][1]}" opacity=".16"/>`; });
+    DRAHA.forEach(([x, y], i) => { const st = i % 10 === 0 ? BARVY[i / 10][1] : null;
+      s += kruh(x, y, 15, `class="cl-pole${OTAZKA.has(i) ? " otazka" : VYZVA.has(i) ? " vyzva" : ""}" ${st ? `style="stroke:${st};stroke-width:4"` : ""}`);
+      if (g.otazky && OTAZKA.has(i)) s += `<text x="${x * B + 20}" y="${y * B + 26}" class="cl-znak">?</text>`;
+      if (g.otazky && VYZVA.has(i)) s += `<text x="${x * B + 20}" y="${y * B + 26}" class="cl-znak">★</text>`; });
+    CIL.forEach((c, i) => c.forEach(([x, y]) => (s += kruh(x, y, 14, `fill="${BARVY[i][1]}" fill-opacity=".22" stroke="${BARVY[i][1]}" stroke-width="2"`))));
+    DOM.forEach((d, i) => d.forEach(([x, y]) => (s += kruh(x, y, 14, `fill="none" stroke="${BARVY[i][1]}" stroke-opacity=".5" stroke-width="2"`))));
+    s += `<circle cx="220" cy="220" r="16" class="cl-stred"/>`;
+    const mozne = new Set((tahyNyni || []).map((t) => t.f));
+    g.hraci.forEach((h, hi) => { if (!h.aktivni) return; h.fig.forEach((p, f) => { const [x, y] = p === -1 ? DOM[h.barva][f] : p >= 40 ? CIL[h.barva][p - 40] : DRAHA[abs(h.barva, p)];
+      const muze = hi === g.na && mozne.has(f) && !h.pc, cx = x * B + 20, cy = y * B + 20, posl = g.posledni && g.posledni.h === hi && g.posledni.f === f;
+      s += `<g class="cl-fig${muze ? " muze" : ""}${posl ? " posledni" : ""}" ${muze ? `data-f="${f}" role="button" tabindex="0" aria-label="${h.jmeno}, figurka ${f + 1}"` : ""} style="transform-origin:${cx}px ${cy}px">
+        ${muze ? `<circle cx="${cx}" cy="${cy}" r="18" class="cl-zar" stroke="${BARVY[h.barva][1]}"/>` : ""}<ellipse cx="${cx}" cy="${cy + 11}" rx="10" ry="3.5" class="cl-stin"/>
+        <circle cx="${cx}" cy="${cy}" r="11.5" fill="url(#clf${h.barva})" stroke="${BARVY[h.barva][2]}" stroke-width="1.5"/></g>`; }); });
+    return s + "</svg>"; }
+  const tecky = { 1: [[50, 50]], 2: [[28, 28], [72, 72]], 3: [[28, 28], [50, 50], [72, 72]], 4: [[28, 28], [72, 28], [28, 72], [72, 72]], 5: [[28, 28], [72, 28], [50, 50], [28, 72], [72, 72]], 6: [[28, 26], [72, 26], [28, 50], [72, 50], [28, 74], [72, 74]] };
+  const kostka = (k) => `<svg viewBox="0 0 100 100" class="cl-kostka" aria-label="Kostka${k ? ": " + k : ""}"><rect x="6" y="6" width="88" height="88" rx="20" class="cl-kostka-tvar"/>${(tecky[k] || []).map(([x, y]) => `<circle cx="${x}" cy="${y}" r="8.5"/>`).join("")}</svg>`;
+  function volba() { const ul = nacist(KLIC, null), lze = ul && ul.stav !== "konec";
+    el.innerHTML = `<div class="cl-volba"><p class="pozn">Hra pro 2–4 u jednoho zařízení. Za chybějící může hrát počítač. Na políčkách <b>?</b> a <b>★</b> čeká otázka – správně = házíš znovu.</p>
+      ${lze ? `<button type="button" class="hlavni" data-cl="pokracovat">Pokračovat v rozehrané hře</button>` : ""}
+      <div class="cl-hraci">${BARVY.map((b, i) => `<div class="cl-hrac"><span class="cl-tecka" style="background:${b[1]}"></span><input value="Hráč ${i + 1}" maxlength="14" data-jm="${i}" aria-label="Jméno hráče ${i + 1}">
+        <select data-typ="${i}" aria-label="Kdo hraje za ${b[0].toLowerCase()}"><option value="clovek"${i === 0 ? " selected" : ""}>Člověk</option><option value="pc"${i === 1 ? " selected" : ""}>Počítač</option><option value="nikdo"${i > 1 ? " selected" : ""}>Nehraje</option></select></div>`).join("")}</div>
+      <label class="cl-prepinac"><input type="checkbox" data-cl-otazky checked> Políčka s otázkami</label>
+      <button type="button" class="${lze ? "" : "hlavni"}" data-cl="nova">Nová hra</button></div>`; }
+  function kresli() {
+    if (!g || g.stav === "volba") { volba(); return; } const hr = hraje(), m = g.stav === "tah" ? tahy(g.na, g.hod) : [];
+    el.innerHTML = `<div class="cl-hra"><div class="cl-deska-obal">${deska(m)}</div>
+      <aside class="cl-panel"><div class="cl-na-tahu" style="--b:${BARVY[hr.barva][1]}"><span class="cl-tecka"></span><b>${g.stav === "konec" ? g.zprava : `Na tahu: ${hr.jmeno}`}</b></div>
+        ${g.stav !== "konec" ? `<button type="button" class="cl-hod" data-cl="hod" ${g.stav === "hod" && !hr.pc ? "" : "disabled"} aria-label="Hodit kostkou">${kostka(g.hod)}<span>${g.stav === "hod" ? (hr.pc ? "Počítač hází…" : "Hodit (mezerník)") : g.stav === "tah" ? (hr.pc ? "Počítač táhne…" : "Vyber figurku") : ""}</span></button>` : `<button type="button" class="hlavni" data-cl="znovu">Hrát znovu</button>`}
+        <p class="cl-zprava" aria-live="polite">${g.zprava || "Hází se kostkou. Z domečku se vyjíždí šestkou."}</p>
+        <ul class="cl-poradi">${g.hraci.filter((h) => h.aktivni).map((h) => `<li${h === hr ? ' class="ted"' : ""}><span class="cl-tecka" style="background:${BARVY[h.barva][1]}"></span>${h.jmeno}${h.pc ? " · počítač" : ""}<small>${h.fig.filter((p) => p >= 40).length}/4 v cíli</small></li>`).join("")}</ul>
+        <button type="button" class="maly" data-cl="menu">Hráči a nová hra</button></aside>
+      ${g.stav === "otazka" ? `<div class="cl-otazka" role="dialog" aria-label="${g.otazka.druh === "otazka" ? "Otázka" : "Výzva"}"><div class="cl-otazka-karta"><span class="nad">${g.otazka.druh === "otazka" ? "Otázka" : "Výzva"}</span><b>${g.otazka.t}</b>
+        <div class="cl-moznosti">${g.otazka.m.map((o) => `<button type="button" data-odp="${String(o).replace(/"/g, "&quot;")}">${o}</button>`).join("")}</div>
+        <small class="pozn">${g.otazka.druh === "otazka" ? "Správně = házíš znovu. Špatně = o 2 pole zpět." : "Správně = házíš znovu."}</small></div></div>` : ""}</div>`;
+  }
+  el.addEventListener("click", (e) => { const b = e.target.closest("[data-cl], [data-f], [data-odp]"); if (!b) return;
+    if (b.dataset.odp != null && g && g.stav === "otazka") { odpoved(b.dataset.odp); return; }
+    if (b.dataset.f != null) { tahni(+b.dataset.f); return; }
+    const a = b.dataset.cl;
+    if (a === "hod") hod();
+    if (a === "pokracovat") { g = nacist(KLIC, null); kresli(); auto(); }
+    if (a === "menu") { clearTimeout(cekej); g = null; volba(); }
+    if (a === "znovu") { const n = { hraci: g.hraci.map((h) => ({ jmeno: h.jmeno, barva: h.barva, pc: h.pc, aktivni: h.aktivni })), otazky: g.otazky }; novaHra(n); }
+    if (a === "nova") { const hraci = BARVY.map((bb, i) => { const t = el.querySelector(`[data-typ="${i}"]`).value; return { jmeno: (el.querySelector(`[data-jm="${i}"]`).value.trim() || bb[0]).slice(0, 14), barva: i, pc: t === "pc", aktivni: t !== "nikdo" }; });
+      if (hraci.filter((h) => h.aktivni).length < 2) { Body.oznam("Hrají aspoň dva – nastav druhého hráče nebo počítač."); return; }
+      novaHra({ hraci, otazky: el.querySelector("[data-cl-otazky]").checked }); } });
+  el.addEventListener("keydown", (e) => { if ((e.key === " " || e.key === "Enter") && e.target.matches(".cl-fig")) { e.preventDefault(); tahni(+e.target.dataset.f); } });
+  const klav = (k) => { if (k === " " && g && g.stav === "hod" && !hraje().pc) hod(); };
+  if (g && g.stav !== "konec") kresli(); else { g = null; volba(); }
+  if (g) auto();
+  skore("–");
+  return { stop() { clearTimeout(cekej); }, klav, get stav() { return g; } };
+}
+return { spust, DRAHA, abs };
+})();
+
+// ================= ✕◯ Piškvorky: pět v řadě na poli 15 × 15 – proti počítači, dva u jednoho zařízení, online (kód místnosti) =================
+const Piskvorky = (() => {
+const N = 15, KLIC = "hra-piskvorky", SMERY = [[1, 0], [0, 1], [1, 1], [1, -1]];
+const xy = (c) => [c % N, Math.floor(c / N)], id = (x, y) => (x < 0 || y < 0 || x >= N || y >= N ? -1 : y * N + x);
+function pet(p, c, h) { const [x, y] = xy(c); for (const [dx, dy] of SMERY) { const r = [c];
+    for (const s of [1, -1]) { let k = 1; while (true) { const n = id(x + dx * k * s, y + dy * k * s); if (n < 0 || p[n] !== h) break; r.push(n); k++; } }
+    if (r.length >= 5) return r; } return null; }
+function skore(p, c, h) { const [x, y] = xy(c); let s = 0;
+  for (const [dx, dy] of SMERY) { let n = 1, o = 0;
+    for (const sm of [1, -1]) { let k = 1; while (true) { const q = id(x + dx * k * sm, y + dy * k * sm); if (q < 0) break; if (p[q] === h) { n++; k++; continue; } if (p[q] == null) o++; break; } }
+    s += n >= 5 ? 1e6 : n === 4 ? (o === 2 ? 1e5 : o === 1 ? 1e4 : 0) : n === 3 ? (o === 2 ? 5e3 : o === 1 ? 400 : 0) : n === 2 ? (o === 2 ? 200 : o === 1 ? 30 : 0) : o === 2 ? 10 : 1; }
+  return s; }
+function tahPC(p, pc) { const hrac = pc === "x" ? "o" : "x", vol = [];
+  if (p.every((v) => v == null)) return id(7, 7);
+  for (let c = 0; c < N * N; c++) { if (p[c] != null) continue; const [x, y] = xy(c); let blizko = false;
+    for (let dy = -2; dy <= 2 && !blizko; dy++) for (let dx = -2; dx <= 2; dx++) { const q = id(x + dx, y + dy); if (q >= 0 && p[q] != null) { blizko = true; break; } }
+    if (blizko) vol.push([c, skore(p, c, pc) * 1.1 + skore(p, c, hrac) + Math.random()]); }
+  return vol.sort((a, b) => b[1] - a[1])[0][0]; }
+function spust(el, sk, opt = {}) {
+  let g = null, spoj = null, kod = "", ja = "x", kodVstup = "", hlaska = "";
+  const ulozHru = () => { if (g && g.rezim !== "online") ulozit(KLIC, g); };
+  const jm = (h) => (g.rezim === "pocitac" ? (h === g.pc ? "Počítač" : "Ty") : g.rezim === "online" ? (h === ja ? "Ty" : "Soupeř") : h === "x" ? "Hráč ✕" : "Hráč ◯");
+  function nova(rezim) { g = { rezim, p: Array(N * N).fill(null), na: "x", pc: rezim === "pocitac" ? "o" : null, vyhra: null, posl: null, n: 0, zacina: g && g.zacina === "x" ? "o" : "x" }; g.na = g.zacina; if (rezim !== "online") ulozHru(); kresli(); if (g.pc === g.na) setTimeout(pcTah, 500); }
+  function hraj(c, odkud) { if (!g || g.vyhra || g.p[c] != null) return false; if (g.rezim === "online" && odkud !== "souper" && g.na !== ja) return false; if (g.rezim === "pocitac" && odkud !== "pc" && g.na === g.pc) return false;
+    g.p[c] = g.na; g.posl = c; g.n++; const r = pet(g.p, c, g.na);
+    if (r) { g.vyhra = { h: g.na, r }; hlaska = `🎉 ${jm(g.na)} – pět v řadě!`; sk(jm(g.na)); } else if (g.n >= N * N) { g.vyhra = { h: null, r: [] }; hlaska = "Remíza – pole je plné."; } else g.na = g.na === "x" ? "o" : "x";
+    if (g.rezim === "online" && odkud !== "souper") spoj.posli({ t: "tah", c });
+    ulozHru(); kresli(); if (!g.vyhra && g.pc === g.na) setTimeout(pcTah, 420); return true; }
+  function pcTah() { if (g && !g.vyhra && g.na === g.pc) hraj(tahPC(g.p, g.pc), "pc"); }
+  function mistnost(zalozit) { kod = zalozit ? Spojeni.novyKod() : kodVstup.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4); if (kod.length !== 4) { hlaska = "Kód má 4 znaky."; kresliVolbu(true); return; }
+    ja = zalozit ? "x" : "o"; g = { rezim: "online", cekam: true }; hlaska = "";
+    spoj = Spojeni.pripoj("piskvorky", kod, { stav: (t, ok) => { const s = el.querySelector(".lo-spojeni"); if (s) { s.textContent = t; s.classList.toggle("ok", ok); } }, zprava: prijato });
+    spoj.posli({ t: "ahoj", ja }); kresli(); }
+  function prijato(m) { if (m.t === "ahoj") { if (m.ja === ja) ja = m.ja === "x" ? "o" : "x"; if (g && g.cekam) { spoj.posli({ t: "ahoj", ja }); nova("online"); g.na = "x"; kresli(); } return; }
+    if (m.t === "tah") hraj(m.c, "souper"); if (m.t === "znovu") { nova("online"); g.na = "x"; kresli(); } if (m.t === "odchod") { hlaska = "Soupeř odešel ze hry."; if (g) g.vyhra = g.vyhra || { h: null, r: [] }; kresli(); } }
+  function kresliVolbu(online) { const ul = nacist(KLIC, null), lze = ul && !ul.vyhra && ul.n > 0;
+    el.innerHTML = online ? `<div class="lo-volba"><button type="button" class="maly" data-pi="zpet">← Jiný režim</button><p class="pozn">Jeden založí místnost a pošle kód. Druhý ho napíše a připojí se.</p>
+      <div class="lo-volby"><button type="button" class="lo-rezim" data-pi="zalozit"><b>Založit místnost</b><span>Dostaneš kód, který pošleš soupeři.</span></button>
+      <div class="lo-rezim lo-pripojit"><b>Mám kód</b><div class="radek"><input class="lo-kod" maxlength="4" autocomplete="off" spellcheck="false" placeholder="např. K7QX" aria-label="Kód místnosti" value="${kodVstup}"><button type="button" class="hlavni" data-pi="pripojit">Připojit</button></div></div></div>${hlaska ? `<p class="lo-hlaska">${hlaska}</p>` : ""}</div>`
+    : `<div class="lo-volba"><p class="pozn">Kdo první postaví pět značek v řadě – vodorovně, svisle, nebo šikmo – vyhrává.</p>${lze ? `<button type="button" class="hlavni" data-pi="pokracovat">Pokračovat v rozehrané hře</button>` : ""}
+      <div class="lo-volby"><button type="button" class="lo-rezim" data-pi="pocitac"><b>🤖 Proti počítači</b><span>Hraješ za ✕, počítač za ◯.</span></button>
+      <button type="button" class="lo-rezim" data-pi="dva"><b>👥 Dva u jednoho zařízení</b><span>Střídáte se na jedné obrazovce.</span></button>
+      <button type="button" class="lo-rezim" data-pi="online" ${Spojeni.lze() ? "" : "disabled"}><b>🌐 Online</b><span>${Spojeni.lze() ? "Každý na svém zařízení – spojíte se kódem." : "Bude dostupné po zapnutí serveru."}</span></button></div></div>`; }
+  function kresli() {
+    if (!g) { kresliVolbu(false); return; }
+    if (g.cekam) { el.innerHTML = `<div class="lo-volba lo-cekani"><button type="button" class="maly" data-pi="zpet">← Jiný režim</button><span class="pozn">Kód místnosti</span><b class="lo-velky-kod">${kod}</b><p>${ja === "x" ? "Pošli kód soupeři. Hra začne, jakmile se připojí." : "Čekám na spojení se soupeřem…"}</p>${ja === "x" ? Spojeni.pozvanka("piskvorky", kod) : ""}<span class="lo-spojeni">Připojuji…</span></div>`; return; }
+    const B = 30, W = N * B, vyh = new Set(g.vyhra ? g.vyhra.r : []), mujTah = !g.vyhra && (g.rezim === "dva" || (g.rezim === "online" ? g.na === ja : g.na !== g.pc));
+    let s = `<svg viewBox="-4 -4 ${W + 8} ${W + 8}" class="pi-deska${mujTah ? " hraje" : ""}" role="grid" aria-label="Hrací pole 15 krát 15"><rect x="-4" y="-4" width="${W + 8}" height="${W + 8}" rx="14" class="pi-podklad"/>`;
+    for (let i = 0; i <= N; i++) s += `<line x1="${i * B}" y1="0" x2="${i * B}" y2="${W}" class="pi-cara"/><line x1="0" y1="${i * B}" x2="${W}" y2="${i * B}" class="pi-cara"/>`;
+    for (let c = 0; c < N * N; c++) { const [x, y] = xy(c), v = g.p[c], cx = x * B + B / 2, cy = y * B + B / 2, tr = `${c === g.posl ? " posl" : ""}${vyh.has(c) ? " vyhra" : ""}`;
+      if (v === "x") s += `<g class="pi-x${tr}"><path d="M${cx - 8} ${cy - 8} L${cx + 8} ${cy + 8} M${cx + 8} ${cy - 8} L${cx - 8} ${cy + 8}" pathLength="1"/></g>`;
+      else if (v === "o") s += `<g class="pi-o${tr}"><circle cx="${cx}" cy="${cy}" r="9" pathLength="1"/></g>`;
+      else s += `<rect x="${x * B + 1}" y="${y * B + 1}" width="${B - 2}" height="${B - 2}" rx="5" class="pi-volne" data-c="${c}" role="button" aria-label="Pole ${x + 1}, ${y + 1}"/>`; }
+    if (g.vyhra && g.vyhra.r.length) { const r = g.vyhra.r.map(xy).sort((a, b) => a[0] - b[0] || a[1] - b[1]), [a, b] = [r[0], r[r.length - 1]]; s += `<line x1="${a[0] * B + B / 2}" y1="${a[1] * B + B / 2}" x2="${b[0] * B + B / 2}" y2="${b[1] * B + B / 2}" class="pi-cara-vyhra" pathLength="1"/>`; }
+    s += "</svg>";
+    el.innerHTML = `<div class="lo-hlava"><button type="button" class="maly" data-pi="zpet">← Jiný režim</button><b class="pi-stav">${g.vyhra ? hlaska : `Na tahu: <span class="pi-znak ${g.na}">${g.na === "x" ? "✕" : "◯"}</span> ${jm(g.na)}`}</b>${g.rezim === "online" ? `<span class="lo-spojeni ok">Místnost ${kod}</span>` : ""}</div>
+      <div class="pi-obal">${s}</div>${g.vyhra ? `<div class="radek lo-tlacitka"><button type="button" class="hlavni" data-pi="znovu">Hrát znovu</button></div>` : ""}`; }
+  el.addEventListener("click", (e) => { const t = e.target.closest("[data-pi], [data-c]"); if (!t) return;
+    if (t.dataset.c != null) { hraj(+t.dataset.c, "ja"); return; } const a = t.dataset.pi;
+    if (a === "pocitac" || a === "dva") nova(a);
+    if (a === "online") { hlaska = ""; kresliVolbu(true); }
+    if (a === "pokracovat") { g = nacist(KLIC, null); kresli(); if (g.pc === g.na) setTimeout(pcTah, 400); }
+    if (a === "zpet") { if (spoj) { spoj.posli({ t: "odchod" }); spoj.zavri(); spoj = null; } g = null; kresli(); }
+    if (a === "zalozit") mistnost(true); if (a === "pripojit") { kodVstup = el.querySelector(".lo-kod").value; mistnost(false); }
+    if (a === "znovu") { if (g.rezim === "online") { spoj.posli({ t: "znovu" }); nova("online"); g.na = "x"; kresli(); } else nova(g.rezim); } });
+  el.addEventListener("input", (e) => { if (e.target.matches(".lo-kod")) { e.target.value = e.target.value.toUpperCase(); kodVstup = e.target.value; } });
+  el.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.matches(".lo-kod")) { kodVstup = e.target.value; mistnost(false); } });
+  kresli(); sk("–");
+  if (opt.kod && Spojeni.lze()) { kodVstup = opt.kod; mistnost(false); } // připojení odkazem / QR kódem
+  return { stop() { if (spoj) { spoj.posli({ t: "odchod" }); spoj.zavri(); } }, get stav() { return { g, ja, kod }; } };
+}
+return { spust, pet, tahPC };
+})();
+
+// ================= 🐍 Had: sám (zdí projdeš na druhou stranu), nebo online souboj o body =================
+// Souboj: 3 kola po 60 s. 1. kolo prázdná plocha, od 2. kola terén z hotových tvarů, souměrně podle středu (spravedlivé pro oba)
+// a vždy průchozí. Náraz do sebe, soupeře nebo terénu = had se zkrátí a za chvilku začne znovu u svého startu; body zůstávají.
+// Počítá zakladatel místnosti, soupeř posílá jen zatáčky. Pomocníky (plátno, barvy, klávesy) dodá h-pauza.
+const Had = (() => {
+const SM = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] };
+// tvary terénu z malých čtverečků (# = kámen); otáčí se po 90°
+const TVARY = [
+  ["##", "##"], ["###", "#..", "#.."], ["###", ".#.", ".#."], [".#.", "###", ".#."], ["#.#", "#.#", "###"], ["####"],
+  ["##.", ".##"], [".#.", "###", "#.#"], ["#..", "##.", ".##"], ["..#", ".##", "##."], ["#.#", ".#.", "#.#"], [".##.", "#..#"],
+];
+const otoc = (t) => t[0].split("").map((_, x) => t.map((r) => r[x]).reverse().join(""));
+const bunky = (t) => t.flatMap((r, y) => [...r].map((z, x) => (z === "#" ? [x, y] : null)).filter(Boolean));
+// terén pro kolo: souměrný podle středu, mezery mezi tvary, start obou hadů volný, všechna volná pole propojená (i přes okraj)
+function teren(SX, SY, kolo, starty) {
+  if (kolo < 2) return [];
+  const pocet = Math.min(3 + kolo, 7), volno = new Set(starty.flatMap(([x, y, dx]) => Array.from({ length: 9 }, (_, i) => `${x + dx * (i - 2)},${y}`)));
+  for (let pokus = 0; pokus < 60; pokus++) {
+    const k = new Set(), blizko = (x, y) => { for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) if (k.has(`${x + a},${y + b}`)) return true; return false; };
+    let n = 0;
+    for (let i = 0; i < 40 && n < pocet; i++) {
+      let t = TVARY[Math.floor(Math.random() * TVARY.length)]; for (let r = Math.floor(Math.random() * 4); r > 0; r--) t = otoc(t);
+      const w = t[0].length, h = t.length, ox = 1 + Math.floor(Math.random() * (SX / 2 - w - 1)), oy = 1 + Math.floor(Math.random() * (SY - h - 2));
+      const b = bunky(t).map(([x, y]) => [ox + x, oy + y]), zrc = b.map(([x, y]) => [SX - 1 - x, SY - 1 - y]), vse = b.concat(zrc);
+      if (vse.some(([x, y]) => blizko(x, y) || volno.has(`${x},${y}`) || volno.has(`${x},${y - 1}`) || volno.has(`${x},${y + 1}`))) continue;
+      vse.forEach(([x, y]) => k.add(`${x},${y}`)); n++;
+    }
+    if (n < 2) continue;
+    // propojenost volných polí (had projde okrajem na druhou stranu)
+    const vol = []; for (let x = 0; x < SX; x++) for (let y = 0; y < SY; y++) if (!k.has(`${x},${y}`)) vol.push(`${x},${y}`);
+    const navst = new Set([vol[0]]), fr = [vol[0]];
+    while (fr.length) { const [x, y] = fr.pop().split(",").map(Number); for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const s = `${(x + a + SX) % SX},${(y + b + SY) % SY}`; if (!k.has(s) && !navst.has(s)) { navst.add(s); fr.push(s); } } }
+    if (navst.size === vol.length) return [...k].map((s) => s.split(",").map(Number));
+  }
+  return [];
+}
+
+function spust(el, skore, opt, P) {
+  let hriste2 = null, spoj = null, kod = "", host = true, kodVstup = "", hlaska = "";
+  const zrus = () => { if (hriste2) hriste2.stop(); hriste2 = null; };
+  function volba(online) { zrus(); skore("–");
+    el.innerHTML = online ? `<div class="lo-volba"><button type="button" class="maly" data-hd="zpet">← Jiný režim</button><p class="pozn">Jeden založí místnost a pošle kód. Druhý ho napíše a připojí se.</p>
+      <div class="lo-volby"><button type="button" class="lo-rezim" data-hd="zalozit"><b>Založit místnost</b><span>Dostaneš kód a QR kód pro soupeře.</span></button>
+      <div class="lo-rezim lo-pripojit"><b>Mám kód</b><div class="radek"><input class="lo-kod" maxlength="4" autocomplete="off" spellcheck="false" placeholder="např. K7QX" aria-label="Kód místnosti" value="${kodVstup}"><button type="button" class="hlavni" data-hd="pripojit">Připojit</button></div></div></div>${hlaska ? `<p class="lo-hlaska">${hlaska}</p>` : ""}</div>`
+    : `<div class="lo-volba"><p class="pozn">Sbírej kostičky. Zdí projdeš na druhou stranu – nesmíš jen narazit sám do sebe.</p>
+      <div class="lo-volby"><button type="button" class="lo-rezim" data-hd="sam"><b>🐍 Sám</b><span>Kolik kostiček nasbíráš?</span></button>
+      <button type="button" class="lo-rezim" data-hd="online" ${Spojeni.lze() ? "" : "disabled"}><b>🌐 Souboj online</b><span>${Spojeni.lze() ? "3 kola po minutě – kdo nasbírá víc. Od 2. kola terén." : "Bude dostupné po zapnutí serveru."}</span></button></div></div>`; }
+  function mistnost(zalozit) { kod = zalozit ? Spojeni.novyKod() : kodVstup.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
+    if (kod.length !== 4) { hlaska = "Kód má 4 znaky."; volba(true); return; }
+    host = zalozit; hlaska = ""; zrus();
+    el.innerHTML = `<div class="lo-volba lo-cekani"><button type="button" class="maly" data-hd="zpet">← Jiný režim</button><span class="pozn">Kód místnosti</span><b class="lo-velky-kod">${kod}</b><p>${host ? "Pošli kód soupeři. Hra začne, jakmile se připojí." : "Čekám na spojení se soupeřem…"}</p>${host ? Spojeni.pozvanka("had", kod) : ""}<span class="lo-spojeni">Připojuji…</span></div>`;
+    spoj = Spojeni.pripoj("had", kod, { stav: (t, ok) => { const s = el.querySelector(".lo-spojeni"); if (s) { s.textContent = t; s.classList.toggle("ok", ok); } }, zprava: prijato });
+    spoj.posli({ t: "ahoj" }); }
+  function prijato(m) { if (m.t === "ahoj") { if (!hriste2) { spoj.posli({ t: "ahoj" }); hriste2 = hra(el, skore, P, { host, spoj, kod }); } return; }
+    if (hriste2) hriste2.zprava(m); }
+  function odejdi() { if (spoj) { spoj.posli({ t: "odchod" }); spoj.zavri(); spoj = null; } zrus(); }
+  el.addEventListener("click", (e) => { const t = e.target.closest("[data-hd]"); if (!t) return; const a = t.dataset.hd;
+    if (a === "sam") { zrus(); hriste2 = hra(el, skore, P, null); }
+    if (a === "online") { hlaska = ""; volba(true); }
+    if (a === "zpet") { odejdi(); volba(false); }
+    if (a === "zalozit") mistnost(true);
+    if (a === "pripojit") { kodVstup = el.querySelector(".lo-kod").value; mistnost(false); } });
+  el.addEventListener("input", (e) => { if (e.target.matches(".lo-kod")) { e.target.value = e.target.value.toUpperCase(); kodVstup = e.target.value; } });
+  el.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.matches(".lo-kod")) { kodVstup = e.target.value; mistnost(false); } });
+  if (opt.kod && Spojeni.lze()) { kodVstup = opt.kod; mistnost(false); } else volba(false);
+  return { stop: odejdi, klav: (k) => { if (hriste2) hriste2.klav(k); } };
+}
+
+// sit = null (sám) | { host, spoj, kod }
+function hra(el, skore, P, sit) {
+  const { W, H } = P, C = sit ? 15 : 20, SX = W / C, SY = H / C, KOLA = 3, DELKA = 60;
+  el.innerHTML = `<div class="lo-hlava"><button type="button" class="maly" data-hd="zpet">← Jiný režim</button>${sit ? `<span class="lo-spojeni ok">Místnost ${sit.kod}</span>` : ""}</div><div class="hd-plocha"></div>`;
+  const pl = el.querySelector(".hd-plocha"), { cv, g, napis } = P.platno(pl);
+  pl.insertAdjacentHTML("beforeend", `<div class="had-sipky" aria-label="Ovládání hada">${[["ArrowUp", "▲"], ["ArrowLeft", "◀"], ["ArrowDown", "▼"], ["ArrowRight", "▶"]].map(([k, z]) => `<button type="button" data-sm="${k}" aria-label="${{ ArrowUp: "nahoru", ArrowLeft: "doleva", ArrowDown: "dolů", ArrowRight: "doprava" }[k]}">${z}</button>`).join("")}</div>`);
+  const host = !sit || sit.host, ja = host ? 0 : 1; // had 0 = zakladatel (sám: jediný had)
+  const STARTY = [[5, Math.floor(SY / 2) - 2, 1], [SX - 6, SY - 1 - (Math.floor(SY / 2) - 2), -1]];
+  // stav (u zakladatele se počítá, soupeř ho jen kreslí)
+  let S = null, raf, t0 = 0, odesl = 0, pryc = false, konecSam = false;
+  const novyHad = (i) => { const [x, y, dx] = STARTY[i]; return { telo: [[x, y], [x - dx, y], [x - 2 * dx, y]], smer: [dx, 0], fronta: [], bum: 0 }; };
+  const obsazeno = () => { const s = new Set(); S.ter.forEach(([x, y]) => s.add(`${x},${y}`)); S.hadi.forEach((h) => h.telo.forEach(([x, y]) => s.add(`${x},${y}`))); S.jidlo.forEach(([x, y]) => s.add(`${x},${y}`)); return s; };
+  function poloz() { const o = obsazeno(); let x, y, n = 0; do { x = Math.floor(Math.random() * SX); y = Math.floor(Math.random() * SY); } while (o.has(`${x},${y}`) && n++ < 500); S.jidlo.push([x, y]); }
+  function kolo(k) { S.kolo = k; S.ter = sit ? teren(SX, SY, k, STARTY) : []; S.hadi = sit ? [novyHad(0), novyHad(1)] : [novyHad(0)]; S.jidlo = []; for (let i = 0; i < (sit ? 3 : 1); i++) poloz();
+    S.zbyva = DELKA; S.odpocet = sit ? 3 : 0; S.bezi = !sit ? false : true; }
+  function nova() { S = { kolo: 1, body: sit ? [0, 0] : [0], konec: false }; kolo(1); konecSam = false;
+    napis(sit ? `Tvůj had je <b style="color:var(--modra)">modrý</b>. ${KOLA} kola po minutě – kdo nasbírá víc kostiček. Zdí projdeš na druhou stranu.` : "Zmáčkni šipku nebo přejeď prstem – had se rozjede. Zdí projdeš na druhou stranu."); ukazSkore(); }
+  const ukazSkore = () => skore(sit ? `${S.body[ja]} : ${S.body[1 - ja]}` : S.body[0]);
+  function zatoc(i, k) { const h = S && S.hadi[i]; const s = SM[k]; if (!h || !s) return; const posl = h.fronta.length ? h.fronta[h.fronta.length - 1] : h.smer;
+    if (s[0] === -posl[0] && s[1] === -posl[1]) return; if (h.fronta.length < 3) h.fronta.push(s); }
+  function klav(k) { if (!S) return;
+    if (!sit) { if (konecSam) { nova(); return; } zatoc(0, k); if (!S.bezi && SM[k]) { S.bezi = true; napis(""); } return; }
+    if (host) zatoc(0, k); else if (SM[k]) sit.spoj.posli({ t: "sm", k }); }
+  // jeden krok hry (jen zakladatel nebo sám)
+  function krok() {
+    const kameny = new Set(S.ter.map(([x, y]) => `${x},${y}`)), hlavy = [];
+    S.hadi.forEach((h, i) => { if (h.bum > 0) { h.bum--; if (!h.bum) S.hadi[i] = novyHad(i); hlavy.push(null); return; }
+      if (h.fronta.length) h.smer = h.fronta.shift(); hlavy.push([(h.telo[0][0] + h.smer[0] + SX) % SX, (h.telo[0][1] + h.smer[1] + SY) % SY]); });
+    const naraz = hlavy.map((hl, i) => { if (!hl) return false; const k = `${hl[0]},${hl[1]}`; if (kameny.has(k)) return true;
+      if (S.hadi.some((h, j) => h.bum === 0 && h.telo.slice(0, j === i ? -1 : undefined).some(([x, y]) => x === hl[0] && y === hl[1]))) return true;
+      return hlavy.some((o, j) => j !== i && o && o[0] === hl[0] && o[1] === hl[1]); });
+    S.hadi.forEach((h, i) => { const hl = hlavy[i]; if (!hl) return;
+      if (naraz[i]) { if (!sit) { konecSam = true; S.bezi = false; const r = P.rekord("had", S.body[0]); napis(`Bum! Kostiček: <b>${S.body[0]}</b>${r && S.body[0] ? " – nový rekord! 🏆" : ""}. Zmáčkni šipku nebo klepni na hřiště a hraj znovu.`); return; }
+        h.telo = h.telo.slice(0, 3); h.bum = 10; return; } // souboj: zkrátit, chvilku stát, pak znovu u startu
+      h.telo.unshift(hl); const j = S.jidlo.findIndex(([x, y]) => x === hl[0] && y === hl[1]);
+      if (j >= 0) { S.body[i]++; S.jidlo.splice(j, 1); poloz(); ukazSkore(); } else h.telo.pop(); });
+  }
+  function sekundy(dt) { if (!sit || S.konec) return; if (S.odpocet > 0) { S.odpocet = Math.max(0, S.odpocet - dt); return; }
+    S.zbyva = Math.max(0, S.zbyva - dt);
+    if (!S.zbyva) { if (S.kolo < KOLA) { kolo(S.kolo + 1); } else { S.konec = true; konecZapasu(); } } }
+  function konecZapasu() { const [a, b] = [S.body[ja], S.body[1 - ja]];
+    napis(`${a > b ? "🎉 Výhra" : a < b ? "Soupeř vyhrál" : "Remíza"} <b>${a} : ${b}</b>. Klepni na hřiště a hrajte znovu.`); }
+  function posli(t) { if (pryc) return; odesl = t; sit.spoj.posli({ t: "st", s: S }); }
+  function zprava(m) {
+    if (m.t === "odchod") { pryc = true; napis("Soupeř odešel ze hry."); if (S) S.konec = true; return; }
+    if (host) { if (m.t === "sm") zatoc(1, m.k); if (m.t === "znovu" && S.konec) nova(); return; }
+    if (m.t === "st") { const byl = S ? S.konec : false; S = m.s; ukazSkore(); if (S.konec && !byl) konecZapasu(); if (!S.konec && byl) napis(""); } }
+  let sx = 0, sy = 0;
+  cv.addEventListener("pointerdown", (e) => { sx = e.clientX; sy = e.clientY; });
+  cv.addEventListener("pointerup", (e) => { const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) { if (!sit && konecSam) nova(); else if (sit && S && S.konec && !pryc) { if (host) nova(); else sit.spoj.posli({ t: "znovu" }); } return; }
+    klav(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "ArrowRight" : "ArrowLeft") : dy > 0 ? "ArrowDown" : "ArrowUp"); });
+  pl.addEventListener("click", (e) => { const b = e.target.closest("[data-sm]"); if (b) klav(b.dataset.sm); });
+  const mmss = (s) => { const c = Math.ceil(s); return `${Math.floor(c / 60)}:${String(c % 60).padStart(2, "0")}`; };
+  function kresli(t) { raf = requestAnimationFrame(kresli); if (!P.vidim()) { t0 = t; return; } const c = P.barvy();
+    if (!t0) t0 = t; const dt = Math.min(0.1, (t - t0) / 1000);
+    if (S && host) { sekundy(dt); const tik = sit ? (S.kolo >= 3 ? 115 : 125) : Math.max(80, 135 - S.body[0] * 2);
+      if ((sit ? !S.konec && !S.odpocet : S.bezi) && t - (kresli.k || 0) > tik) { kresli.k = t; krok(); if (sit) posli(t); } }
+    t0 = t;
+    if (sit && host && t - odesl > 400) posli(t); // odpočet a konec kola i bez pohybu
+    g.fillStyle = c.pozadi; g.fillRect(0, 0, W, H); g.strokeStyle = c.cara; g.lineWidth = 1;
+    for (let x = 0; x <= SX; x++) { g.beginPath(); g.moveTo(x * C, 0); g.lineTo(x * C, H); g.stroke(); } for (let y = 0; y <= SY; y++) { g.beginPath(); g.moveTo(0, y * C); g.lineTo(W, y * C); g.stroke(); }
+    if (!S) return;
+    g.fillStyle = c.ink; g.globalAlpha = 0.55; S.ter.forEach(([x, y]) => { g.beginPath(); g.roundRect(x * C + 1, y * C + 1, C - 2, C - 2, 3); g.fill(); }); g.globalAlpha = 1;
+    S.jidlo.forEach(([fx, fy]) => { const jx = fx * C + C / 2, jy = fy * C + C / 2, k = C / 20; g.fillStyle = sit ? c.z : c.b; // kostička (v souboji zelená – oranžový je soupeř)
+      g.beginPath(); g.roundRect(jx - 6 * k, jy - 2.5 * k, 12 * k, 5 * k, 2); g.fill(); [[-6, -3], [-6, 3], [6, -3], [6, 3]].forEach(([dx, dy]) => { g.beginPath(); g.arc(jx + dx * k, jy + dy * k, 3.2 * k, 0, 7); g.fill(); }); });
+    S.hadi.forEach((h, i) => { const muj = !sit || i === ja; g.globalAlpha = h.bum ? 0.35 : 1;
+      h.telo.forEach(([x, y], n) => { if (sit) { g.fillStyle = muj ? c.a : c.b; g.globalAlpha = (h.bum ? 0.35 : 1) * (n ? 0.62 : 1); } else g.fillStyle = n ? c.z : c.a;
+        g.beginPath(); g.roundRect(x * C + 2, y * C + 2, C - 4, C - 4, n ? 5 : 7); g.fill(); });
+      const [hx, hy] = h.telo[0], sm = h.smer; g.fillStyle = "#fff"; g.beginPath(); g.arc(hx * C + C / 2 + sm[0] * 3 - sm[1] * 4 * C / 20, hy * C + C / 2 + sm[1] * 3 + sm[0] * 4 * C / 20, 2.2, 0, 7); g.arc(hx * C + C / 2 + sm[0] * 3 + sm[1] * 4 * C / 20, hy * C + C / 2 + sm[1] * 3 - sm[0] * 4 * C / 20, 2.2, 0, 7); g.fill(); g.globalAlpha = 1; });
+    if (sit) { g.font = "700 15px system-ui, sans-serif"; g.textAlign = "right"; g.fillStyle = c.ink; g.globalAlpha = 0.8;
+      g.fillText(S.konec ? "Konec" : S.odpocet > 0 ? `Kolo ${S.kolo} začíná za ${Math.ceil(S.odpocet)}` : `Kolo ${S.kolo}/${KOLA} · ${mmss(S.zbyva)}`, W - 8, 18); g.globalAlpha = 1; } }
+  nova(); raf = requestAnimationFrame(kresli);
+  return { stop: () => cancelAnimationFrame(raf), zprava, klav };
+}
+return { spust, teren };
+})();
+
+// ================= ☕ pauza – minihry na oddech (bez bodů): ping-pong, had, pexeso =================
+// Od 3.15 bez měření času: hry jsou otevřené kdykoli (Rytmus je vypnutý). Lodě a piškvorky jdou i online přes server Učebny.
+(() => {
+const app = $("#pauza-app"); if (!app) return;
+const ZDARMA = true, W = 480, H = 300; // hry kdykoli – pauzy se neměří
+const HRY_P = [
+  { id: "pingpong", n: "Ping-pong", ik: "🏓", p: "Proti počítači, nebo online. Myš, prst nebo šipky ↑ ↓. Hraje se do 5." },
+  { id: "had", n: "Had", ik: "🐍", p: "Sám, nebo souboj online o body. Zdí projdeš na druhou stranu. Šipky nebo přejetí prstem." },
+  { id: "lode", n: "Lodě", ik: "⚓", p: "Proti počítači, ve dvou u jednoho zařízení, nebo online. Zásah = střílíš znovu." },
+  { id: "clovece", n: "Člověče, nezlob se", ik: "🎲", p: "Pro 2–4 u jednoho zařízení, za chybějící hraje počítač. Políčka s otázkami." },
+  { id: "piskvorky", n: "Piškvorky", ik: "✕", p: "Pět v řadě. Proti počítači, ve dvou, nebo online." },
+  { id: "pexeso", n: "Pexeso", ik: "🃏", p: "Najdi dvojice – ikony, nebo zlomky a procenta. Čím míň otočení, tím líp." },
+];
+let hra = null, posledni = ZAK ? "#" + ZAK.lekce[0] : "#zlomky";
+const bezi = () => Rytmus.bezi(), zbyva = () => Rytmus.zbyva;
+const mmss = (ms) => `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, "0")}`;
+window.addEventListener("hashchange", () => { if (!/^#(hry|testy)/.test(location.hash) && location.hash) posledni = location.hash.replace(/-\d+$/, ""); });
+function kresli() {
+  app.hidden = !Odhaleni.je("pauza"); if (app.hidden) return;
+  const muze = true, doPauzy = 0, pl = $("#pauza-plocha", app), drz = pl && !pl.hidden ? pl : null;
+  app.innerHTML = `${window.__HRY_VEREJNE ? "" : `<h3>☕ Hry na oddech</h3>
+    <p class="pozn">Kdykoli si chceš odpočinout. Hry body nedávají. Lodě, piškvorky a ping-pong si zahraješ i online – každý na svém zařízení, spojíte se kódem nebo QR kódem.</p>`}
+    <div class="hry">${HRY_P.map((h) => `<article class="hra-karta${muze ? "" : " zamceno"}"><b>${h.ik} ${h.n}</b><p class="pozn">${h.p}</p>
+      <span class="pozn">${h.id === "lode" || h.id === "piskvorky" || h.id === "pingpong" ? "1–2 hráči" : h.id === "clovece" ? "2–4 hráči" : h.id === "pexeso" ? `nejmíň otočení: ${nacist("pauza-" + h.id, 0) || "–"}` : `nejlepší: ${nacist("pauza-" + h.id, 0)}`}</span>
+      <button type="button" class="hlavni" data-pauza="${h.id}" ${muze ? "" : "disabled"}>${muze ? "Hrát" : `🔒 za ${doPauzy} min`}</button></article>`).join("")}</div>
+    <div class="pauza-plocha" id="pauza-plocha" hidden></div>`;
+  if (drz) $("#pauza-plocha", app).replaceWith(drz);
+}
+function stav() { const e = $("#pauza-stav", app); if (e && bezi()) e.innerHTML = `☕ Pauza běží – zbývá <b>${mmss(zbyva())}</b>`; const c = $("#pauza-cas", app); if (c) c.textContent = bezi() ? `☕ ${mmss(zbyva())}` : ZDARMA ? "" : "☕ 0:00"; }
+function zastav() { if (hra && hra.stop) hra.stop(); hra = null; }
+function konecPauzy() { zastav(); const pl = $("#pauza-plocha", app); if (!pl) return;
+  pl.hidden = false; pl.innerHTML = `<div class="hra-konec"><b>Pauza skončila 🙂</b><span>Odpočatá hlava počítá líp. Jdeme na to?</span>
+    <div class="radek" style="justify-content:center"><a class="tl hlavni" href="${posledni}">Zpátky k příkladům</a><button type="button" data-pa="zavrit">Zavřít</button></div></div>`; kresli(); }
+setInterval(() => { stav(); if (hra && !ZDARMA && !bezi()) konecPauzy(); }, 500);
+function otevri(id, opt = {}) {
+  if (!opt.host && !bezi() && !Rytmus.zacni() && !ZDARMA) { kresli(); return; }
+  zastav(); const def = HRY_P.find((h) => h.id === id), pl = $("#pauza-plocha", app); pl.hidden = false;
+  pl.innerHTML = `<div class="radek pauza-lista"><b>${def.ik} ${def.n}</b><span class="hra-cas" id="pauza-cas"></span>${["lode", "clovece", "piskvorky"].includes(id) ? "" : `<span>skóre <b id="pauza-skore">0</b></span>`}<button type="button" class="maly" data-pa="zavrit">Zavřít</button></div><div class="pauza-hra"></div>`;
+  hra = ({ pingpong: (e, s) => pingpong(e, s, opt), had: (e, s) => Had.spust(e, s, opt, { W, H, platno, barvy, vidim, rekord }), pexeso, lode: (e, s) => Lode.spust(e, s, opt), clovece: (e, s) => Clovece.spust(e, s), piskvorky: (e, s) => Piskvorky.spust(e, s, opt) })[id]($(".pauza-hra", pl), (n) => { const s = $("#pauza-skore", pl); if (s) s.textContent = n; });
+  hra.id = id; stav(); kresli(); pl.scrollIntoView({ block: window.__HRY_VEREJNE ? "start" : "nearest" });
+}
+const rekord = (id, n, mensi) => { const b = nacist("pauza-" + id, 0); if (!b || (mensi ? n < b : n > b)) { ulozit("pauza-" + id, n); return true; } return false; };
+function platno(el) { el.innerHTML = `<canvas width="${W * 2}" height="${H * 2}" class="pauza-platno" tabindex="0" aria-label="Herní plocha"></canvas><p class="pozn pauza-napis" aria-live="polite"></p>`;
+  const cv = $("canvas", el), g = cv.getContext("2d"); g.scale(2, 2); cv.focus({ preventScroll: true }); return { cv, g, napis: (t) => ($(".pauza-napis", el).innerHTML = t) }; }
+const barvy = () => ({ pozadi: css("--karta") || "#fff", cara: css("--mrizka") || "#ddd", ink: css("--inkoust") || "#222", a: css("--modra") || "#2e6cd0", b: css("--oranzova") || "#e8892b", z: css("--zelena") || "#3a9a4a" });
+const vidim = () => !$("#lekce-hry").hidden && !document.hidden;
+const klavesy = new Set(); document.addEventListener("keydown", (e) => { if (!hra || !vidim() || e.target.closest("input, textarea, select")) return;
+  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key) && hra.id !== "pexeso") { e.preventDefault(); klavesy.add(e.key); if (hra.klav) hra.klav(e.key); } });
+document.addEventListener("keyup", (e) => klavesy.delete(e.key));
+
+// ---------- ping-pong: proti počítači, nebo online (zakladatel místnosti počítá míček, soupeř posílá jen svou pálku) ----------
+// Online: každý se vidí vlevo (modrá pálka). Zakladatel posílá stav ~15× za s, soupeř polohu pálky; mezi zprávami se míček dopočítá.
+function pingpong(el, skore, opt = {}) {
+  let hriste2 = null, spoj = null, kod = "", host = true, kodVstup = "", hlaska = "";
+  const zrus = () => { if (hriste2) hriste2.stop(); hriste2 = null; };
+  function volba(online) { zrus(); skore("–");
+    el.innerHTML = online ? `<div class="lo-volba"><button type="button" class="maly" data-pp="zpet">← Jiný režim</button><p class="pozn">Jeden založí místnost a pošle kód. Druhý ho napíše a připojí se.</p>
+      <div class="lo-volby"><button type="button" class="lo-rezim" data-pp="zalozit"><b>Založit místnost</b><span>Dostaneš kód a QR kód pro soupeře.</span></button>
+      <div class="lo-rezim lo-pripojit"><b>Mám kód</b><div class="radek"><input class="lo-kod" maxlength="4" autocomplete="off" spellcheck="false" placeholder="např. K7QX" aria-label="Kód místnosti" value="${kodVstup}"><button type="button" class="hlavni" data-pp="pripojit">Připojit</button></div></div></div>${hlaska ? `<p class="lo-hlaska">${hlaska}</p>` : ""}</div>`
+    : `<div class="lo-volba"><p class="pozn">Odpal míček na druhou stranu. Kdo první dá 5 bodů, vyhrává.</p>
+      <div class="lo-volby"><button type="button" class="lo-rezim" data-pp="pocitac"><b>🤖 Proti počítači</b><span>Pálka vlevo je tvoje.</span></button>
+      <button type="button" class="lo-rezim" data-pp="online" ${Spojeni.lze() ? "" : "disabled"}><b>🌐 Online</b><span>${Spojeni.lze() ? "Každý na svém zařízení – spojíte se kódem." : "Bude dostupné po zapnutí serveru."}</span></button></div></div>`; }
+  function mistnost(zalozit) { kod = zalozit ? Spojeni.novyKod() : kodVstup.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
+    if (kod.length !== 4) { hlaska = "Kód má 4 znaky."; volba(true); return; }
+    host = zalozit; hlaska = ""; zrus();
+    el.innerHTML = `<div class="lo-volba lo-cekani"><button type="button" class="maly" data-pp="zpet">← Jiný režim</button><span class="pozn">Kód místnosti</span><b class="lo-velky-kod">${kod}</b><p>${host ? "Pošli kód soupeři. Hra začne, jakmile se připojí." : "Čekám na spojení se soupeřem…"}</p>${host ? Spojeni.pozvanka("pingpong", kod) : ""}<span class="lo-spojeni">Připojuji…</span></div>`;
+    spoj = Spojeni.pripoj("pingpong", kod, { stav: (t, ok) => { const s = el.querySelector(".lo-spojeni"); if (s) { s.textContent = t; s.classList.toggle("ok", ok); } }, zprava: prijato });
+    spoj.posli({ t: "ahoj" }); }
+  function prijato(m) { if (m.t === "ahoj") { if (!hriste2) { spoj.posli({ t: "ahoj" }); hriste2 = hriste(el, skore, { host, spoj, kod }); } return; }
+    if (hriste2) hriste2.zprava(m); }
+  function odejdi() { if (spoj) { spoj.posli({ t: "odchod" }); spoj.zavri(); spoj = null; } zrus(); }
+  el.addEventListener("click", (e) => { const t = e.target.closest("[data-pp]"); if (!t) return; const a = t.dataset.pp;
+    if (a === "pocitac") { zrus(); hriste2 = hriste(el, skore, null); }
+    if (a === "online") { hlaska = ""; volba(true); }
+    if (a === "zpet") { odejdi(); volba(false); }
+    if (a === "zalozit") mistnost(true);
+    if (a === "pripojit") { kodVstup = el.querySelector(".lo-kod").value; mistnost(false); } });
+  el.addEventListener("input", (e) => { if (e.target.matches(".lo-kod")) { e.target.value = e.target.value.toUpperCase(); kodVstup = e.target.value; } });
+  el.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.matches(".lo-kod")) { kodVstup = e.target.value; mistnost(false); } });
+  if (opt.kod && Spojeni.lze()) { kodVstup = opt.kod; mistnost(false); } else volba(false);
+  return { stop: odejdi };
+}
+// hřiště: sit = null (proti počítači) | { host, spoj }
+function hriste(el, skore, sit) {
+  el.innerHTML = `${sit ? `<div class="lo-hlava"><button type="button" class="maly" data-pp="zpet">← Jiný režim</button><span class="lo-spojeni ok">Místnost ${sit.kod}</span></div>` : `<div class="lo-hlava"><button type="button" class="maly" data-pp="zpet">← Jiný režim</button></div>`}<div class="pp-plocha"></div>`;
+  const { cv, g, napis } = platno(el.querySelector(".pp-plocha")); const host = !sit || sit.host;
+  let ty = H / 2, py = H / 2, ay = H / 2, ayCil = H / 2, b, sk = [0, 0], cekej = 0.8, t0 = performance.now(), raf, konec = false, odesl = 0, posl = -1, pryc = false;
+  const PH = 64, PW = 10, R = 7;
+  const podej = (smer) => { const u = (Math.random() - 0.5) * 0.9; b = { x: W / 2, y: H / 2, vx: 250 * smer * Math.cos(u), vy: 250 * Math.sin(u) }; cekej = 0.8; };
+  podej(1); napis(sit ? "Tvoje pálka je vlevo (modrá). Myš, prst nebo šipky ↑ ↓. Hraje se do 5." : "Pohybuj myší nebo prstem nad hřištěm, nebo šipkami ↑ ↓.");
+  const ukaz = () => skore(`${sk[0]} : ${sk[1]}`);
+  cv.addEventListener("pointermove", (e) => { const r = cv.getBoundingClientRect(); ty = ((e.clientY - r.top) / r.height) * H; });
+  cv.addEventListener("pointerdown", (e) => { const r = cv.getBoundingClientRect(); ty = ((e.clientY - r.top) / r.height) * H; if (konec && !pryc) { if (host) restart(); else sit.spoj.posli({ t: "znovu" }); } });
+  function restart() { sk = [0, 0]; konec = false; ukaz(); podej(1); napis(""); }
+  function konecHry() { konec = true; const vyhra = sk[0] === 5; if (vyhra && !sit) rekord("pingpong", sk[0] - sk[1]);
+    napis(vyhra ? `🎉 Výhra ${sk[0]} : ${sk[1]}! Klepni na hřiště a hraj znovu.` : `${sit ? "Soupeř" : "Počítač"} vyhrál ${sk[1]} : ${sk[0]}. Klepni na hřiště a zkus to znovu.`); }
+  function zprava(m) {
+    if (m.t === "odchod") { pryc = true; konec = true; napis("Soupeř odešel ze hry."); return; }
+    if (host) { if (m.t === "p") ayCil = Math.max(PH / 2, Math.min(H - PH / 2, +m.y || H / 2)); if (m.t === "znovu" && konec) restart(); return; }
+    if (m.t === "s") { // stav od zakladatele – zrcadlově, ať je tahle hráčka vlevo
+      b = { x: W - m.x, y: m.y, vx: -m.vx, vy: m.vy }; ayCil = m.py; cekej = m.c ? 1 : 0;
+      const nove = [m.sk[1], m.sk[0]], zmena = nove[0] !== sk[0] || nove[1] !== sk[1]; sk = nove; if (zmena) ukaz();
+      if (m.k && !konec) konecHry(); if (!m.k && konec) { konec = false; napis(""); } } }
+  function krok(t) { const dt = Math.min(0.04, (t - t0) / 1000); t0 = t; raf = requestAnimationFrame(krok); if (!vidim()) return; const c = barvy();
+    if (klavesy.has("ArrowUp")) ty = py - 40; if (klavesy.has("ArrowDown")) ty = py + 40;
+    py += Math.max(-420 * dt, Math.min(420 * dt, ty - py)); py = Math.max(PH / 2, Math.min(H - PH / 2, py));
+    if (sit) ay += Math.max(-900 * dt, Math.min(900 * dt, ayCil - ay)); // soupeř: plynule k poslední známé poloze
+    if (!konec && host) { if (cekej > 0) cekej -= dt; else { b.x += b.vx * dt; b.y += b.vy * dt; }
+      if (!sit) { const cil = b.vx > 0 ? b.y : H / 2, rych = 170 + 18 * (sk[0] + sk[1]); ay += Math.max(-rych * dt, Math.min(rych * dt, cil - ay)); ay = Math.max(PH / 2, Math.min(H - PH / 2, ay)); }
+      if (b.y < R || b.y > H - R) { b.vy = -b.vy; b.y = Math.max(R, Math.min(H - R, b.y)); }
+      const odraz = (yp, smer) => { const o = Math.max(-1, Math.min(1, (b.y - yp) / (PH / 2))), v = Math.min(560, Math.hypot(b.vx, b.vy) * 1.06), u = o * 1.0; b.vx = smer * v * Math.cos(u); b.vy = v * Math.sin(u); };
+      const tol = sit ? 8 : 0, ap = sit ? ayCil : ay; // online: pálka soupeře podle poslední zprávy, s malou tolerancí na zpoždění
+      if (b.vx < 0 && b.x - R < 22 + PW && b.x > 14 && Math.abs(b.y - py) < PH / 2 + R) { b.x = 22 + PW + R; odraz(py, 1); }
+      if (b.vx > 0 && b.x + R > W - 22 - PW && b.x < W - 14 && Math.abs(b.y - ap) < PH / 2 + R + tol) { b.x = W - 22 - PW - R; odraz(ap, -1); }
+      if (b.x < -R || b.x > W + R) { sk[b.x < 0 ? 1 : 0]++; ukaz(); if (sk[0] === 5 || sk[1] === 5) konecHry(); else podej(b.x < 0 ? 1 : -1); } }
+    if (!host && !konec && cekej <= 0) { b.x += b.vx * dt; b.y += b.vy * dt; if (b.y < R || b.y > H - R) { b.vy = -b.vy; b.y = Math.max(R, Math.min(H - R, b.y)); } } // dopočet mezi zprávami
+    if (sit && !pryc && t - odesl > 66) { odesl = t; // ~15 zpráv za sekundu
+      if (host) sit.spoj.posli({ t: "s", x: Math.round(b.x * 10) / 10, y: Math.round(b.y * 10) / 10, vx: Math.round(b.vx), vy: Math.round(b.vy), py: Math.round(py), sk, c: cekej > 0, k: konec });
+      else if (Math.round(py) !== posl) { posl = Math.round(py); sit.spoj.posli({ t: "p", y: posl }); } }
+    g.fillStyle = c.pozadi; g.fillRect(0, 0, W, H); g.strokeStyle = c.cara; g.setLineDash([8, 10]); g.lineWidth = 3; g.beginPath(); g.moveTo(W / 2, 0); g.lineTo(W / 2, H); g.stroke(); g.setLineDash([]);
+    g.font = "700 34px system-ui, sans-serif"; g.textAlign = "center"; g.fillStyle = c.cara; g.fillText(sk[0], W / 2 - 50, 44); g.fillText(sk[1], W / 2 + 50, 44);
+    g.fillStyle = c.a; g.beginPath(); g.roundRect(22, py - PH / 2, PW, PH, 5); g.fill(); g.fillStyle = c.b; g.beginPath(); g.roundRect(W - 22 - PW, ay - PH / 2, PW, PH, 5); g.fill();
+    if (!konec) { g.fillStyle = c.ink; g.beginPath(); g.arc(b.x, b.y, R, 0, 7); g.fill(); } }
+  ukaz(); raf = requestAnimationFrame(krok);
+  return { stop: () => cancelAnimationFrame(raf), zprava };
+}
+
+// ---------- had: h-had.js (sám se průchodem zdí, souboj online) ----------
+
+// ---------- pexeso: čárové ikony, nebo zlomky ↔ procenta; 8 dvojic ----------
+const IKONY = {
+  sluchatka: '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6.5" rx="1.6"/><rect x="17" y="14" width="4" height="6.5" rx="1.6"/>',
+  ovladac: '<path d="M7 8.5h10a4 4 0 0 1 4 4v2a2.5 2.5 0 0 1-4.4 1.6L15 14.5H9l-1.6 1.6A2.5 2.5 0 0 1 3 14.5v-2a4 4 0 0 1 4-4z"/><path d="M7.5 10.5v3.5M5.75 12.25h3.5"/><circle cx="15.5" cy="11.5" r=".9"/><circle cx="17.8" cy="13.2" r=".9"/>',
+  fotak: '<path d="M3.5 8h3.5l2-2.5h6L17 8h3.5v11h-17z"/><circle cx="12" cy="13.2" r="3.6"/>',
+  tenisky: '<path d="M3 17.5V11l4.5-.5 2.5 2.5 3.5-.5 3 2.2 4.5 1.3v1.5z"/><path d="M3 20h18M8.5 12.5l1.5-1.5M11 13l1.5-1.5"/>',
+  planeta: '<circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="10" ry="3.2" transform="rotate(-22 12 12)"/>',
+  blesk: '<path d="M13.5 2.5 5 13.5h6.5l-1 8 8.5-11h-6.5z"/>',
+  nota: '<path d="M9 18V6l10-2.2V16"/><circle cx="6.8" cy="18" r="2.3"/><circle cx="16.8" cy="16" r="2.3"/>',
+  raketa: '<path d="M12 2.5c3 2.2 5 5.5 5 9.5l-1.8 4H8.8L7 12c0-4 2-7.3 5-9.5z"/><circle cx="12" cy="10" r="1.7"/><path d="M9 16.2 7 21l3.2-1.4M15 16.2l2 4.8-3.2-1.4"/>',
+  diamant: '<path d="M6.5 4h11l3.5 5-9 11.5L3 9z"/><path d="M3 9h18M9.5 4 12 20.5 14.5 4"/>',
+  mesic: '<path d="M20 14.6A8.2 8.2 0 1 1 9.4 4a6.6 6.6 0 0 0 10.6 10.6z"/>',
+  kostka: '<rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.1"/><circle cx="15" cy="9" r="1.1"/><circle cx="9" cy="15" r="1.1"/><circle cx="15" cy="15" r="1.1"/><circle cx="12" cy="12" r="1.1"/>',
+  kolo: '<circle cx="6" cy="16.5" r="3.5"/><circle cx="18" cy="16.5" r="3.5"/><path d="M6 16.5 10 9.5h5.5l2.5 7M10 9.5 8.8 6.5H6.8M12.3 16.5l3.2-7"/>',
+  mobil: '<rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M10.8 18.6h2.4"/>',
+  kava: '<path d="M5 9h11v5.2A4.8 4.8 0 0 1 11.2 19h-1.4A4.8 4.8 0 0 1 5 14.2z"/><path d="M16 10.8h1.4a2.6 2.6 0 0 1 0 5.2H16M8.5 3.5v3M11.5 3.5v3"/>',
+};
+const BARVY_P = ["--modra", "--oranzova", "--zelena", "--fialova", "--cervena", "--modra", "--zelena", "--oranzova"];
+const ZL_PROC = [[1, 2, "50"], [1, 4, "25"], [3, 4, "75"], [1, 5, "20"], [2, 5, "40"], [1, 10, "10"], [3, 10, "30"], [1, 8, "12,5"], [3, 5, "60"], [7, 10, "70"], [4, 5, "80"], [1, 20, "5"], [3, 20, "15"], [9, 10, "90"]];
+const zamichej = (a) => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function pexeso(el, skore) {
+  let druh = nacist("pexeso-druh", "ikony");
+  function nova() {
+    let karty;
+    if (druh === "zlomky") karty = zamichej(ZL_PROC).slice(0, 8).flatMap(([a, b, p], i) => [{ k: i, html: `<span class="pex-mat">${zl(a, b)}</span>`, t: `${a}/${b}` }, { k: i, html: `<span class="pex-mat">${p} %</span>`, t: `${p} %` }]);
+    else karty = zamichej(Object.keys(IKONY)).slice(0, 8).flatMap((id, i) => { const h = `<svg viewBox="0 0 24 24" class="pex-ikona" style="color:var(${BARVY_P[i]})" aria-hidden="true">${IKONY[id]}</svg>`; return [{ k: i, html: h, t: id }, { k: i, html: h, t: id }]; });
+    karty = zamichej(karty); let otoc = [], tahy = 0, nalez = 0, zamek = false;
+    el.innerHTML = `<div class="volby pex-druh" role="group" aria-label="Druh pexesa"><button type="button" class="maly${druh === "ikony" ? " vybrano" : ""}" data-druh="ikony">Ikony</button><button type="button" class="maly${druh === "zlomky" ? " vybrano" : ""}" data-druh="zlomky">Zlomky ↔ procenta</button></div>
+      <div class="pexeso" role="group" aria-label="Pexeso">${karty.map((k, j) => `<button type="button" class="pex" data-j="${j}" aria-label="Karta ${j + 1}"><span class="pex-lic">${k.html}</span></button>`).join("")}</div>
+      <p class="pozn pauza-napis" aria-live="polite">${druh === "zlomky" ? "Najdi dvojice: zlomek a stejná hodnota v procentech." : "Otoč dvě karty. Když jsou stejné, zůstanou."}</p>`;
+    skore(0);
+    el.onclick = (e) => { const d = e.target.closest("[data-druh]"); if (d) { druh = d.dataset.druh; ulozit("pexeso-druh", druh); nova(); return; }
+      if (e.target.closest("[data-pa='znovu-pex']")) { nova(); return; }
+      const b = e.target.closest(".pex"); if (!b || zamek || b.classList.contains("lic")) return;
+      b.classList.add("lic"); b.setAttribute("aria-label", `Karta ${+b.dataset.j + 1}: ${karty[b.dataset.j].t}`); otoc.push(b); if (otoc.length < 2) return;
+      tahy++; skore(tahy); const [x, y] = otoc;
+      if (karty[x.dataset.j].k === karty[y.dataset.j].k) { x.classList.add("par"); y.classList.add("par"); otoc = []; nalez++;
+        if (nalez === 8) { const r = rekord(druh === "zlomky" ? "pexeso-zl" : "pexeso", tahy, true); $(".pauza-napis", el).innerHTML = `Hotovo za <b>${tahy}</b> otočení${r ? " – nový rekord 🏆" : ""}. <button type="button" class="maly" data-pa="znovu-pex">Znovu</button>`; } }
+      else { zamek = true; setTimeout(() => { otoc.forEach((k) => { k.classList.remove("lic"); k.setAttribute("aria-label", `Karta ${+k.dataset.j + 1}`); }); otoc = []; zamek = false; }, 900); } };
+  }
+  nova(); return { stop() {} };
+}
+
+app.addEventListener("click", (e) => { const b = e.target.closest("[data-pauza], [data-pa]"); if (!b) return;
+  if (b.dataset.pauza) { otevri(b.dataset.pauza); return; }
+  if (b.dataset.pa === "rytmus") { const u = Math.max(5, Math.min(240, +$("#ryt-uceni").value || 60)), p = Math.max(5, Math.min(240, +$("#ryt-pauza").value || 60)); Rytmus.nastav(u, p); Body.oznam(`Rytmus uložen: ${u} min učení → ${p} min pauza.`); kresli(); return; }
+  if (b.dataset.pa === "ukoncit") { Rytmus.ukonci(); konecPauzy(); return; }
+  if (b.dataset.pa === "zavrit") { zastav(); $("#pauza-plocha", app).hidden = true; kresli(); } });
+document.addEventListener("den-zmena", () => { if (!$("#lekce-hry").hidden && !hra) kresli(); });
+document.addEventListener("odhaleni-zmena", () => { if (!hra) kresli(); });
+window.addEventListener("hashchange", () => { if (location.hash === "#hry") kresli(); else if (hra && hra.id !== "pexeso") { zastav(); const pl = $("#pauza-plocha", app); if (pl) pl.hidden = true; } });
+kresli();
+// pozvánka odkazem / QR kódem: #hra-lode-K7QX → rovnou do místnosti (host nepotřebuje pauzu ani účet)
+function zOdkazu() { const m = (location.hash || "").match(/^#hra-(lode|piskvorky|pingpong|had)-([A-Z0-9]{4})$/i); if (!m) return;
+  history.replaceState(null, "", "#hry"); window.dispatchEvent(new HashChangeEvent("hashchange")); app.hidden = false;
+  setTimeout(() => { app.hidden = false; otevri(m[1].toLowerCase(), { host: true, kod: m[2].toUpperCase() }); }, 50); }
+window.addEventListener("hashchange", zOdkazu); setTimeout(zOdkazu, 0);
+window.__pauza = { otevri, get hra() { return hra; }, konecPauzy };
+})();
+
+window.__hryTest = { teren: Had.teren };
+})();
+</script>
+</body></html>
