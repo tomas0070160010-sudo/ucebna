@@ -3,6 +3,7 @@
 Stránka pro doučování a hry (přihlášení přes Supabase projekt `ucebna`).
 
 ## Verze
+- **0.8.3** (10. 11. 2026) – stránka her: Tetris má rychlý návod (jde přeskočit, ❓ Jak hrát). Potřebuje Matiku 3.21.
 - **0.8.2** (10. 11. 2026) – stránka her: Tetris online souboj (kód nebo QR kód, stejný čas, pauza u obou), způsob odpovědi určí hra, pokusy, pomalý dopad, WSAD. Potřebuje Matiku 3.20.
 - **0.8.1** (10. 11. 2026) – stránka her: nová hra Tetris se zlomky (nejdřív zjednoduš, pak poskládej; obtížnost podle hráče). Potřebuje Matiku 3.19.
 - **0.8** (10. 11. 2026) – stránka her: vzdělávací hry Závod v počítání (i online), Odhadovačka na ose (i online), Had s čísly, Úhlové dělo; obtížnost Lehká / Střední / Obtížná / Lektorská – každý hráč si volí svou. Potřebuje Matiku 3.17.

@@ -614,7 +614,28 @@ body.na-prehledu nav.zalozky { display: none; }
 .dl-ovladani { justify-content: center; gap: 8px; margin-top: 8px; }
 .dl-ovladani .hlavni { min-width: 9em; }
 /* 🧱 Tetris se zlomky: deska 10 × 16, dílky s čísly ve čtverečcích, zelená znaménka na hranách, černá zlomková čára */
-.tt-hra { display: grid; gap: 10px; outline: none; }
+.tt-hra { display: grid; gap: 10px; outline: none; position: relative; } .tt-lista-tl { display: flex; gap: 6px; flex-wrap: wrap; }
+/* návod (jde přeskočit): kostky ↔ zápis v sešitu */
+.tt-navod { position: absolute; inset: 0 0 auto 0; max-height: 100%; z-index: 20; display: grid; grid-template-rows: auto auto auto; gap: 10px; padding: 16px; background: var(--karta); border: 2px solid var(--modra); border-radius: 16px; box-shadow: 0 12px 34px rgba(0,0,0,.2); overflow: auto; animation: tt-panel .3s ease-out; }
+.tt-n-hlava { display: flex; justify-content: space-between; align-items: center; gap: 10px; } .tt-n-hlava b { font-size: 20px; }
+.tt-n-tecky { display: flex; gap: 5px; } .tt-n-tecky i { width: 9px; height: 9px; border-radius: 50%; background: var(--mrizka); } .tt-n-tecky i.ted { background: var(--modra); }
+.tt-n-obsah { display: grid; gap: 12px; align-content: start; justify-items: center; text-align: center; } .tt-n-obsah p { margin: 0; max-width: 46ch; }
+.tt-n-pata { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; } .tt-n-pata > span { display: flex; gap: 8px; }
+.tt-n-vedle { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.tt-n-k { display: grid; gap: 6px; justify-items: center; } .tt-n-k small { color: var(--tuzka); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.tt-n-sip { font-size: 26px; color: var(--tuzka); }
+.tt-m { font: 700 24px/1.2 var(--f-mat); display: inline-flex; align-items: center; gap: 6px; }
+.tt-m-zl { display: inline-grid; justify-items: center; vertical-align: middle; } .tt-m-zl > span:first-child { padding: 0 4px 2px; border-bottom: 2px solid var(--inkoust); } .tt-m-zl > span:last-child { padding-top: 2px; }
+.tt-m-zl.tl > span:first-child { border-bottom: 4px solid var(--fialova); }
+.tt-n-leg, .tt-n-zp, .tt-n-kroky { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; text-align: left; max-width: 48ch; font-size: 15px; } .tt-n-kroky { list-style: decimal; padding-left: 22px; }
+.tt-n-leg li { display: flex; gap: 10px; align-items: center; }
+.tt-n-ctv { flex: none; width: 26px; height: 26px; display: grid; place-items: center; font: 800 15px/1 var(--f-mat); background: color-mix(in srgb, var(--modra) 16%, var(--karta)); border: 1.5px solid color-mix(in srgb, var(--modra) 55%, var(--karta)); border-radius: 4px; }
+.tt-n-zn { flex: none; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; background: var(--zelena); color: #fff; font: 800 12px/1 var(--f-text, system-ui); }
+.tt-n-cara { flex: none; width: 30px; height: 3px; background: var(--inkoust); border-radius: 2px; } .tt-n-cara.tl { height: 5px; background: var(--fialova); }
+.tt-n-zp li { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; }
+.tt-n-tok { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; } .tt-n-tok > b { font-size: 22px; color: var(--tuzka); }
+.tt-n-rada { display: grid; grid-template-columns: repeat(4, 16px); gap: 2px; } .tt-n-rada i { width: 16px; height: 16px; border-radius: 3px; background: color-mix(in srgb, var(--modra) 22%, var(--karta)); border: 1.5px solid var(--modra); } .tt-n-rada i.z { background: var(--zvyraz); }
+.tt-n-ovl { display: grid; grid-template-columns: auto auto; gap: 8px 14px; align-items: center; text-align: left; } .tt-n-ovl kbd { display: inline-block; min-width: 1.6em; padding: 2px 6px; margin-right: 3px; border: 1.5px solid var(--mrizka); border-bottom-width: 3px; border-radius: 6px; font: 700 13px/1.2 var(--f-text, system-ui); text-align: center; }
 .tt-lista { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; } .tt-cerv { color: var(--cervena); } .tt-pz { background: var(--oranzova); border-color: var(--oranzova); color: #fff; }
 .tt-telo { display: flex; gap: 10px; align-items: flex-start; justify-content: center; }
 .tt-deska-obal { position: relative; flex: none; }
@@ -2167,6 +2188,59 @@ function klavesa(e, pr, st) {
 return { NAZEV, novy, html, klik, klavesa, spatne, sablona, zbytecne };
 })();
 
+// ================= 🧱 Tetris se zlomky – rychlý návod (jde přeskočit): kostky ↔ zápis v sešitu, odpovídání, ovládání =================
+// Ukáže se při první hře (pamatuje se „tetris-navod“) a kdykoli pod tlačítkem ❓ Jak hrát. Šipky ← → listují, Esc zavře.
+//   TetrisNavod.otevri(obal, { zavreno }) – obal = .tt-hra (návod ho překryje)
+const TetrisNavod = (() => {
+const D = TetrisDilek, esc = D.esc;
+const zl = (c, j, tl) => `<span class="tt-m-zl${tl ? " tl" : ""}"><span>${c}</span><span>${j}</span></span>`; // zlomek jako v sešitu
+const vedle = (dilek, sesit, popis = "") => `<div class="tt-n-vedle"><div class="tt-n-k"><small>v Tetrisu</small>${dilek}</div><b class="tt-n-sip" aria-hidden="true">=</b><div class="tt-n-k"><small>v sešitu</small><span class="tt-m">${sesit}</span></div></div>${popis}`;
+const DIL = {
+  rada: { rady: [{ od: 0, b: ["2", "x", "3"], h: [null, "·", "+"] }] },
+  zlomek: { rady: [{ od: 0, b: ["6x", "9"], h: [null, "+"] }, { od: 0, b: ["3"] }], cary: [{ pod: 0 }] },
+  tri: { rady: [{ od: 0, b: ["3"] }, { od: 0, b: ["4"] }, { od: 0, b: ["5"] }], cary: [{ pod: 0 }, { pod: 1, tl: true }] },
+  zbytecne: { rady: [{ od: 0, b: ["3", "x", "0"], h: [null, "·", "+"], pr: [2] }] },
+  cervena: { rady: [{ od: 0, b: ["3", "x", "1"], h: [null, "·", "·"], r: [2] }] },
+  vysledek: { rady: [{ od: 0, b: ["2x", "3"], h: [null, "+"] }] },
+};
+const SNIMKY = [
+  { n: "Jak se hraje", h: () => `<div class="tt-n-tok">${D.dilek(DIL.zlomek, 38)}<b aria-hidden="true">→</b>${D.dilek(DIL.vysledek, 38)}<b aria-hidden="true">→</b><span class="tt-n-rada" aria-hidden="true"><i></i><i></i><i class="z"></i><i class="z"></i><i></i><i></i><i></i><i></i></span></div>
+      <ol class="tt-n-kroky"><li><b>Zjednoduš</b> výraz na dílku – dílek zatím stojí.</li><li>Zjednodušený dílek <b>padá</b> – je menší, líp se vejde.</li><li><b>Poskládej</b> ho tak, aby vznikla plná řada – ta zmizí.</li></ol>` },
+  { n: "Kostka = zápis v sešitu", h: () => vedle(D.dilek(DIL.rada, 44), "2 · x + 3",
+      `<ul class="tt-n-leg"><li><span class="tt-n-ctv">2</span> v každém čtverečku je číslo, nebo písmeno (x, x²)</li><li><span class="tt-n-zn">+</span> zelené kolečko je znaménko – leží na hraně mezi čtverečky</li></ul>`) },
+  { n: "Zlomky mají patra", h: () => vedle(D.dilek(DIL.zlomek, 40), `(6x + 9) : 3 = ${zl("6x + 9", "3")}`, "") + vedle(D.dilek(DIL.tri, 36), zl(zl("3", "4"), "5", true),
+      `<ul class="tt-n-leg"><li><span class="tt-n-cara"></span> černá čára pod řadou = zlomková čára: nahoře čitatel, dole jmenovatel</li><li><span class="tt-n-cara tl"></span> fialová tučná čára = hlavní, dělí zlomek zlomkem</li></ul>`) },
+  { n: "Co jde pryč a co je trest", h: () => vedle(D.dilek(DIL.zbytecne, 40), "3 · x <s>+ 0</s> = 3x",
+      `<p class="pozn">Čárkovaně = zbytečnost (+ 0, · 1) – při zjednodušení zmizí.</p>`) + vedle(D.dilek(DIL.cervena, 40), "3 · x <b class=\"tt-cerv\">· 1</b>",
+      `<p class="pozn">Červená · 1 = trest za špatný pokus. Nejde odstranit, dílek je s ní větší. Další příklad začíná zase bez ní.</p>`) },
+  { n: "Jak odpovídat", h: () => `<p class="pozn">Způsob určí hra u každého příkladu:</p><ul class="tt-n-zp">
+      <li><b>Klepni</b><span>škrtni čárkované zbytečnosti, pak vyber výsledek · 2 pokusy</span></li><li><b>Vyber</b><span>jednu ze 4 možností · 2 pokusy</span></li>
+      <li><b>Napiš</b><span>výsledek na klávesnici ve hře · 3 pokusy</span></li><li><b>Doplň okénka</b><span>čísla do šablony výsledku · 3 pokusy</span></li></ul>
+      <p class="pozn">💡 Klepnutím na čtvereček ho zašedneš – co už máš spočítané. Pokus to nestojí.</p>` },
+  { n: "Pokládání dílku", h: () => `<div class="tt-n-ovl"><span><kbd>◀</kbd><kbd>▶</kbd> nebo <kbd>A</kbd><kbd>D</kbd></span><span>posun</span><span><kbd>⟳</kbd> nebo <kbd>W</kbd> <kbd>↑</kbd></span><span>otočit – otočí se i zápis</span>
+      <span><kbd>▼</kbd> nebo <kbd>S</kbd></span><span>rychleji dolů</span><span><kbd>⤓</kbd> nebo mezerník</span><span>pustit dolů</span><span><kbd>P</kbd></span><span>pauza</span></div>
+      <p class="pozn">Tečkovaně je vidět, kam dílek dopadne. Online hrajete každý svou desku – další dílek přijde, až oba vloží ten předchozí.</p>` },
+];
+function otevri(obal, { zavreno } = {}) {
+  let i = 0; const el = document.createElement("div"); el.className = "tt-navod"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", "Jak hrát Tetris se zlomky");
+  const kresli = () => { const s = SNIMKY[i];
+    el.innerHTML = `<div class="tt-n-hlava"><b>❓ ${esc(s.n)}</b><span class="tt-n-tecky" aria-label="Snímek ${i + 1} z ${SNIMKY.length}">${SNIMKY.map((_, j) => `<i class="${j === i ? "ted" : ""}"></i>`).join("")}</span></div>
+      <div class="tt-n-obsah">${s.h()}</div>
+      <div class="tt-n-pata"><button type="button" class="maly" data-tn="preskocit">Přeskočit</button><span>${i ? '<button type="button" data-tn="zpet">← Zpět</button>' : ""}
+      <button type="button" class="hlavni" data-tn="dal">${i === SNIMKY.length - 1 ? "Hrát!" : "Další →"}</button></span></div>`;
+    const b = el.querySelector('[data-tn="dal"]'); if (b) b.focus({ preventScroll: true }); };
+  const zavri = () => { el.remove(); document.removeEventListener("keydown", klav, true); ulozit("tetris-navod", 1); if (zavreno) zavreno(); };
+  const klav = (e) => { if (!el.isConnected) return document.removeEventListener("keydown", klav, true);
+    if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); zavri(); } else if (e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); e.stopPropagation(); if (i < SNIMKY.length - 1) { i++; kresli(); } else zavri(); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); e.stopPropagation(); if (i) { i--; kresli(); } } else e.stopPropagation(); };
+  el.addEventListener("click", (e) => { const b = e.target.closest("[data-tn]"); if (!b) return; e.stopPropagation(); const a = b.dataset.tn;
+    if (a === "preskocit") zavri(); else if (a === "zpet") { i = Math.max(0, i - 1); kresli(); } else if (i < SNIMKY.length - 1) { i++; kresli(); } else zavri(); });
+  document.addEventListener("keydown", klav, true); obal.append(el); kresli(); return { zavri };
+}
+const videl = () => !!nacist("tetris-navod", 0);
+return { otevri, videl, SNIMKY };
+})();
+
 // ================= 🧱 Tetris se zlomky – hra: sám, nebo online souboj =================
 // Kolo: nový dílek se nejdřív zjednoduší (Klepni / Napiš / Šablona / Vyber ze 3 – h-tetris-odpovedi.js) – dílek stojí. Pak padá
 // zjednodušený dílek: posun, otočení (otočí se i výraz), pustit – šipky nebo WSAD, mezerník, tlačítka. Plná řada zmizí, čtverečky si nechají čísla i otočení. Chyba = červená
@@ -2198,7 +2272,7 @@ function hra(el, skore, sit, X) {
   const q = (s) => el.querySelector(s), panel = q(".tt-panel"), dsk = q(".tt-deska");
   const velikost = () => { C = Math.max(16, Math.min(30, Math.floor(((el.clientWidth || 360) - (sit ? 110 : 96)) / S))); };
   const lista = () => `<span>${sit ? `Ty <b>${rad(rady)}</b> · soupeř <b>${rad(sv.rady)}</b>` : `Řady <b>${rady}</b>`} · správně ${spravne}/${celkem}</span>
-    <button type="button" class="maly${pauza ? " tt-pz" : ""}" data-tt="pauza" aria-pressed="${pauza}">${pauza ? "▶ Pokračovat" : "⏸️ Pauza"}</button>`;
+    <span class="tt-lista-tl"><button type="button" class="maly" data-tt="navod" aria-label="Jak hrát – návod">❓ Jak hrát</button><button type="button" class="maly${pauza ? " tt-pz" : ""}" data-tt="pauza" aria-pressed="${pauza}">${pauza ? "▶ Pokračovat" : "⏸️ Pauza"}</button></span>`;
   // ---------- deska ----------
   const volno = (g, x, y) => g.c.every((c) => { const X2 = x + c.x, Y = y + c.y; return X2 >= 0 && X2 < S && Y < V && (Y < 0 || !deska.c.has(X2 + "," + Y)); });
   const radkyBodu = (y) => (Number.isInteger(y) ? [y - 1, y] : [Math.floor(y)]);
@@ -2275,8 +2349,12 @@ function hra(el, skore, sit, X) {
     if (faze === "zjednodus" && !pauza && !b.dataset.tt) { const r = O.klik(b, pr, st); if (r.odpoved != null) odpovez(r.odpoved, r.j); else if (r.prekresli) kresliPanel(); return; }
     const a = b.dataset.tt;
     if (a === "pauza") { nastavPauzu(!pauza, "ty"); posli({ t: "pauza", p: pauza }); }
+    else if (a === "navod") navod();
     else if (a === "znovu") { if (sit && !sv.pryc) { if (sit.host) start(); } else novaHra(null); }
     else if (a === "vlevo") pohni(-1, 0); else if (a === "vpravo") pohni(1, 0); else if (a === "dolu") pohni(0, 1); else if (a === "otoc") otoc(); else if (a === "pust") pust(); }
+  // návod: hra mezitím stojí (jen u mě – soupeři se pauza neposílá)
+  function navod() { if (q(".tt-navod")) return; const stala = pauza; if (faze === "pada") pauza = true;
+    TetrisNavod.otevri(q(".tt-hra"), { zavreno: () => { if (!stala && faze !== "konec") pauza = false; q(".tt-hra").focus({ preventScroll: true }); } }); }
   function odeslat(e) { if (!e.target.closest(".tt-psani") || !el.contains(e.target)) return; e.preventDefault(); const v = q(".tt-vstup"); if (v && v.value.trim()) { st.text = v.value; odpovez(v.value); } }
   function klavesa(e) { if (!el.isConnected) return stop(); const t = e.target; if (t.closest && t.closest("input,textarea,select") && !t.closest(".tt-hra")) return;
     const vPoli = t.classList && t.classList.contains("tt-vstup");
@@ -2308,6 +2386,7 @@ function hra(el, skore, sit, X) {
     q(".tt-lista").innerHTML = lista(); panel.hidden = false; panel.innerHTML = `<p>Čekám na soupeře…</p><div class="tt-cekej" aria-hidden="true"></div>`; kresliDesku();
     if (sit.host) start(); else posli({ t: "chci", u: U }); }
   else novaHra(null);
+  if (!TetrisNavod.videl()) setTimeout(navod, 60); // poprvé návod (jde přeskočit)
   return { stop, zprava: zpravaSit };
 }
 return { spust, _test: () => TEST };
