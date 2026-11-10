@@ -53,6 +53,8 @@ input:focus { border-color: var(--modra); outline: none; }
 .lista.tenka { position: static; padding-block: 6px; gap: 14px; }
 .lista.tenka button { padding: 6px 10px; font-size: 14px; }
 .stav-sync { color: var(--tuzka); font-size: 14px; } .stav-sync.ok { color: var(--zelena); } .stav-sync.ne { color: var(--cervena); font-weight: 700; }
+.stav-sync.nahled { color: var(--modra); font-weight: 700; }
+.aplikace.nahled .lista.tenka { background: color-mix(in srgb, var(--modra) 12%, var(--papir)); border-bottom-color: var(--modra); }
 #ramec { flex: 1; width: 100%; border: 0; background: var(--papir); }
 /* žáci */
 .zaci { padding: 20px; display: grid; gap: 14px; }
@@ -71,7 +73,7 @@ code { font: 600 14px ui-monospace, "Cascadia Mono", Consolas, monospace; backgr
 .tema { font-size: 13px; background: var(--karta); border: 1px solid var(--linka); border-radius: 8px; padding: 3px 8px; } .tema b { color: var(--modra); letter-spacing: 1px; font-size: 11px; }
 .zak button, .zaci-hlava button { padding: 8px 12px; font-size: 15px; }
 .panel { border-top: 1px solid var(--linka); padding-top: 12px; }
-.lekce-form, .heslo-form, .pridat { display: grid; gap: 12px; }
+.lekce-form, .heslo-form, .body-form, .pridat { display: grid; gap: 12px; }
 .lekce-tab { border-collapse: collapse; width: 100%; } .lekce-tab select { max-width: 260px; } .lekce-tab th { text-align: left; font-weight: 600; font-size: 15px; padding: 5px 8px 5px 0; } .lekce-tab td { padding: 4px 0; }
 select { font: 15px system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--inkoust); background: var(--karta); border: 1.5px solid var(--linka); border-radius: 8px; padding: 7px 8px; width: 100%; }
 .radek-pole { display: flex; align-items: center; gap: 10px; } .radek-pole input { width: 110px; }

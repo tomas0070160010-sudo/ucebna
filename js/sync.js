@@ -42,3 +42,14 @@ export async function serverNovejsi(app, uid) {
   const m = meta(app); const [r] = await tabulka(`stav?select=upraveno&uzivatel=eq.${uid}&aplikace=eq.${app}`);
   return !!(r && m.cas && r.upraveno > m.cas);
 }
+
+// náhled za žáka (Hodina spolu, Vyzkoušet za žáka): vlastní data jdou stranou a po náhledu zpět –
+// i když se stránka zavře uprostřed náhledu (vrátí je další spuštění Učebny)
+const ODLOZENO = "ucebna-odlozeno";
+export function odlozMistni(predpona) {
+  if (!localStorage.getItem(ODLOZENO)) localStorage.setItem(ODLOZENO, JSON.stringify({ predpona, data: mistni(predpona) }));
+  prepis(predpona, {});
+}
+export function vratMistni() { let z = null; try { z = JSON.parse(localStorage.getItem(ODLOZENO)); } catch (e) { /* poškozené */ }
+  if (!z || !z.predpona) return false; prepis(z.predpona, z.data); localStorage.removeItem(ODLOZENO); return true; }
+export const nastavMistni = (predpona, data) => prepis(predpona, data);
