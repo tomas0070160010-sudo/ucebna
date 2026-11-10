@@ -184,14 +184,14 @@ create trigger cas_upravy before insert or update on public.stav for each row ex
 create trigger cas_upravy before insert or update on public.nastaveni for each row execute function privat.cas_upravy();
 create trigger cas_upravy before insert or update on public.hry for each row execute function privat.cas_upravy();
 
--- ---------- soukromé úložiště souborů: aplikace/<app>/zak.html (každý s přístupem), <app>/lektor.html (lektor), <app>/testy/… (každý s přístupem) ----------
+-- ---------- soukromé úložiště souborů: aplikace/<app>/matika.html a <app>/testy/… (každý s přístupem), <app>/klice/… a <app>/lektor.html (jen lektor a správce) ----------
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('aplikace', 'aplikace', false, 52428800, array['text/html', 'application/pdf']) on conflict (id) do nothing;
 create policy "aplikace: čtení podle přístupu" on storage.objects for select to authenticated using (
   bucket_id = 'aplikace' and (
     privat.je_spravce()
     or privat.role_v(split_part(name, '/', 1)) = 'lektor'
-    or (privat.role_v(split_part(name, '/', 1)) is not null and (split_part(name, '/', 2) = 'zak.html' or split_part(name, '/', 2) = 'testy'))
+    or (privat.role_v(split_part(name, '/', 1)) is not null and split_part(name, '/', 2) not in ('lektor.html', 'klice'))
   ));
 create policy "aplikace: nahrává správce" on storage.objects for insert to authenticated with check (bucket_id = 'aplikace' and privat.je_spravce());
 create policy "aplikace: přepisuje správce" on storage.objects for update to authenticated using (bucket_id = 'aplikace' and privat.je_spravce()) with check (bucket_id = 'aplikace' and privat.je_spravce());
