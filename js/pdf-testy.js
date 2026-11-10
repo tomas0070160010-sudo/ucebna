@@ -6,9 +6,9 @@ import { api, nahratSoubor, seznamSouboru } from "./server.js";
 const $ = (s, r = document) => r.querySelector(s);
 const TYP = { ts: "test", test: "test", ksr: "klic", klic: "klic", vza: "arch", arch: "arch" };
 
-// „2025-A-test.pdf“, „M9A_2026_TS.pdf“, „M9A_2025_rozsireny_klic.pdf“ → „2025-A-test.pdf“; jinak null
+// „2025-A-test.pdf“, „matika-2025-A-test.pdf“, „M9A_2026_TS.pdf“, „M9A_2025_rozsireny_klic.pdf“ → „2025-A-test.pdf“; jinak null
 export function nazevPdf(soubor) {
-  const n = soubor.toLowerCase().replace(/\s*\(\d+\)(?=\.pdf$)/, "");
+  const n = soubor.toLowerCase().replace(/\s*\(\d+\)(?=\.pdf$)/, "").replace(/^matika-/, ""); // i soubor stažený z Matiky („matika-2025-A-test.pdf“)
   let m = /^(\d{4})-([a-d])-(test|klic|arch)\.pdf$/.exec(n);
   if (m) return `${m[1]}-${m[2].toUpperCase()}-${m[3]}.pdf`;
   m = /m9([a-d])_(\d{4})_(?:rozsireny_)?(ts|ksr|klic|vza)\b/.exec(n);
