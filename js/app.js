@@ -24,7 +24,7 @@ async function nactiMe() {
 function domu() {
   ukaz("domu");
   $("#kdo").textContent = ja.jmeno; $("#pozdrav").textContent = `Ahoj, ${ja.jmeno || "vítej"}`;
-  const appky = ja.aplikace.filter((a) => APLIKACE[a.id]).sort((a, b) => brzy(a.id) - brzy(b.id));
+  const appky = ja.aplikace.filter((a) => APLIKACE[a.id]).sort((a, b) => brzy(a.id) - brzy(b.id) || Object.keys(APLIKACE).indexOf(a.id) - Object.keys(APLIKACE).indexOf(b.id)); // Matika první
   $("#dlazdice").innerHTML = appky.length ? appky.map((a) => { const z = APLIKACE[a.id], b = brzy(a.id);
     return `<button type="button" class="dlazdice" data-app="${esc(a.id)}" ${b ? "disabled" : ""}><span class="znak" aria-hidden="true">${z.znak}</span><b>${esc(a.nazev)}</b><small>${b ? "Připravujeme" : esc(z.popis)}</small></button>`; }).join("")
     : `<p class="pozn">Zatím nemáš přístup k žádné aplikaci. Napiš lektorovi.</p>`;
