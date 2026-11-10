@@ -531,6 +531,34 @@ div.lo-rezim { background: var(--karta); border: 1.5px solid var(--linka); } .lo
 .lo-velky-kod { font: 800 56px/1 var(--f-nadpis); letter-spacing: .18em; color: var(--modra); }
 .lo-cekani p { margin: 0; } .lo-spojeni { font-size: 13px; color: var(--tuzka); } .lo-spojeni.ok { color: var(--zelena); }
 .lo-hlava { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; width: 100%; }
+/* 🗂️ přehled s velkými kartami (lišta lekcí až po otevření karty) */
+body.na-prehledu nav.zalozky { display: none; }
+.ph-dlazdice:not(:has(*)) { display: none; }
+.kp-mrizka { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 16px; margin-top: 16px; }
+.kp-karta { background: var(--karta); border: 1.5px solid var(--mrizka); border-radius: 20px; padding: 20px; display: grid; gap: 12px; align-content: start; }
+.kp-karta.zamcena { opacity: .62; }
+.kp-karta.kp-ted { border-color: var(--modra); box-shadow: 0 0 0 3px color-mix(in srgb, var(--modra) 18%, transparent); }
+.kp-hlava { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+.kp-hlava h3 { margin: 0; font-size: 24px; }
+.kp-hlava .pozn { margin: 2px 0 0; }
+.kp-ikona { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font-size: 24px; font-weight: 800; background: color-mix(in srgb, var(--modra) 14%, var(--karta)); color: var(--modra); }
+.kp-kruh { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--modra) calc(var(--p) * 360deg), var(--mrizka) 0); flex: none; }
+.kp-kruh.hotovo { background: var(--zelena); }
+.kp-kruh b { width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; background: var(--karta); font-size: 15px; }
+.kp-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: var(--tuzka); }
+.kp-kroky { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 14px; font-size: 15px; }
+.kp-kroky li { display: flex; gap: 8px; align-items: baseline; min-width: 0; }
+.kp-kroky li::before { content: "○"; color: var(--tuzka); width: 1em; flex: none; }
+.kp-kroky li.hotovo::before { content: "✓"; color: var(--zelena); font-weight: 800; }
+.kp-kroky li.ted { font-weight: 700; color: var(--modra); } .kp-kroky li.ted::before { content: "▶"; color: var(--modra); }
+.kp-kroky li.zam { color: var(--tuzka); } .kp-kroky li.zam::before { content: "🔒"; font-size: 11px; }
+.kp-pozn { background: color-mix(in srgb, #f6d34a 22%, var(--karta)); border-radius: 14px; padding: 12px 14px; display: grid; gap: 6px; justify-items: start; font-size: 15px; }
+.kp-pozn p { margin: 0; white-space: pre-wrap; }
+.kp-pozn.prazdna > p { color: var(--tuzka); font-style: italic; }
+.kp-pozn textarea { width: 100%; }
+.kp-kroky-pozn { font-size: 13px; color: var(--tuzka); }
+.kp-tl { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 420px) { .kp-kroky { grid-template-columns: minmax(0, 1fr); } .kp-hlava h3 { font-size: 21px; } }
 /* 🚀 Závod v počítání */
 .zv-drahy { display: grid; gap: 8px; width: 100%; }
 .zv-draha { display: grid; grid-template-columns: 4.5em minmax(0, 1fr) 2em; gap: 10px; align-items: center; }
@@ -574,6 +602,37 @@ div.lo-rezim { background: var(--karta); border: 1.5px solid var(--linka); } .lo
 /* 🎯 Úhlové dělo */
 .dl-ovladani { justify-content: center; gap: 8px; margin-top: 8px; }
 .dl-ovladani .hlavni { min-width: 9em; }
+/* 🧱 Tetris se zlomky: deska 10 × 16, dílky s čísly ve čtverečcích, zelená znaménka na hranách, černá zlomková čára */
+.tt-hra { display: grid; gap: 10px; outline: none; }
+.tt-lista { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; } .tt-cerv { color: var(--cervena); } .tt-pz { background: var(--oranzova); border-color: var(--oranzova); color: #fff; }
+.tt-telo { display: flex; gap: 10px; align-items: flex-start; justify-content: center; }
+.tt-deska-obal { position: relative; flex: none; }
+.tt-panel { position: absolute; inset: 0; z-index: 5; overflow: auto; display: grid; gap: 8px; align-content: start; justify-items: center; text-align: center; padding: 12px; background: color-mix(in srgb, var(--karta) 94%, transparent); border: 2px solid var(--modra); border-radius: 12px; }
+.tt-panel > b { font-size: 19px; } .tt-panel p { margin: 0; }
+.tt-ok { color: var(--zelena); font-style: normal; } .tt-ch { color: var(--cervena); font-style: normal; } .tt-zprava { font-weight: 800; color: var(--oranzova); }
+.tt-zad { padding: 6px 0; }
+.tt-rezim { display: flex; gap: 6px; } .tt-rezim .vybrano { background: var(--modra); border-color: var(--modra); color: #fff; }
+.tt-vyber { display: grid; gap: 8px; width: 100%; } .tt-vyber button { font: 700 18px/1.1 var(--f-mat); padding: 12px; text-align: center; } .tt-vyber kbd { font-size: 11px; opacity: .6; margin-right: 6px; }
+.tt-psani { display: flex; gap: 6px; width: 100%; } .tt-vstup { flex: 1; min-width: 0; font: 700 18px/1.2 var(--f-mat); padding: 8px 10px; border: 2px solid var(--modra); border-radius: 10px; background: var(--karta); color: var(--inkoust); }
+.tt-klav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; width: 100%; } .tt-klav button { padding: 7px 0; font: 700 16px/1 var(--f-mat); }
+.tt-bok { display: grid; gap: 6px; justify-items: center; align-content: start; width: clamp(84px, 16vw, 150px); flex: none; }
+.tt-hist { margin: 0; padding-left: 14px; display: grid; gap: 3px; font-size: 12px; text-align: left; justify-self: stretch; } .tt-hist i { font-style: normal; font-weight: 800; }
+.tt-hist-cela { font-size: 14px; max-height: 40vh; overflow: auto; justify-self: center; }
+.tt-ovl { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 420px; width: 100%; justify-self: center; } .tt-ovl button { font-size: 20px; padding: 10px 0; touch-action: manipulation; }
+.tt-napoveda { text-align: center; margin: 0; } @media (pointer: coarse) { .tt-napoveda { display: none; } }
+.tt-dk { position: relative; flex: none; margin: 0 auto; }
+.tt-dsk { position: relative; border: 2px solid var(--inkoust); border-radius: 6px; box-sizing: content-box; background-color: var(--karta); background-image: linear-gradient(color-mix(in srgb, var(--mrizka) 55%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--mrizka) 55%, transparent) 1px, transparent 1px); background-size: var(--c) var(--c); overflow: hidden; }
+.tt-c { position: absolute; box-sizing: border-box; display: grid; place-items: center; font-weight: 800; font-style: normal; font-family: var(--f-mat); color: var(--inkoust); background: color-mix(in srgb, var(--modra) 16%, var(--karta)); border: 1.5px solid color-mix(in srgb, var(--modra) 55%, var(--karta)); border-radius: 4px; }
+.tt-c b, .tt-hr b { display: inline-block; font-weight: inherit; }
+.tt-c.p { background: color-mix(in srgb, var(--modra) 22%, var(--karta)); border-color: var(--modra); }
+.tt-c.pada { background: color-mix(in srgb, var(--zelena) 22%, var(--karta)); border-color: var(--zelena); }
+.tt-c.duch { background: transparent; border: 1.5px dotted var(--zelena); }
+.tt-c.pr { border: 2px dashed var(--modra); }
+.tt-c.r { background: color-mix(in srgb, var(--cervena) 22%, var(--karta)); border-color: var(--cervena); color: var(--cervena); }
+.tt-hr { position: absolute; z-index: 2; transform: translate(-50%, -50%); box-sizing: border-box; padding: 0 3px; display: grid; place-items: center; font-weight: 800; line-height: 1; background: var(--zelena); color: #fff; }
+.tt-hr.pr { outline: 2px dashed var(--modra); outline-offset: 1px; } .tt-hr.r { background: var(--cervena); }
+.tt-tecka { display: block; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+.tt-cara { position: absolute; z-index: 1; background: var(--inkoust); border-radius: 2px; }
 .lo-tah.ja { color: var(--zelena); } .lo-hlaska { margin: 0; min-height: 1.4em; text-align: center; font-weight: 600; } .lo-navod { margin: 0; text-align: center; }
 .lo-lode { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
 .lo-chip { height: auto; padding: 4px 10px; border-radius: 8px; font-size: 13px; letter-spacing: 1px; color: var(--inkoust); }
@@ -1885,6 +1944,231 @@ function spust(el, skore, opt, P) {
 return { spust };
 })();
 
+// ================= 🧱 Tetris se zlomky – příklady (zadání dílku → zjednodušený dílek) =================
+// Dílek = { rady: [{ od, b: [čtverečky], h: [znaménko na levé hraně čtverečku i; h[b.length] = za posledním], pr, r }], cary: [{ pod, tl }] }.
+// Kratší řada leží u kraje delší (vlevo nebo vpravo), nikdy uprostřed; nejvýš 4 čtverečky na šířku a 4 patra. T dílek není.
+// novy(u) → { zad, vys, sp (správný zápis), moz (3 možnosti), prijmi (zápisy, které se uznají při psaní), t (zadání textem), rada }
+const TetrisPriklady = (() => {
+const nah = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const vyber = (a) => a[Math.floor(Math.random() * a.length)];
+const mix = (a) => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const nsd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+// řada z členů a znamének mezi nimi; pr = indexy čtverečků, které jsou zbytečnost (i se znaménkem před sebou)
+const R = (b, z = [], pr = []) => ({ od: 0, b: b.map(String), h: [null, ...z], pr });
+// zlomek ze dvou (i víc) řad: kratší řada u kraje – náhodně vlevo, nebo vpravo; cary pod každou řadou kromě poslední
+function patra(rady, tl = -1) { const s = Math.max(...rady.map((r) => r.b.length)), vpravo = Math.random() < 0.5;
+  rady.forEach((r) => (r.od = vpravo ? s - r.b.length : 0));
+  return { rady, cary: rady.slice(0, -1).map((_, i) => ({ pod: i, tl: i === tl })) }; }
+const jedna = (b, z, pr) => ({ rady: [R(b, z, pr)], cary: [] });
+// výsledek z textu: „2x + 3“, „x − 2“, „3/20“, „(x + 2)/2“, „7“
+function zTextu(t) {
+  const rada = (s) => { const c = s.replace(/[()]/g, "").split(/ ([+−]) /); return R(c.filter((_, i) => i % 2 === 0), c.filter((_, i) => i % 2 === 1)); };
+  const zl = t.match(/^\(?(.+?)\)?\/(.+)$/); if (zl) return patra([rada(zl[1]), rada(zl[2])]);
+  return { rady: [rada(t)], cary: [] };
+}
+const zlomek = (p, q) => { const g = nsd(p, q); p /= g; q /= g; return q === 1 ? String(p) : `${p}/${q}`; };
+const linear = (a, b, zn = "+") => `${a === 1 ? "" : a}x ${zn} ${b}`;
+// zápis pro porovnání: bez mezer, malá písmena, * . ⋅ → ·, - → −, : → /
+const norm = (s) => String(s).toLowerCase().replace(/\s+/g, "").replace(/[*.⋅×]/g, "·").replace(/-/g, "−").replace(/:/g, "/");
+// u součtu „ax + b“ se uzná i „b + ax“
+function prijmi(sp) { const n = norm(sp), m = n.match(/^([^+−]+)\+([^+−]+)$/); const a = new Set([n]); if (m) a.add(m[2] + "+" + m[1]); if (/^\(.+\)\/.+$/.test(n)) a.add(n); return [...a]; }
+const tri = (sp, spatne) => { const s = new Set([sp]); for (const x of mix(spatne)) { if (s.size >= 3) break; if (x !== sp) s.add(x); } let i = 2; while (s.size < 3) s.add(sp + " + " + i++); return mix([...s]); };
+
+// ---------- rodiny příkladů ----------
+const RODINY = {
+  // a + b (Lehká)
+  soucet: () => { const a = nah(2, 9), b = nah(1, 9), c = a + b;
+    return { zad: jedna([a, b], ["+"]), sp: String(c), spatne: [String(c + 1), String(c - 1), String(a * b), String(c + 10)], t: `${a} + ${b}`, rada: "Sečti obě čísla." }; },
+  // km / kn → m/n (Lehká, Střední)
+  kraceni: () => { const p = vyber([[1, 2], [1, 3], [2, 3], [3, 4], [1, 4], [2, 5], [3, 5], [4, 5]]), k = nah(2, 6), [m, n] = Math.random() < 0.25 ? [nah(2, 4) * p[1], p[1]] : p;
+    const sp = zlomek(m, n);
+    return { zad: patra([R([k * m]), R([k * n])]), sp, spatne: [zlomek(k * m, n), zlomek(m, k * n), zlomek(n, m), `${m + 1}/${n}`], t: `${k * m} / ${k * n}`, rada: `Čitatel i jmenovatel vyděl ${k}.` }; },
+  // a · x + 0 → ax (Lehká, Střední)
+  nula: () => { const a = nah(2, 9);
+    return { zad: jedna([a, "x", 0], ["·", "+"], [2]), sp: `${a}x`, spatne: [`${a} + x`, `${a + 1}x`, `${a}x + 1`, "x"], t: `${a} · x + 0`, rada: "+ 0 nic nemění, a · x se píše ax." }; },
+  // a · x + b · 1 → ax + b (Střední)
+  krat1: () => { const a = nah(2, 9), b = nah(1, 9);
+    return { zad: jedna([a, "x", b, 1], ["·", "+", "·"], [3]), sp: linear(a, b), spatne: [linear(a, b + 1), `${a + b}x`, linear(a * b, 1), `${a}x · ${b}`], t: `${a} · x + ${b} · 1`, rada: "· 1 nic nemění." }; },
+  // (ka x + kb) / k → ax + b (Střední, Obtížná)
+  vytkni: () => { const a = nah(1, 4), b = nah(1, 5), k = nah(2, 4);
+    return { zad: patra([R([`${k * a}x`, k * b], ["+"]), R([k])]), sp: linear(a, b), spatne: [linear(a, k * b), linear(k * a, b), linear(a, b + k), `${a + b}x`], t: `(${k * a}x + ${k * b}) / ${k}`, rada: `Každý člen čitatele vyděl ${k}.` }; },
+  // (x + a) / (x + a) → 1 (Střední)
+  stejne: () => { const a = nah(1, 9), r = () => R(["x", a], ["+"]);
+    return { zad: patra([r(), r()]), sp: "1", spatne: ["0", "x", "2", `x + ${a}`], t: `(x + ${a}) / (x + ${a})`, rada: "Stejný čitatel a jmenovatel = 1." }; },
+  // (x + a) / (2 · 1) → (x + a)/2 – tvar S nebo Z (Střední, Obtížná)
+  sz: () => { const a = nah(1, 9), k = nah(2, 5), z = { rady: [R(["x", a], ["+"]), R([k, 1], ["·"], [1])], cary: [{ pod: 0 }] }; const s = Math.random() < 0.5; z.rady[0].od = s ? 1 : 0; z.rady[1].od = s ? 0 : 1;
+    return { zad: z, sp: `(x + ${a})/${k}`, spatne: [`(x + ${a})/${k + 1}`, `x + ${a}/${k}`, `(x + ${a * k})/${k}`, `x + ${a}`], t: `(x + ${a}) / (${k} · 1)`, rada: "· 1 ve jmenovateli nic nemění." }; },
+  // (a / b) / c → a / (bc) – 3 patra (Obtížná)
+  tripatra: () => { const a = nah(1, 5), b = nah(2, 6), c = nah(2, 5), sp = zlomek(a, b * c);
+    return { zad: patra([R([a]), R([b]), R([c])], 1), sp, spatne: [zlomek(a * c, b), zlomek(a, b + c), zlomek(a * b, c), zlomek(a + c, b)], t: `(${a}/${b}) / ${c}`, rada: `Dělit ${c} = násobit jmenovatel: ${b} · ${c}.` }; },
+  // (a / b) / (c / d) → ad / bc – 4 patra (Obtížná, Lektorská)
+  ctyripatra: () => { const a = nah(1, 5), b = nah(2, 6), c = nah(1, 5), d = nah(2, 6), sp = zlomek(a * d, b * c);
+    return { zad: patra([R([a]), R([b]), R([c]), R([d])], 1), sp, spatne: [zlomek(a * c, b * d), zlomek(b * c, a * d), zlomek(a * b, c * d), zlomek(a + d, b + c)], t: `(${a}/${b}) / (${c}/${d})`, rada: "Zlomkem dělíš tak, že násobíš převráceným: a/b · d/c." }; },
+  // (kr / r) / (k · x) → 1/x – L / J (Obtížná)
+  lko: () => { const k = nah(2, 6), r = nah(2, 4), z = patra([R([k * r]), R([r]), R(["" + k, "x"], ["·"])], 1);
+    return { zad: z, sp: "1/x", spatne: ["x", `${k}/x`, `1/${k}x`, "1"], t: `(${k * r}/${r}) / (${k} · x)`, rada: `${k * r} : ${r} = ${k}, a ${k} / (${k}x) = 1/x.` }; },
+  // (ka x + kb + 0) / (k · 1 · 1) → ax + b – 2×3 (Obtížná)
+  sestka: () => { const a = nah(1, 4), b = nah(1, 5), k = nah(2, 4);
+    return { zad: patra([R([`${k * a}x`, k * b, 0], ["+", "+"], [2]), R([k, 1, 1], ["·", "·"], [1, 2])]), sp: linear(a, b), spatne: [linear(a, k * b), linear(k * a, b), linear(a, b + 1), `${a + b}x`], t: `(${k * a}x + ${k * b} + 0) / (${k} · 1 · 1)`, rada: `Zbytečnosti pryč, pak vyděl ${k}.` }; },
+  // (x² − a²) / (x + a) → x − a (Lektorská)
+  ctverce: () => { const a = nah(1, 7);
+    return { zad: patra([R(["x²", a * a], ["−"]), R(["x", a], ["+"])]), sp: `x − ${a}`, spatne: [`x + ${a}`, `x − ${a * a}`, `x² − ${a}`, "1"], t: `(x² − ${a * a}) / (x + ${a})`, rada: `x² − ${a * a} = (x − ${a})(x + ${a}).` }; },
+  // ((kx + ka)/k) / (x + a) → 1 – největší 3×4 (Lektorská)
+  nejvetsi: () => { const a = nah(1, 6), k = nah(2, 4);
+    return { zad: patra([R([k, "x", k * a, 0], ["·", "+", "+"], [3]), R([k, 1, 0, 1], ["·", "+", "·"], [1, 2, 3]), R(["x", a, 0, 1], ["+", "+", "·"], [2, 3])], 1), sp: "1", spatne: ["0", "x", String(k), `x + ${a}`], t: `((${k}x + ${k * a})/${k}) / (x + ${a})`, rada: `Nahoře po krácení x + ${a}, dole taky x + ${a} → 1.` }; },
+};
+const SADY = { lehka: ["soucet", "kraceni", "nula"], stredni: ["kraceni", "nula", "krat1", "vytkni", "stejne", "sz"], obtizna: ["vytkni", "sz", "tripatra", "ctyripatra", "lko", "sestka"], lektorska: ["tripatra", "ctyripatra", "lko", "sestka", "ctverce", "nejvetsi"] };
+let posledni = "";
+function novy(u = "stredni") {
+  const sada = SADY[u] || SADY.stredni; let id; do id = vyber(sada); while (id === posledni && sada.length > 1); posledni = id;
+  const p = RODINY[id](); p.id = id; p.vys = zTextu(p.sp); p.moz = tri(p.sp, p.spatne); p.prijmi = prijmi(p.sp); delete p.spatne; return p;
+}
+const spravne = (p, text) => p.prijmi.includes(norm(text));
+return { novy, spravne, norm, zTextu, RODINY, SADY };
+})();
+
+// ================= 🧱 Tetris se zlomky – dílek: geometrie, otočení, kreslení, červené zbytečnosti =================
+// Geometrie v jednotkách čtverečku: c = čtverečky {x, y, t, k, rot?}, o = znaménka v bodě hrany {x, y, t, k}, b = zlomkové čáry
+// jako úsečky {x1, y1, x2, y2, tl}. Otočení o 90° otočí i text (rot), takže výraz leží jako na otočeném papíře.
+const TetrisDilek = (() => {
+const LIMIT = 16; // nejvýš 16 čtverečků (4 × 4) i s červenými
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const tridy = (r, i) => ["pr", "r"].filter((k) => (r[k] || []).includes(i)).join(" ");
+function geo(d) { const c = [], o = [], b = [];
+  d.rady.forEach((r, y) => { r.b.forEach((t, i) => { c.push({ x: r.od + i, y, t, k: tridy(r, i) }); const h = (r.h || [])[i]; if (h) o.push({ x: r.od + i, y: y + 0.5, t: h, k: tridy(r, i) }); });
+    const k = (r.h || [])[r.b.length]; if (k) o.push({ x: r.od + r.b.length, y: y + 0.5, t: k, k: "" }); });
+  (d.cary || []).forEach((q) => { const a = d.rady[q.pod], e = d.rady[q.pod + 1]; if (!a || !e) return; const od = Math.min(a.od, e.od), kon = Math.max(a.od + a.b.length, e.od + e.b.length); b.push({ x1: od, y1: q.pod + 1, x2: kon, y2: q.pod + 1, tl: !!q.tl }); });
+  return { c, o, b, W: Math.max(...c.map((q) => q.x)) + 1, H: Math.max(...c.map((q) => q.y)) + 1, rot: 0 }; }
+// o 90° po směru hodinových ručiček
+const otoc = (g) => { const H = g.H; return { c: g.c.map((q) => ({ ...q, x: H - 1 - q.y, y: q.x, rot: ((q.rot ?? g.rot) + 90) % 360 })), o: g.o.map((q) => ({ ...q, x: H - q.y, y: q.x, rot: ((q.rot ?? g.rot) + 90) % 360 })),
+  b: g.b.map((q) => ({ ...q, x1: H - q.y1, y1: q.x1, x2: H - q.y2, y2: q.x2 })), W: g.H, H: g.W, rot: (g.rot + 90) % 360 }; };
+const posun = (g, dx, dy) => ({ ...g, c: g.c.map((q) => ({ ...q, x: q.x + dx, y: q.y + dy })), o: g.o.map((q) => ({ ...q, x: q.x + dx, y: q.y + dy })), b: g.b.map((q) => ({ ...q, x1: q.x1 + dx, x2: q.x2 + dx, y1: q.y1 + dy, y2: q.y2 + dy })) });
+// červené „· 1“ na konec poslední řady (do šířky 4), pak do nové řady; dohromady nejvýš LIMIT čtverečků a 4 patra
+function sCervenymi(d, n) { if (!n) return d; d = JSON.parse(JSON.stringify(d)); let pocet = d.rady.reduce((s, r) => s + r.b.length, 0);
+  for (let i = 0; i < n && pocet < LIMIT; i++) { let r = d.rady[d.rady.length - 1];
+    if (r.od + r.b.length >= 4) { if (d.rady.length >= 4) break; r = { od: 0, b: [], h: [], r: [] }; d.rady.push(r); }
+    r.r = r.r || []; r.h = r.h || []; r.r.push(r.b.length); r.h[r.b.length] = "·"; r.b.push("1"); pocet++; }
+  return d; }
+// HTML obsahu (absolutní polohy v px); opt.k = třída všech čtverečků (p = na zemi, pada, duch = kam dopadne)
+function obsah(g, C, opt = {}) { const oh = Math.max(Math.min(11, Math.round(C * 0.6)), Math.round(C * 0.38)), of = Math.max(Math.min(9, Math.round(C * 0.45)), Math.round(C * 0.3)), fs = Math.max(9, Math.round(C * 0.42)); let h = "";
+  const txt = (t, rot) => `<b style="transform:rotate(${rot || 0}deg)">${t === "·" ? '<span class="tt-tecka"></span>' : esc(t)}</b>`;
+  g.c.forEach((q) => { h += `<i class="tt-c ${opt.k || ""} ${q.k || ""}" style="left:${q.x * C}px;top:${q.y * C}px;width:${C}px;height:${C}px;font-size:${fs}px">${opt.k === "duch" ? "" : txt(q.t, q.rot ?? g.rot)}</i>`; });
+  if (opt.k === "duch") return h;
+  g.b.forEach((q) => { const t = q.tl ? Math.max(4, Math.round(C * 0.14)) : Math.max(2, Math.round(C * 0.08));
+    h += q.y1 === q.y2 ? `<span class="tt-cara" style="left:${q.x1 * C - 2}px;top:${q.y1 * C - t / 2}px;width:${(q.x2 - q.x1) * C + 4}px;height:${t}px"></span>`
+      : `<span class="tt-cara" style="left:${q.x1 * C - t / 2}px;top:${Math.min(q.y1, q.y2) * C - 2}px;height:${Math.abs(q.y2 - q.y1) * C + 4}px;width:${t}px"></span>`; });
+  g.o.forEach((q) => { h += `<span class="tt-hr ${q.k || ""}" style="left:${q.x * C}px;top:${q.y * C}px;height:${oh}px;min-width:${oh}px;border-radius:${oh / 2}px;font-size:${of}px">${txt(q.t, q.rot ?? g.rot)}</span>`; });
+  return h; }
+const dilek = (d, C, opt) => { const g = d.c ? d : geo(d); return `<div class="tt-dk" style="width:${g.W * C}px;height:${g.H * C}px">${obsah(g, C, opt)}</div>`; };
+return { geo, otoc, posun, sCervenymi, obsah, dilek, LIMIT, esc };
+})();
+
+// ================= 🧱 Tetris se zlomky – hra (zatím sám; online souboj přijde ve verzi 2) =================
+// Kolo: nový dílek se nejdřív zjednoduší (výběr ze 3, nebo napsat) – dílek stojí. Pak padá zjednodušený dílek, hráč ho posouvá,
+// otáčí (otočí se i výraz) a pustí. Plná řada zmizí, čtverečky si nechají čísla i otočení. Chyba = červená „· 1“ navíc (nejde odstranit),
+// každá správná odpověď jednu červenou ubere (nejstarší). Konec, když se nový dílek nevejde. Historie jen pro tuhle hru.
+const Tetris = (() => {
+const S = 10, V = 16, D = TetrisDilek, P = TetrisPriklady;
+const TEMPO = { lehka: 950, stredni: 800, obtizna: 680, lektorska: 580 };
+let TEST = null; // pro testy: stav hry
+function spust(el, skore, opt, X = {}) {
+  const U = Obtiznost.je(); let rezim = nacist("tetris-rezim", "vyber") === "napis" ? "napis" : "vyber";
+  let deska, pr, dalsi, kus, faze, rady, spravne, celkem, cervene, hist, pauza, acc, zprava, C;
+  const lista = () => `<span>Řady <b>${rady}</b> · správně ${spravne}/${celkem}${cervene ? ` · <b class="tt-cerv">červené ${cervene}</b>` : ""}</span>
+    <button type="button" class="maly${pauza ? " tt-pz" : ""}" data-tt="pauza" aria-pressed="${pauza}">${pauza ? "▶ Pokračovat" : "⏸️ Pauza"}</button>`;
+  el.innerHTML = `<div class="tt-hra" tabindex="0" aria-label="Tetris se zlomky">
+    <div class="tt-lista"></div>
+    <div class="tt-telo"><div class="tt-deska-obal"><div class="tt-deska"></div><div class="tt-panel" hidden></div></div>
+      <div class="tt-bok"><span class="pozn">Další</span><div class="tt-dalsi"></div><span class="pozn">${Obtiznost.nazev(U)}</span><ol class="tt-hist" aria-label="Poslední příklady"></ol></div></div>
+    <div class="tt-ovl" role="group" aria-label="Ovládání dílku"><button type="button" data-tt="vlevo" aria-label="Doleva">◀</button><button type="button" data-tt="otoc" aria-label="Otočit">⟳</button><button type="button" data-tt="dolu" aria-label="Dolů">▼</button><button type="button" data-tt="pust" aria-label="Pustit dolů">⤓</button><button type="button" data-tt="vpravo" aria-label="Doprava">▶</button></div>
+    <p class="pozn tt-napoveda">← → posun · ↑ otočit · ↓ rychleji · mezerník pustit · P pauza</p></div>`;
+  const q = (s) => el.querySelector(s), panel = q(".tt-panel"), dsk = q(".tt-deska");
+  function velikost() { const w = el.clientWidth || 360; C = Math.max(16, Math.min(30, Math.floor((w - 96) / S))); }
+  // ---------- deska ----------
+  const volno = (g, x, y) => g.c.every((c) => { const X = x + c.x, Y = y + c.y; return X >= 0 && X < S && Y < V && (Y < 0 || !deska.c.has(X + "," + Y)); });
+  const radkyBodu = (y) => (Number.isInteger(y) ? [y - 1, y] : [Math.floor(y)]); // znaménko na vodorovné hraně patří oběma řadám
+  const radkyCary = (b) => (b.y1 === b.y2 ? [b.y1 - 1, b.y1] : Array.from({ length: Math.abs(b.y2 - b.y1) }, (_, i) => Math.min(b.y1, b.y2) + i));
+  function smazRadu(R) {
+    for (let x = 0; x < S; x++) deska.c.delete(x + "," + R);
+    const nove = new Map(); for (const [k, c] of deska.c) { const [x, y] = k.split(",").map(Number); nove.set(x + "," + (y < R ? y + 1 : y), c); } deska.c = nove;
+    deska.o = deska.o.filter((o) => !radkyBodu(o.y).includes(R)).map((o) => (Math.max(...radkyBodu(o.y)) < R ? { ...o, y: o.y + 1 } : o));
+    deska.b = deska.b.filter((b) => !radkyCary(b).includes(R)).map((b) => (Math.max(...radkyCary(b)) < R ? { ...b, y1: b.y1 + 1, y2: b.y2 + 1 } : b)); }
+  function zamkni() { const g = D.posun(kus.g, kus.x, kus.y);
+    if (g.c.some((c) => c.y < 0)) return konec();
+    g.c.forEach((c) => deska.c.set(c.x + "," + c.y, { t: c.t, rot: c.rot ?? g.rot, k: "p" + (/\br\b/.test(c.k) ? " r" : "") }));
+    g.o.forEach((o) => deska.o.push({ ...o, rot: o.rot ?? g.rot, k: /\br\b/.test(o.k) ? "r" : "" })); g.b.forEach((b) => deska.b.push(b));
+    let n = 0; for (let y = V - 1; y >= 0; ) { let plna = true; for (let x = 0; x < S; x++) if (!deska.c.has(x + "," + y)) { plna = false; break; } if (plna) { smazRadu(y); n++; } else y--; }
+    if (n) { rady += n; skore(rady); zprava = n > 1 ? `🎉 ${n} řady najednou!` : "✨ Plná řada zmizela"; }
+    kus = null; kolo(); }
+  // ---------- kolo: zjednodušit → padat ----------
+  function kolo() { pr = dalsi; dalsi = P.novy(U); faze = "zjednodus"; kresli(); }
+  function odpovez(text) { if (faze !== "zjednodus" || pauza) return; const ok = P.spravne(pr, text); celkem++;
+    if (ok) { spravne++; cervene = Math.max(0, cervene - 1); } else cervene = Math.min(D.LIMIT, cervene + 1);
+    hist.unshift({ t: pr.t, odp: text, sp: pr.sp, ok }); faze = "odpoved";
+    panel.innerHTML = ok ? `<b class="tt-ok">✓ Správně</b><p class="pozn">${D.esc(pr.t)} = <b>${D.esc(pr.sp)}</b></p>`
+      : `<b class="tt-ch">✗ Správně je ${D.esc(pr.sp)}</b><p class="pozn">💡 ${D.esc(pr.rada)}</p><p class="pozn">Dílek dostal červenou zbytečnost · 1 – zmizí až za správnou odpověď.</p>`;
+    kresliBok(); q(".tt-lista").innerHTML = lista();
+    setTimeout(() => { if (faze === "odpoved") padej(); }, ok ? 650 : 1900); }
+  function padej() { const g = D.geo(D.sCervenymi(pr.vys, cervene)), x = Math.floor((S - g.W) / 2);
+    kus = { g, x, y: 0 }; acc = 0; faze = "pada"; if (!volno(g, x, 0)) return konec(); kresli(); }
+  function konec() { faze = "konec"; const nov = X.rekord ? X.rekord("tetris-" + U, rady) : false; kresli();
+    panel.hidden = false; panel.innerHTML = `<b>🏁 Konec – stavba došla nahoru</b><p><b>${rady}</b> ${rady === 1 ? "řada" : rady > 1 && rady < 5 ? "řady" : "řad"} · správně ${spravne} z ${celkem}${nov && rady ? " · 🏆 nový rekord" : ""}</p>
+      <ol class="tt-hist tt-hist-cela">${hist.map((h) => `<li>${D.esc(h.t)} → ${D.esc(h.odp)} ${h.ok ? '<i class="tt-ok">✓</i>' : `<i class="tt-ch">✗ správně ${D.esc(h.sp)}</i>`}</li>`).join("") || "<li>Žádný příklad.</li>"}</ol>
+      <button type="button" class="hlavni" data-tt="znovu">Hrát znovu</button>`; }
+  // ---------- pohyb ----------
+  function pohni(dx, dy) { if (faze !== "pada" || pauza || !kus) return false; if (!volno(kus.g, kus.x + dx, kus.y + dy)) return false; kus.x += dx; kus.y += dy; kresliDesku(); return true; }
+  function otoc() { if (faze !== "pada" || pauza || !kus) return; const g = D.otoc(kus.g);
+    for (const dx of [0, -1, 1, -2, 2]) if (volno(g, kus.x + dx, kus.y)) { kus.g = g; kus.x += dx; kresliDesku(); return; } }
+  function pust() { if (faze !== "pada" || pauza || !kus) return; while (volno(kus.g, kus.x, kus.y + 1)) kus.y++; zamkni(); }
+  const rychlost = () => Math.max(170, (TEMPO[U] || 800) - rady * 25);
+  const tik = setInterval(() => { if (!el.isConnected) return stop(); if (faze !== "pada" || pauza || !kus) return; acc += 50; if (acc < rychlost()) return; acc = 0;
+    if (!pohni(0, 1)) zamkni(); }, 50);
+  // ---------- kreslení ----------
+  function kresliDesku() { let h = "";
+    const zem = { c: [...deska.c].map(([k, c]) => { const [x, y] = k.split(",").map(Number); return { x, y, ...c }; }), o: deska.o, b: deska.b, rot: 0 };
+    h += D.obsah(zem, C);
+    if (kus) { let y = kus.y; while (volno(kus.g, kus.x, y + 1)) y++; if (y > kus.y) h += D.obsah(D.posun(kus.g, kus.x, y), C, { k: "duch" }); h += D.obsah(D.posun(kus.g, kus.x, kus.y), C, { k: "pada" }); }
+    dsk.innerHTML = `<div class="tt-dsk" style="--c:${C}px;width:${S * C}px;height:${V * C}px">${h}</div>`; }
+  function kresliBok() { q(".tt-dalsi").innerHTML = dalsi ? D.dilek(dalsi.zad, C > 24 ? 20 : 16) : "";
+    q(".tt-hist").innerHTML = hist.slice(0, 3).map((h) => `<li>${D.esc(h.t)} ${h.ok ? '<i class="tt-ok">✓</i>' : '<i class="tt-ch">✗</i>'}</li>`).join(""); }
+  function kresliPanel() {
+    if (pauza && faze !== "konec") { panel.hidden = false; const p = hist[0];
+      panel.innerHTML = `<b>⏸️ Pauza</b>${p ? `<p class="pozn">Poslední příklad: <b>${D.esc(p.t)}</b> → ${D.esc(p.odp)} ${p.ok ? "✓" : `✗ (správně ${D.esc(p.sp)})`}</p>` : ""}<button type="button" class="hlavni" data-tt="pauza">▶ Pokračovat</button>`; return; }
+    if (faze === "pada") { panel.hidden = true; return; }
+    if (faze !== "zjednodus") return; panel.hidden = false;
+    const odp = rezim === "vyber" ? `<div class="tt-vyber">${pr.moz.map((m, j) => `<button type="button" data-tt-m="${j}"><kbd>${j + 1}</kbd> ${D.esc(m)}</button>`).join("")}</div>`
+      : `<form class="tt-psani"><input class="tt-vstup" inputmode="none" autocomplete="off" spellcheck="false" aria-label="Zjednodušený výraz" placeholder="např. 2x + 3"><button type="submit" class="hlavni">OK</button></form>
+        <div class="tt-klav">${["7", "8", "9", "x", "4", "5", "6", "²", "1", "2", "3", "+", "0", "(", ")", "−", "/", "·", "⌫"].map((k) => `<button type="button" data-tt-k="${k}">${k}</button>`).join("")}</div>`;
+    panel.innerHTML = `${zprava ? `<p class="tt-zprava">${zprava}</p>` : ""}<p class="pozn">Zjednoduš – pak bude padat:</p><div class="tt-zad">${D.dilek(D.sCervenymi(pr.zad, cervene), Math.min(40, C + 10))}</div>
+      <div class="tt-rezim" role="group" aria-label="Jak odpovídat"><button type="button" class="maly${rezim === "vyber" ? " vybrano" : ""}" data-tt-r="vyber">Vyber ze 3</button><button type="button" class="maly${rezim === "napis" ? " vybrano" : ""}" data-tt-r="napis">Napiš</button></div>${odp}`;
+    zprava = ""; const v = q(".tt-vstup"); if (v && matchMedia("(pointer: fine)").matches) v.focus({ preventScroll: true }); }
+  function kresli() { velikost(); q(".tt-lista").innerHTML = lista(); kresliDesku(); kresliBok(); kresliPanel(); TEST = { get faze() { return faze; }, get sp() { return pr && pr.sp; }, get kus() { return kus; }, get rady() { return rady; }, get cervene() { return cervene; }, deska: () => deska, odpovez, pust, pohni, otoc, plnaRada: (y = V - 1, bez = -1) => { for (let x = 0; x < S; x++) if (x !== bez) deska.c.set(x + "," + y, { t: "1", rot: 0, k: "p" }); kresliDesku(); } }; }
+  // ---------- ovládání ----------
+  function klik(e) { const b = e.target.closest("[data-tt],[data-tt-m],[data-tt-k],[data-tt-r]"); if (!b || !el.contains(b)) return;
+    if (b.dataset.ttM != null) return odpovez(pr.moz[+b.dataset.ttM]);
+    if (b.dataset.ttR) { rezim = b.dataset.ttR; ulozit("tetris-rezim", rezim); return kresliPanel(); }
+    if (b.dataset.ttK) { const v = q(".tt-vstup"); if (!v) return; v.value = b.dataset.ttK === "⌫" ? v.value.slice(0, -1) : v.value + b.dataset.ttK; return; }
+    const a = b.dataset.tt;
+    if (a === "pauza") { if (faze === "konec") return; pauza = !pauza; q(".tt-lista").innerHTML = lista(); kresliPanel(); if (!pauza && faze === "pada") panel.hidden = true; }
+    else if (a === "znovu") novaHra(); else if (a === "vlevo") pohni(-1, 0); else if (a === "vpravo") pohni(1, 0); else if (a === "dolu") pohni(0, 1); else if (a === "otoc") otoc(); else if (a === "pust") pust(); }
+  function odeslat(e) { if (!e.target.closest(".tt-psani") || !el.contains(e.target)) return; e.preventDefault(); const v = q(".tt-vstup"); if (v && v.value.trim()) odpovez(v.value); }
+  function klavesa(e) { if (!el.isConnected) return stop(); if (e.target.closest && e.target.closest("input,textarea,select") && !e.target.closest(".tt-hra")) return;
+    const vPoli = e.target.classList && e.target.classList.contains("tt-vstup");
+    if ((e.key === "p" || e.key === "P") && !vPoli) { e.preventDefault(); return klik({ target: q('[data-tt="pauza"]') }); }
+    if (faze === "zjednodus" && rezim === "vyber" && /^[1-3]$/.test(e.key)) { e.preventDefault(); return odpovez(pr.moz[+e.key - 1]); }
+    if (faze !== "pada" || vPoli) return;
+    const m = { ArrowLeft: () => pohni(-1, 0), ArrowRight: () => pohni(1, 0), ArrowDown: () => pohni(0, 1), ArrowUp: otoc, " ": pust }[e.key];
+    if (m) { e.preventDefault(); m(); } }
+  el.addEventListener("click", klik); el.addEventListener("submit", odeslat); document.addEventListener("keydown", klavesa);
+  function stop() { clearInterval(tik); document.removeEventListener("keydown", klavesa); el.removeEventListener("click", klik); el.removeEventListener("submit", odeslat); }
+  function novaHra() { deska = { c: new Map(), o: [], b: [] }; kus = null; rady = 0; spravne = 0; celkem = 0; cervene = 0; hist = []; pauza = false; acc = 0; zprava = ""; skore(0);
+    dalsi = P.novy(U); kolo(); q(".tt-hra").focus({ preventScroll: true }); }
+  novaHra();
+  return { stop };
+}
+return { spust, _test: () => TEST };
+})();
+
 // ================= ☕ pauza – minihry na oddech (bez bodů): ping-pong, had, pexeso =================
 // Od 3.15 bez měření času: hry jsou otevřené kdykoli (Rytmus je vypnutý). Lodě a piškvorky jdou i online přes server Učebny.
 (() => {
@@ -1899,6 +2183,7 @@ const HRY_P = [
   { id: "zavod", n: "Závod v počítání", ik: "🚀", p: "10 příkladů co nejrychleji – sám na čas, nebo online souboj se stejnými příklady." },
   { id: "osa", n: "Odhadovačka na ose", ik: "📏", p: "Kde leží 3/8, 0,7 nebo 125 %? Klepni na osu – čím blíž, tím víc bodů. Sám, nebo online." },
   { id: "delo", n: "Úhlové dělo", ik: "🎯", p: "Nastav hlaveň na zadaný úhel jen odhadem a vystřel. Přesný úhel = zásah balónku." },
+  { id: "tetris", n: "Tetris se zlomky", ik: "🧱", p: "Nejdřív zjednoduš výraz, pak dílek poskládej. Plná řada zmizí, chyba přidá červenou zbytečnost." },
   { id: "pexeso", n: "Pexeso", ik: "🃏", p: "Najdi dvojice – ikony, nebo zlomky a procenta. Čím míň otočení, tím líp." },
 ];
 let hra = null, posledni = ZAK ? "#" + ZAK.lekce[0] : "#zlomky";
@@ -1909,6 +2194,7 @@ window.addEventListener("hashchange", () => { if (!/^#(hry|testy)/.test(location
 function info(id) { const u = Obtiznost.je(), r = (k) => nacist("pauza-" + k, 0);
   if (id === "zavod") return `1–2 hráči · nejlepší: ${r("zavod-" + u) ? String(r("zavod-" + u) / 10).replace(".", ",") + " s" : "–"}`;
   if (id === "osa") return `1–2 hráči · nejlepší: ${r("osa-" + u) || "–"}`;
+  if (id === "tetris") return `nejvíc řad: ${r("tetris-" + u) || "–"}`;
   if (id === "delo") return `nejlepší: ${r("delo-" + u) || "–"} ze 100`;
   if (id === "had") return `1–2 hráči · nejlepší: ${r("had")} · s čísly: ${r("had-cisla-" + u) || "–"}`;
   if (["lode", "piskvorky", "pingpong"].includes(id)) return "1–2 hráči";
@@ -1920,7 +2206,7 @@ function kresli() {
   const muze = true, doPauzy = 0, pl = $("#pauza-plocha", app), drz = pl && !pl.hidden ? pl : null;
   app.innerHTML = `${window.__HRY_VEREJNE ? "" : `<h3>☕ Hry na oddech</h3>
     <p class="pozn">Kdykoli si chceš odpočinout. Hry body nedávají. Lodě, piškvorky a ping-pong si zahraješ i online – každý na svém zařízení, spojíte se kódem nebo QR kódem.</p>`}
-    ${Obtiznost.volba()}<p class="pozn obt-pozn">Obtížnost platí pro závod, odhadovačku, hada s čísly a dělo – každý hráč si volí svou.</p>
+    ${Obtiznost.volba()}<p class="pozn obt-pozn">Obtížnost platí pro závod, odhadovačku, hada s čísly, dělo a Tetris – každý hráč si volí svou.</p>
     <div class="hry">${HRY_P.map((h) => `<article class="hra-karta${muze ? "" : " zamceno"}"><b>${h.ik} ${h.n}</b><p class="pozn">${h.p}</p>
       <span class="pozn">${info(h.id)}</span>
       <button type="button" class="hlavni" data-pauza="${h.id}" ${muze ? "" : "disabled"}>${muze ? "Hrát" : `🔒 za ${doPauzy} min`}</button></article>`).join("")}</div>
@@ -1937,7 +2223,7 @@ function otevri(id, opt = {}) {
   if (!opt.host && !bezi() && !Rytmus.zacni() && !ZDARMA) { kresli(); return; }
   zastav(); const def = HRY_P.find((h) => h.id === id), pl = $("#pauza-plocha", app); pl.hidden = false;
   pl.innerHTML = `<div class="radek pauza-lista"><b>${def.ik} ${def.n}</b><span class="hra-cas" id="pauza-cas"></span>${["lode", "clovece", "piskvorky"].includes(id) ? "" : `<span>skóre <b id="pauza-skore">0</b></span>`}<button type="button" class="maly" data-pa="zavrit">Zavřít</button></div><div class="pauza-hra"></div>`;
-  hra = ({ pingpong: (e, s) => pingpong(e, s, opt), had: (e, s) => Had.spust(e, s, opt, { W, H, platno, barvy, vidim, rekord }), zavod: (e, s) => Zavod.spust(e, s, opt, { rekord }), osa: (e, s) => Osa.spust(e, s, opt, { rekord }), delo: (e, s) => Delo.spust(e, s, opt, { W, H, platno, barvy, vidim, rekord }), pexeso, lode: (e, s) => Lode.spust(e, s, opt), clovece: (e, s) => Clovece.spust(e, s), piskvorky: (e, s) => Piskvorky.spust(e, s, opt) })[id]($(".pauza-hra", pl), (n) => { const s = $("#pauza-skore", pl); if (s) s.textContent = n; });
+  hra = ({ pingpong: (e, s) => pingpong(e, s, opt), had: (e, s) => Had.spust(e, s, opt, { W, H, platno, barvy, vidim, rekord }), zavod: (e, s) => Zavod.spust(e, s, opt, { rekord }), osa: (e, s) => Osa.spust(e, s, opt, { rekord }), delo: (e, s) => Delo.spust(e, s, opt, { W, H, platno, barvy, vidim, rekord }), tetris: (e, s) => Tetris.spust(e, s, opt, { rekord }), pexeso, lode: (e, s) => Lode.spust(e, s, opt), clovece: (e, s) => Clovece.spust(e, s), piskvorky: (e, s) => Piskvorky.spust(e, s, opt) })[id]($(".pauza-hra", pl), (n) => { const s = $("#pauza-skore", pl); if (s) s.textContent = n; });
   hra.id = id; stav(); kresli(); pl.scrollIntoView({ block: window.__HRY_VEREJNE ? "start" : "nearest" });
 }
 const rekord = (id, n, mensi) => { const b = nacist("pauza-" + id, 0); if (!b || (mensi ? n < b : n > b)) { ulozit("pauza-" + id, n); return true; } return false; };
@@ -2089,7 +2375,7 @@ window.addEventListener("hashchange", zOdkazu); setTimeout(zOdkazu, 0);
 window.__pauza = { otevri, get hra() { return hra; }, konecPauzy };
 })();
 
-window.__hryTest = { teren: Had.teren, zavodSp: Zavod._akt, osa: Osa, had: Had, obt: Obtiznost };
+window.__hryTest = { teren: Had.teren, zavodSp: Zavod._akt, osa: Osa, had: Had, obt: Obtiznost, tetris: Tetris._test, tp: TetrisPriklady, td: TetrisDilek };
 })();
 </script>
 </body></html>
