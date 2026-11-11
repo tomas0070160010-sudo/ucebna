@@ -3,6 +3,7 @@
 Stránka pro doučování a hry (přihlášení přes Supabase projekt `ucebna`).
 
 ## Verze
+- **0.8.7** (11. 11. 2026) – stránka her: Tetris se zlomky začíná s předem poskládaným obrázkem z fialových čtverečků (výška podle obtížnosti, nejvýš půl hřiště), na Lehké a Střední občas padá větší dílek, online mají oba hráči stejný obrázek.
 - **0.8.6** (11. 11. 2026) – Žáci › Body a odměny: lektor může dát odměnu za hvězdičky dřív (zaškrtnutím); stránka her: piškvorky na telefonu na poli 12 × 12, vzhled kostek v Tetrisu. Potřebuje Matiku 3.23.
 - **0.8.5** (11. 11. 2026) – stránka her na telefonu: hra se otevře přes celou obrazovku (všechno vidět, zavře ji i tlačítko Zpět), tlačítka větší pro prst. Potřebuje Matiku 3.22.2.
 - **0.8.4** (10. 11. 2026) – stránka her: Tetris jde ovládat prstem na desce (táhni, klepni, švihni dolů); Správa › PDF testů pozná i soubor stažený z Matiky (`matika-2025-A-test.pdf`). Potřebuje Matiku 3.22.
