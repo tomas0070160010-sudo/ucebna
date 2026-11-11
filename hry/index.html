@@ -270,6 +270,46 @@ dialog#lk-dialog::backdrop { background: rgba(10, 16, 30, .45); }
 .ukazatel { height: 12px; background: var(--mrizka); border-radius: 999px; overflow: hidden; }
 .ukazatel > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--oranzova), var(--zvyraz)); transition: width .4s; }
 #hry-app h3 { font-size: 22px; }
+:root[data-skin="mata"] { --papir: #eefaf5; --mrizka: #d5efe5; --karta: #fbfffd; --linka: #bfe3d4; --inkoust: #143a30; --tuzka: #4f6f66; --modra: #12866a; --zvyraz: #fff1a8; --cervena: #cf3f36; --zelena: #1f7f54; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #d8483a; --hruska: #7fa21f; --fialova: #7b4fc4; --oranzova: #d9821e; color-scheme: light; }
+:root[data-skin="sepie"] { --papir: #f6efe1; --mrizka: #eadfc8; --karta: #fffaf0; --linka: #dccba6; --inkoust: #3b2a17; --tuzka: #6e5a40; --modra: #8a5a2b; --zvyraz: #ffe08a; --cervena: #b8352c; --zelena: #3f7a2a; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #c8432f; --hruska: #7f9a1f; --fialova: #7a4a9a; --oranzova: #c9741a; color-scheme: light; }
+:root[data-skin="bonbon"] { --papir: #fff1f6; --mrizka: #fbdbe7; --karta: #fffafc; --linka: #f3c4d6; --inkoust: #4a1830; --tuzka: #7a4a62; --modra: #c23c78; --zvyraz: #ffe3a1; --cervena: #c8303a; --zelena: #1f7f54; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #d8483a; --hruska: #7fa21f; --fialova: #9b4fc4; --oranzova: #d9821e; color-scheme: light; }
+:root[data-skin="arktida"] { --papir: #eef6fd; --mrizka: #d9e9f7; --karta: #ffffff; --linka: #c3d9ee; --inkoust: #16304a; --tuzka: #4f6680; --modra: #2a74c0; --zvyraz: #fff1a8; --cervena: #cf3f36; --zelena: #1f7f54; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #d8483a; --hruska: #7fa21f; --fialova: #6b4fc4; --oranzova: #d9821e; color-scheme: light; }
+:root[data-skin="zapad"] { --papir: #fff4ea; --mrizka: #fbe0cc; --karta: #fffaf5; --linka: #f0caa8; --inkoust: #41201a; --tuzka: #7a5244; --modra: #c4501f; --zvyraz: #ffe08a; --cervena: #b8302a; --zelena: #2a7a44; --cokolada: #7a4a2b; --cokolada-s: #ead9c8; --jablko: #d8483a; --hruska: #7fa21f; --fialova: #8a3ab8; --oranzova: #d9821e; color-scheme: light; }
+:root[data-skin="hlubina"] { --papir: #071c26; --mrizka: #0d2a38; --karta: #0d2533; --linka: #1f4556; --inkoust: #e2f6ff; --tuzka: #9cc0cf; --modra: #4fd1e8; --zvyraz: #144a5a; --cervena: #ff7a70; --zelena: #5fd3a0; --cokolada: #c48a5c; --cokolada-s: #3a2b22; --jablko: #ff6b5b; --hruska: #b6d651; --fialova: #b28cff; --oranzova: #f0a24a; color-scheme: dark; }
+:root[data-skin="dzungle"] { --papir: #0d1f14; --mrizka: #163222; --karta: #14291c; --linka: #2b4a34; --inkoust: #e7f6e8; --tuzka: #a6c8ab; --modra: #7fdc6a; --zvyraz: #4a4a12; --cervena: #ff7a70; --zelena: #5fd3a0; --cokolada: #c48a5c; --cokolada-s: #3a2b22; --jablko: #ff6b5b; --hruska: #b6d651; --fialova: #c8a0ff; --oranzova: #f0a24a; color-scheme: dark; }
+:root[data-skin="lava"] { --papir: #1a0b0a; --mrizka: #2a1210; --karta: #241110; --linka: #4a2420; --inkoust: #ffece4; --tuzka: #d6a99a; --modra: #ff8a4a; --zvyraz: #5a2a12; --cervena: #ff6a5a; --zelena: #6fd3a0; --cokolada: #c48a5c; --cokolada-s: #3a2b22; --jablko: #ff6b5b; --hruska: #b6d651; --fialova: #d0a0ff; --oranzova: #ffb24a; color-scheme: dark; }
+:root[data-skin="neon"] { --papir: #0b0816; --mrizka: #191233; --karta: #140f28; --linka: #2f2560; --inkoust: #f0ecff; --tuzka: #b1a8d8; --modra: #3ef0ff; --zvyraz: #3a1f5c; --cervena: #ff6a8a; --zelena: #5ff0b0; --cokolada: #c48a5c; --cokolada-s: #3a2b22; --jablko: #ff6b5b; --hruska: #b6d651; --fialova: #ff4fd8; --oranzova: #ffb24a; color-scheme: dark; }
+/* pohyblivá pozadí (vrstva za stránkou, jemná; vypnutá při omezeném pohybu nebo přepínačem) */
+.zive-pozadi { position: fixed; inset: 0; z-index: -1; pointer-events: none; width: 100vw; height: 100vh; display: block; }
+html[data-zive] .pozadi-anim { display: none !important; }
+.odm-zive { padding: 0; overflow: hidden; } .odm-zive canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+.pozadi-anim { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.pozadi-anim::before, .pozadi-anim::after { content: ""; position: absolute; inset: -320px 0 0 0; background-repeat: repeat; }
+.pozadi-anim[data-pohyb="snih"]::before { background-image: radial-gradient(2.5px 2.5px at 12% 18%, #9cc6ee 50%, transparent 51%), radial-gradient(2px 2px at 58% 42%, #b6d6f4 50%, transparent 51%), radial-gradient(3px 3px at 83% 76%, #8fbbe6 50%, transparent 51%), radial-gradient(2px 2px at 32% 88%, #a9cdf0 50%, transparent 51%); background-size: 240px 240px; animation: pa-dolu 16s linear infinite; }
+.pozadi-anim[data-pohyb="snih"]::after { background-image: radial-gradient(1.6px 1.6px at 22% 32%, #b6d6f4 50%, transparent 51%), radial-gradient(1.4px 1.4px at 72% 12%, #9cc6ee 50%, transparent 51%), radial-gradient(1.8px 1.8px at 46% 66%, #a9cdf0 50%, transparent 51%); background-size: 160px 160px; animation: pa-dolu2 10s linear infinite; }
+.pozadi-anim[data-pohyb="svetlusky"]::before { background-image: radial-gradient(3px 3px at 20% 30%, #f4ff9a 40%, #f4ff9a33 60%, transparent 70%), radial-gradient(2.5px 2.5px at 70% 60%, #e9ff8a 40%, #e9ff8a33 60%, transparent 70%), radial-gradient(3px 3px at 45% 85%, #f4ff9a 40%, #f4ff9a33 60%, transparent 70%); background-size: 320px 320px; animation: pa-vznasi 28s linear infinite, pa-blika 3.4s ease-in-out infinite alternate; }
+.pozadi-anim[data-pohyb="svetlusky"]::after { background-image: radial-gradient(2px 2px at 35% 15%, #e9ff8a 40%, transparent 70%), radial-gradient(2.5px 2.5px at 85% 45%, #f4ff9a 40%, transparent 70%); background-size: 260px 260px; animation: pa-vznasi 36s linear infinite reverse, pa-blika 2.6s ease-in-out infinite alternate-reverse; }
+.pozadi-anim[data-pohyb="bubliny"]::before { background-image: radial-gradient(circle at 20% 70%, transparent 5px, #7fe3ff66 6px, transparent 8px), radial-gradient(circle at 65% 30%, transparent 8px, #7fe3ff55 9px, transparent 11px), radial-gradient(circle at 85% 85%, transparent 3px, #a8f0ff77 4px, transparent 6px); background-size: 280px 280px; animation: pa-nahoru 20s linear infinite; }
+.pozadi-anim[data-pohyb="bubliny"]::after { background-image: radial-gradient(circle at 40% 50%, transparent 3px, #7fe3ff55 4px, transparent 6px), radial-gradient(circle at 10% 15%, transparent 6px, #a8f0ff44 7px, transparent 9px); background-size: 200px 200px; animation: pa-nahoru2 13s linear infinite; }
+.pozadi-anim[data-pohyb="hvezdy"]::before { background-image: radial-gradient(1.6px 1.6px at 15% 25%, #fff 50%, transparent 51%), radial-gradient(1.2px 1.2px at 62% 48%, #ffe9ff 50%, transparent 51%), radial-gradient(2px 2px at 85% 12%, #fff 50%, transparent 51%), radial-gradient(1.3px 1.3px at 38% 80%, #e8dcff 50%, transparent 51%); background-size: 210px 210px; inset: 0; animation: pa-blika 2.8s ease-in-out infinite alternate; }
+.pozadi-anim[data-pohyb="hvezdy"]::after { background-image: radial-gradient(1.4px 1.4px at 30% 60%, #fff 50%, transparent 51%), radial-gradient(1.8px 1.8px at 75% 85%, #ffe9ff 50%, transparent 51%), linear-gradient(115deg, transparent 49.6%, #ffffffaa 50%, transparent 50.6%); background-size: 170px 170px, 170px 170px, 900px 900px; inset: 0; animation: pa-blika 3.6s ease-in-out infinite alternate-reverse; }
+.pozadi-anim[data-pohyb="listi"]::before { background-image: radial-gradient(ellipse 5px 2.5px at 18% 22%, #4caf50 60%, transparent 62%), radial-gradient(ellipse 4px 2px at 66% 54%, #7fdc6a 60%, transparent 62%), radial-gradient(ellipse 5px 2.5px at 40% 86%, #2f8a3a 60%, transparent 62%); background-size: 260px 260px; animation: pa-padani 22s linear infinite; opacity: .8; }
+.pozadi-anim[data-pohyb="listi"]::after { background-image: radial-gradient(ellipse 4px 2px at 80% 30%, #9ad35a 60%, transparent 62%), radial-gradient(ellipse 3.5px 1.8px at 25% 65%, #4caf50 60%, transparent 62%); background-size: 190px 190px; animation: pa-padani 15s linear infinite; opacity: .7; }
+.pozadi-anim[data-pohyb="jiskry"] { background: radial-gradient(ellipse 120% 40% at 50% 110%, #ff5a1a33, transparent 70%); }
+.pozadi-anim[data-pohyb="jiskry"]::before { background-image: radial-gradient(2px 2px at 20% 60%, #ffb24a 50%, #ff7a2a44 60%, transparent 70%), radial-gradient(1.6px 1.6px at 70% 30%, #ffd27a 50%, transparent 70%), radial-gradient(2.2px 2.2px at 45% 90%, #ff8a3a 50%, #ff5a1a44 60%, transparent 70%); background-size: 230px 230px; animation: pa-nahoru 12s linear infinite, pa-blika 1.4s ease-in-out infinite alternate; }
+.pozadi-anim[data-pohyb="jiskry"]::after { background-image: radial-gradient(1.4px 1.4px at 35% 20%, #ffd27a 50%, transparent 70%), radial-gradient(1.8px 1.8px at 85% 70%, #ffb24a 50%, transparent 70%); background-size: 170px 170px; animation: pa-nahoru2 8s linear infinite; }
+.pozadi-anim[data-pohyb="neon"]::before { inset: 0; background-image: linear-gradient(#3ef0ff22 1px, transparent 1px), linear-gradient(90deg, #ff4fd822 1px, transparent 1px); background-size: 48px 48px; animation: pa-pulz 4s ease-in-out infinite alternate, pa-posun 30s linear infinite; }
+.pozadi-anim[data-pohyb="neon"]::after { inset: 0; background: radial-gradient(ellipse 60% 40% at 20% 10%, #3ef0ff1a, transparent 70%), radial-gradient(ellipse 50% 40% at 85% 90%, #ff4fd81a, transparent 70%); animation: pa-pulz 6s ease-in-out infinite alternate-reverse; }
+.pozadi-anim[data-pohyb="trpyt"]::before { inset: 0; background-image: radial-gradient(2px 2px at 15% 30%, #d4a017 50%, transparent 51%), radial-gradient(1.5px 1.5px at 60% 70%, #e8b830 50%, transparent 51%), radial-gradient(2.4px 2.4px at 82% 20%, #c99a12 50%, transparent 51%); background-size: 230px 230px; animation: pa-blika 2.2s ease-in-out infinite alternate; }
+.pozadi-anim[data-pohyb="trpyt"]::after { inset: 0; background-image: radial-gradient(1.6px 1.6px at 40% 50%, #e8b830 50%, transparent 51%), radial-gradient(2px 2px at 90% 85%, #d4a017 50%, transparent 51%); background-size: 180px 180px; animation: pa-blika 3s ease-in-out infinite alternate-reverse; }
+@keyframes pa-dolu { to { transform: translateY(240px); } } @keyframes pa-dolu2 { to { transform: translateY(160px) translateX(20px); } }
+@keyframes pa-nahoru { from { transform: translateY(280px); } to { transform: translateY(0); } } @keyframes pa-nahoru2 { from { transform: translateY(200px); } to { transform: translateY(0); } }
+@keyframes pa-vznasi { 50% { transform: translate(30px, 120px); } to { transform: translate(0, 320px); } } @keyframes pa-padani { to { transform: translate(-60px, 260px); } }
+@keyframes pa-blika { from { opacity: .25; } to { opacity: 1; } } @keyframes pa-pulz { from { opacity: .45; } to { opacity: 1; } } @keyframes pa-posun { to { background-position: 48px 48px, 48px 48px; } }
+html.pozadi-stoji .pozadi-anim::before, html.pozadi-stoji .pozadi-anim::after { animation: none; }
+@media (prefers-reduced-motion: reduce) { .pozadi-anim::before, .pozadi-anim::after { animation: none !important; } }
+.vzhled-app { display: grid; gap: 10px; } .vz-hlava { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.vz-pohyb { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
 .vzhledy { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
 .vzhled { display: grid; gap: 6px; padding: 10px; text-align: left; line-height: 1.2; }
 .vzhled small { font-weight: 400; font-size: 13px; color: var(--tuzka); }
@@ -862,6 +902,10 @@ body.na-prehledu nav.zalozky { display: none; }
 .cl-karta-q { display: grid; gap: 8px; width: 100%; padding-top: 8px; border-top: 1.5px dashed var(--linka); }
 .cl-karta .cl-moznosti { grid-template-columns: 1fr 1fr; } .cl-moznosti button.ok { border-color: var(--zelena); background: color-mix(in srgb, var(--zelena) 16%, var(--karta)); opacity: 1; } .cl-moznosti button.spatne { border-color: var(--cervena); background: color-mix(in srgb, var(--cervena) 14%, var(--karta)); opacity: 1; }
 .cl-vysledek.ok { color: var(--zelena); } .cl-vysledek.spatne { color: var(--cervena); }
+.cl-karta-pruh { justify-self: stretch; height: 6px; border-radius: 3px; background: var(--mrizka); overflow: hidden; margin-top: 2px; }
+.cl-karta-pruh span { display: block; height: 100%; border-radius: 3px; background: var(--k); transform-origin: left center; transform: scaleX(var(--od, 1)); animation: cl-ubyva linear forwards; }
+@keyframes cl-ubyva { from { transform: scaleX(var(--od, 1)); } to { transform: scaleX(0); } }
+.cl-karta-pc { cursor: pointer; }
 .cl-karta-kdo { display: inline-flex; gap: 6px; align-items: center; color: var(--tuzka); } .cl-karta-kdo .cl-tecka { width: 12px; height: 12px; }
 .cl-vyber { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; } .cl-vyber button { padding: 4px; height: auto; } .cl-vyber .cl-kostka { width: 100%; height: auto; max-width: 54px; }
 .cl-legenda summary { cursor: pointer; font-weight: 700; } .cl-legenda ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
@@ -1567,8 +1611,9 @@ function spust(el, skore) {
     if (hr.fig.every((p) => p >= 40)) { g.konec = g.na; g.stav = "konec"; g.zprava = `🎉 ${hr.jmeno} vyhrává!`; ulozHru(); kresli(); skore(hr.jmeno); return; }
     const a = hr.fig[f] < 40 ? abs(hr.barva, hr.fig[f]) : -1, d = a >= 0 ? pole(a) : null, clovek = !hr.pc;
     if ((d === "otazka" || d === "vyzva") && g.otazky && clovek) return ukazOtazku(d, f, sest, d === "otazka" ? OtazkyHer.matika() : OtazkyHer.vyzva());
-    if (d === "nahoda" || d === "truhla") { const k = P.tahni(d, !clovek || !g.otazky); g.stav = "karta"; g.karta = { ...k, bal: d, h: g.na, f, sest, q: k.priklad ? OtazkyHer.matika() : null };
-      g.zprava = `${hr.jmeno} táhne kartu ${d === "truhla" ? "Truhla" : "Náhoda"}.`; ulozHru(); kresli(); if (!k.priklad) { clearTimeout(kartaCas); kartaCas = setTimeout(zavriKartu, clovek ? 3200 : 2400); } return; }
+    if (d === "nahoda" || d === "truhla") { const k = P.tahni(d, !clovek || !g.otazky), doba = k.priklad ? 0 : dobaKarty(clovek);
+      g.stav = "karta"; g.karta = { ...k, bal: d, h: g.na, f, sest, q: k.priklad ? OtazkyHer.matika() : null, doba, do: doba ? Date.now() + doba : 0 };
+      g.zprava = `${hr.jmeno} táhne kartu ${d === "truhla" ? "Truhla" : "Náhoda"}.`; ulozHru(); kresli(); if (doba) { clearTimeout(kartaCas); kartaCas = setTimeout(zavriKartu, doba); } return; }
     if (d === "zkratka" || d === "led") { if (g.otazky && clovek) return ukazOtazku(d, f, sest, OtazkyHer.matika());
       const vyjde = clovek || Math.random() < 0.5; return d === "zkratka" ? (vyjde ? efekt({ vpred: 5 }, f, sest, "🚀 Zkratka!") : poTahu(sest)) : (vyjde && !clovek ? poTahu(sest) : efekt({ stoj: true }, f, sest, "🧊 Led – příští hod stojíš.")); }
     if (d === "vir") return efekt({ vir: a }, f, sest, "🌀 Vír: ostatní figurky v této čtvrtině jdou o 1 zpět.");
@@ -1599,6 +1644,12 @@ function spust(el, skore) {
     if (ef.vir != null) { const q = Math.floor(ef.vir / 10); kroky = zpatky1((hi, ff, a) => !(hi === h && ff === f) && Math.floor(a / 10) === q); msg = kroky.length ? "" : "Nikoho nesmetl."; }
     g.zprava = [uvod, msg].filter(Boolean).join(" "); g.stav = "pohyb"; g.dal = { krok: "konec", sest, znovu }; ulozHru(); prehraj(kroky, dokonci); }
   // ---------- otázka a karta uprostřed desky ----------
+  // jak dlouho je karta vidět: vlastní karta hráče 3,2 s (nebo OK); karta počítače krátce, když hraje i člověk (ať se nečeká),
+  // dlouho, když hrají jen počítače (dá se v klidu přečíst); pod kartou ubývá pruh, klepnutím zmizí hned
+  const jenPocitace = () => g.hraci.filter((h) => h.aktivni).every((h) => h.pc);
+  const dobaKarty = (clovek) => clovek ? 3200 : jenPocitace() ? 5500 : 1600;
+  function pruhHtml(k) { if (!k.doba) return ""; const zb = Math.max(0, (k.do || 0) - Date.now()), od = Math.min(1, zb / k.doba);
+    return `<div class="cl-karta-pruh" aria-hidden="true"><span style="--od:${od.toFixed(3)};animation-duration:${zb}ms"></span></div>`; }
   function ukazOtazku(druh, f, sest, q) { g.stav = "otazka"; g.otazka = { druh, f, sest, ...q }; ulozHru(); kresli(); }
   function zavriKartu() { clearTimeout(kartaCas); if (g.stav !== "karta") return; const k = g.karta; g.karta = null; efekt(k.ef, k.f, k.sest, `${k.ik} ${k.n}:`); }
   function odpoved(o) { const q = g.stav === "karta" ? g.karta && g.karta.q : g.otazka; if (!q || q.vysledek) return; q.vysledek = { ok: o === q.sp, o }; Zaznam.pis("hra", q.vysledek.ok ? "otázka správně" : "otázka špatně"); ulozHru(); kresli();
@@ -1644,10 +1695,11 @@ function spust(el, skore) {
   function kartaHtml() { const hr = hraje(), tecka = `<span class="cl-tecka" style="background:${BARVY[hr.barva][1]}"></span>`;
     const klic = g.stav === "karta" && g.karta ? `k${g.tah}-${g.karta.id}` : g.stav === "otazka" && g.otazka ? `o${g.tah}-${g.otazka.t}` : "", otoc = klic && klic !== ukazana ? " otoc" : ""; ukazana = klic || ukazana;
     if (g.stav === "karta" && g.karta) { const k = g.karta;
-      return `<div class="cl-karta-vrstva"><div class="cl-karta bal-${k.bal}${otoc}" role="dialog" aria-label="Karta ${esc(k.n)}"><div class="cl-karta-hlava">${k.bal === "truhla" ? "🎁 Truhla" : "🃏 Náhoda"}</div>
+      const pc = hr.pc && !k.q;
+      return `<div class="cl-karta-vrstva"><div class="cl-karta bal-${k.bal}${otoc}${pc ? " cl-karta-pc" : ""}" role="dialog" aria-label="Karta ${esc(k.n)}"${pc ? ` data-cl="karta-ok" title="Klepni a karta zmizí hned"` : ""}><div class="cl-karta-hlava">${k.bal === "truhla" ? "🎁 Truhla" : "🃏 Náhoda"}</div>
         <div class="cl-karta-ik" aria-hidden="true">${k.ik}</div><b class="cl-karta-nazev">${esc(k.n)}</b><p>${esc(k.t)}</p>
         ${k.q ? `<div class="cl-karta-q"><b>${esc(k.q.t)}</b>${moznostiHtml(k.q)}</div>` : hr.pc ? "" : `<button type="button" class="hlavni" data-cl="karta-ok">OK</button>`}
-        <small class="cl-karta-kdo">${tecka}${esc(hr.jmeno)} · vidí všichni</small></div></div>`; }
+        <small class="cl-karta-kdo">${tecka}${esc(hr.jmeno)} · ${pc ? "zmizí sama, klepnutím hned" : "vidí všichni"}</small>${pruhHtml(k)}</div></div>`; }
     if (g.stav === "otazka" && g.otazka) { const q = g.otazka, D = P.DRUHY[q.druh];
       return `<div class="cl-karta-vrstva"><div class="cl-karta bal-${q.druh}${otoc}" role="dialog" aria-label="${D.n}"><div class="cl-karta-hlava">${D.ik} ${D.n}</div><b class="cl-karta-nazev">${esc(q.t)}</b>${moznostiHtml(q)}
         <small class="pozn">${D.t}</small><small class="cl-karta-kdo">${tecka}${esc(hr.jmeno)} odpovídá · vidí všichni</small></div></div>`; }
@@ -1691,8 +1743,10 @@ function spust(el, skore) {
   el.addEventListener("keydown", (e) => { if ((e.key === " " || e.key === "Enter") && e.target.matches(".cl-fig")) { e.preventDefault(); tahni(+e.target.dataset.f); } });
   const klav = (k) => { if (k === " " && g && g.stav === "hod" && !hraje().pc) hod(); };
   // po obnovení stránky: rozehraný pohyb dokončí, karta počítače se zavře sama, otázka s výsledkem pokračuje
-  function obnov() { kresli(); if (g.stav === "pohyb") { dokonci(); return; }
-    if (g.stav === "karta" && g.karta && !g.karta.q) { kartaCas = setTimeout(zavriKartu, 1500); return; }
+  function obnov() { const kk = g.stav === "karta" && g.karta && !g.karta.q ? g.karta : null, zb = kk ? Math.max(1500, (kk.do || 0) - Date.now()) : 0;
+    if (kk) { kk.doba = Math.max(kk.doba || 0, zb); kk.do = Date.now() + zb; }
+    kresli(); if (g.stav === "pohyb") { dokonci(); return; }
+    if (kk) { kartaCas = setTimeout(zavriKartu, zb); return; }
     const q = g.stav === "karta" ? g.karta && g.karta.q : g.stav === "otazka" ? g.otazka : null; if (q && q.vysledek) { casovac = setTimeout(pokracuj, 800); return; }
     auto(); }
   if (g && g.stav !== "konec") obnov(); else { g = null; volba(); }
