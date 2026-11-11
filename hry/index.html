@@ -1243,6 +1243,74 @@ button.t-ab, button.t-ac, button.t-bc { border-left-width: 6px; } button.t-ab { 
 .cesta .odemknout { width: auto; border-radius: 10px; padding: 0 10px; font-size: 12px; margin-left: auto; }
 .blik { animation: blik 1.1s ease 2; border-radius: 12px; }
 @keyframes blik { 50% { box-shadow: 0 0 0 4px var(--oranzova); } }
+/* ↻ Moje chyby (3.32): souhrn, témata, karty chyb, okénko Zkusit znovu, dávka 5 chyb, Týden (co se plete) */
+.chyby-app { display: grid; gap: 18px; }
+.ch-souhrn { display: grid; gap: 10px; padding: 16px 18px; border-radius: 18px; background: var(--karta); border: 1.5px solid var(--linka); }
+.ch-souhrn .pozn { margin: 0; }
+.ch-cisla { display: flex; gap: 22px; flex-wrap: wrap; } .ch-cisla > div { display: flex; gap: 8px; align-items: baseline; }
+.ch-cislo { font-size: 34px; line-height: 1; font-weight: 800; color: var(--oranzova); font-variant-numeric: tabular-nums; } .ch-cislo.ok { color: var(--zelena); }
+.ch-cisla span { color: var(--tuzka); font-weight: 700; }
+.ch-tema { display: grid; gap: 10px; } .ch-tema h3 { margin: 0; display: flex; gap: 8px; align-items: baseline; }
+.ch-seznam { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
+.ch-polozka { display: grid; gap: 8px; padding: 14px 16px; border-radius: 16px; background: var(--karta); border: 1.5px solid var(--linka); min-width: 0; }
+.ch-polozka.otevrena { grid-column: 1 / -1; border-color: var(--modra); }
+.ch-polozka.zvladnuto { border-color: color-mix(in srgb, var(--zelena) 55%, var(--linka)); }
+.ch-p-hlava { display: flex; justify-content: space-between; gap: 10px; align-items: center; } .ch-p-hlava b { font-size: 17px; }
+.ch-tecky { display: inline-flex; gap: 4px; flex: none; } .ch-tecky span { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--zelena); }
+.ch-tecky span.ano { background: var(--zelena); }
+.ch-meta { margin: 0; font-size: 13px; color: var(--tuzka); }
+.ch-zadani { font-size: 21px; padding: 8px 12px; border-radius: 10px; background: var(--papir); border: 1.5px dashed var(--linka); max-width: 100%; }
+.ch-zadani svg { max-width: 100%; height: auto; }
+.ch-zadani-test { margin: 0; color: var(--tuzka); }
+.ch-vstup { margin: 0; font-size: 15px; } .ch-vstup code { font: 600 16px var(--f-mat); padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, var(--cervena) 12%, transparent); color: var(--inkoust); overflow-wrap: anywhere; }
+details.ch-postup { border: 1.5px dashed var(--linka); border-radius: 12px; padding: 0 12px; } details.ch-postup summary { cursor: pointer; padding: 9px 0; font-weight: 700; color: var(--modra); }
+details.ch-postup[open] { padding-bottom: 10px; }
+.ch-kroky { margin: 0; padding-left: 22px; display: grid; gap: 4px; } .ch-kroky .co { color: var(--tuzka); font-size: 15px; }
+.ch-akce:empty { display: none; }
+.ch-zkus { display: grid; gap: 10px; padding: 12px 14px; border: 2px solid var(--modra); border-radius: 14px; background: color-mix(in srgb, var(--modra) 6%, var(--karta)); min-width: 0; }
+.ch-zkus-hlava { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; } .ch-zkus-hlava b { font: 700 23px/1 var(--f-ruka); color: var(--modra); }
+.ch-zkus .zadani { font-size: 23px; } .ch-zkus .zadani svg { max-width: 100%; height: auto; }
+.ch-zkus kbd, .ch-davka kbd { font: 700 11px/1 var(--f-text); padding: 2px 5px; border: 1.5px solid var(--linka); border-bottom-width: 3px; border-radius: 5px; opacity: .75; margin-left: 4px; }
+.ch-co-dal { display: block; margin-top: 4px; font-weight: 600; color: var(--inkoust); }
+.ch-pole { display: grid; gap: 8px; } .ch-pole .arch-pole { flex-wrap: wrap; }
+.ch-zvladnuto { border: 1.5px solid var(--linka); border-radius: 14px; padding: 0 14px; background: var(--karta); } .ch-zvladnuto summary { cursor: pointer; padding: 12px 0; font-weight: 700; color: var(--zelena); }
+.ch-zvladnuto ul { margin: 0 0 12px; padding-left: 20px; display: grid; gap: 4px; }
+.ch-prazdne { display: grid; gap: 8px; justify-items: center; text-align: center; padding: 28px 16px; border: 1.5px dashed var(--linka); border-radius: 18px; } .ch-prazdne > span { font-size: 44px; } .ch-prazdne h3 { margin: 0; }
+.ch-davka { display: grid; gap: 12px; padding: 16px 18px; border-radius: 18px; background: var(--karta); border: 1.5px solid var(--linka); }
+.ch-davka-hlava { display: grid; gap: 6px; } .ch-davka-hlava b { font-size: 18px; }
+.ch-davka-pruh { display: flex; gap: 6px; } .ch-davka-pruh span { flex: 1; height: 7px; border-radius: 4px; background: var(--mrizka); }
+.ch-davka-pruh span.byl { background: color-mix(in srgb, var(--tuzka) 45%, var(--mrizka)); } .ch-davka-pruh span.ted { background: var(--modra); } .ch-davka-pruh span.ok { background: var(--zelena); }
+.ch-davka-tl { justify-content: space-between; }
+.ch-davka-konec { justify-items: center; text-align: center; } .ch-davka-konec h3 { margin: 0; } .ch-velky { font-size: 48px; }
+.ch-ty .pozn { margin: 0; }
+.ch-ty-muj { display: flex; gap: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; } .ch-ty-muj > div { display: grid; gap: 2px; }
+.ch-plete { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.ch-plete li { display: grid; grid-template-columns: minmax(110px, 180px) minmax(60px, 1fr) auto; gap: 10px; align-items: center; } .ch-plete small { color: var(--tuzka); font-size: 13px; }
+.ch-sloupec { height: 10px; border-radius: 5px; background: var(--mrizka); overflow: hidden; } .ch-sloupec span { display: block; height: 100%; border-radius: 5px; background: var(--oranzova); }
+.ch-dl .ph-ik { color: var(--oranzova); font-weight: 800; }
+@media (max-width: 560px) { .ch-souhrn, .ch-davka { padding: 14px; } .ch-polozka { padding: 12px; } .ch-zadani { font-size: 19px; } .ch-zkus { padding: 10px; } .ch-zkus .zadani { font-size: 20px; }
+  .ch-zkus input.odpoved { width: 100%; } .ch-zkus .radek > .hlavni { flex: 1; } .ch-plete li { grid-template-columns: minmax(0, 1fr) auto; } .ch-plete .ch-sloupec { grid-column: 1 / -1; grid-row: 2; } }
+
+/* 🏅 Týdenní výzva a odznaky týdne (3.32) */
+.vt-hlava { display: flex; gap: 14px; align-items: center; } .vt-hlava > div { display: grid; gap: 4px; min-width: 0; } .vt-hlava h3 { margin: 0; } .vt-hlava .odz { flex: none; }
+.vt-pruh { height: 10px; border-radius: 5px; background: var(--mrizka); overflow: hidden; } .vt-pruh span { display: block; height: 100%; background: var(--zelena); border-radius: 5px; transition: width .5s; }
+.vt-ukoly { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.vt-ukol { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 14px; border: 1.5px solid var(--linka); background: var(--papir); }
+.vt-ukol.hotovo { border-color: color-mix(in srgb, var(--zelena) 55%, var(--linka)); background: color-mix(in srgb, var(--zelena) 8%, var(--karta)); }
+.vt-znak { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; border: 2px solid var(--modra); color: var(--modra); }
+.vt-ukol.hotovo .vt-znak { background: var(--zelena); border-color: var(--zelena); color: var(--karta); }
+.vt-text { display: grid; gap: 2px; } .vt-text small { color: var(--tuzka); font-size: 13px; font-variant-numeric: tabular-nums; }
+.vt-ukol a.tl { padding: 8px 11px; font-size: 14px; }
+details.vt-lektor { border: 1.5px dashed var(--linka); border-radius: 12px; padding: 0 12px; } details.vt-lektor summary { cursor: pointer; padding: 9px 0; font-weight: 700; color: var(--tuzka); }
+details.vt-lektor[open] { padding-bottom: 10px; display: grid; gap: 8px; } details.vt-lektor .pozn { margin: 0; }
+.vt-dl-odz { width: 44px; display: grid; place-items: center; } .vt-dl-odz .odz { width: 34px; height: auto; }
+.vt-oslava { display: grid; place-items: center; } .vt-oslava .odz { animation: zv-pop .6s; }
+.odz-mrizka { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
+.odz-polozka { margin: 0; display: grid; justify-items: center; gap: 6px; padding: 12px 8px; border-radius: 14px; background: var(--karta); border: 1.5px solid var(--linka); text-align: center; }
+.odz-polozka.tento { border-color: var(--modra); } .odz-polozka figcaption { display: grid; gap: 2px; } .odz-polozka small { color: var(--tuzka); font-size: 12px; }
+.odz-polozka.chybi b { color: var(--tuzka); }
+@media (max-width: 560px) { .vt-hlava { align-items: flex-start; } .vt-hlava .odz { width: 52px; height: auto; } .vt-ukol { grid-template-columns: auto minmax(0, 1fr); padding: 10px; } .vt-ukol a.tl { grid-column: 2; justify-self: start; }
+  .odz-mrizka { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .odz-polozka { padding: 8px 4px; } .odz-polozka .odz { width: 52px; height: auto; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 
@@ -3317,13 +3385,14 @@ const zbytecne = (pr) => { const s = []; pr.zad.rady.forEach((r, ri) => (r.pr ||
 function novy(pr, U) { return { skrt: new Set(), venku: new Set(), boxy: sablona(pr.sp).filter((k) => k.box).map(() => ""), akt: 0, rada: S_RADOU.includes(U), hlaska: "", text: "" }; }
 const vyber = (pr, st) => `<div class="tt-vyber">${pr.moz.map((m, j) => `<button type="button" data-tt-m="${j}"${st.venku.has(j) ? ' class="venku" disabled' : ""}><kbd>${j + 1}</kbd> ${D.esc(m)}</button>`).join("")}</div>`;
 const tecky = (zbyva, celkem) => `<span class="tt-pokusy" aria-label="Zbývá pokusů: ${zbyva} z ${celkem}">${"●".repeat(zbyva)}${"○".repeat(Math.max(0, celkem - zbyva))}</span>`;
+// Klávesnice pro Napiš má i „y“ (3.32): příklady typu x + y + 3 + 5 jdou psát i na telefonu (inputmode=none – systémová klávesnice se neukáže).
 function html(pr, st, C, cervene, zbyva) {
   const r = pr.rezim, zb = zbytecne(pr), hotovo = zb.every((k) => st.skrt.has(k));
   const dil = D.dilek(D.sCervenymi(pr.zad, cervene), C, { klik: true, skrt: st.skrt }); // klepnutí zašedne čtvereček (u Klepni je to úkol, jinde pomůcka)
   let odp = "";
   if (r === "vyber") odp = vyber(pr, st);
   else if (r === "napis") odp = `<form class="tt-psani"><input class="tt-vstup" inputmode="none" autocomplete="off" spellcheck="false" aria-label="Zjednodušený výraz" placeholder="např. 2x + 3" value="${D.esc(st.text)}"><button type="submit" class="hlavni">OK</button></form>
-    <div class="tt-klav">${["7", "8", "9", "x", "4", "5", "6", "²", "1", "2", "3", "+", "0", "(", ")", "−", "/", "·", "⌫"].map((k) => `<button type="button" data-tt-k="${k}">${k}</button>`).join("")}</div>`;
+    <div class="tt-klav">${["7", "8", "9", "x", "4", "5", "6", "y", "1", "2", "3", "²", "0", "(", ")", "+", "/", "·", "−", "⌫"].map((k) => `<button type="button" data-tt-k="${k}">${k}</button>`).join("")}</div>`;
   else if (r === "klepni") odp = hotovo ? `<p class="pozn">✓ Zbytečnosti pryč. Teď vyber výsledek:</p>${vyber(pr, st)}` : `<p class="pozn">Klepni na to, co jde pryč (čárkovaně) – zbývá ${zb.length - [...st.skrt].filter((k) => zb.includes(k)).length}.</p>`;
   else { let b = 0; const kus = (cast) => sablona(cast).map((k) => (k.box ? `<button type="button" class="tt-box${b === st.akt ? " ted" : ""}" data-tt-b="${b}" aria-label="Okénko ${b + 1}">${D.esc(st.boxy[b++]) || "&nbsp;"}</button>` : `<span>${D.esc(k.t)}</span>`)).join("");
     const zl = pr.sp.match(/^\(?(.+?)\)?\/(.+)$/); // zlomek se skládá nad sebe jako na papíře
