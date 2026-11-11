@@ -95,7 +95,8 @@ function panelBody(karta, uid) {
 function panelPristupy(karta, uid) {
   const p = data.profily.find((x) => x.id === uid) || {}, role = (app) => (data.pristupy.find((x) => x.uzivatel === uid && x.aplikace === app) || {}).role || "nema";
   $(".panel", karta).innerHTML = `<form class="pristupy-form" novalidate><table class="lekce-tab"><tbody>${Object.entries(APP).map(([a, n]) => `<tr><th>${n}</th><td><select name="${a}" aria-label="Přístup – ${n}">
-      ${[["nema", "nemá přístup"], ["zak", "žák"], ["host", "host"], ["lektor", "lektor"]].map(([v, t]) => `<option value="${v}" ${role(a) === v ? "selected" : ""}>${t}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table>
+      ${[["nema", "nemá přístup"], ["zak", "žák"], ["host", "host"], ["lektor", "lektor"]].filter(([v]) => !(a === "matika" && v === "host" && role(a) !== "host")).map(([v, t]) => `<option value="${v}" ${role(a) === v ? "selected" : ""}>${t}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table>
+    <p class="pozn">Host má jen Hry – v Matice jsou testy a řešení jen pro doučování.</p>
     <label class="zaskrt"><input type="checkbox" name="blok" ${p.zablokovan ? "checked" : ""}> Zablokovat – do aplikací se nedostane, postup zůstane uložený</label>
     <div class="radek"><button type="button" data-z="zavrit">Zavřít</button><button type="submit" class="hlavni">Uložit</button></div><p class="pozn stav-panel" aria-live="polite">Lektor vidí jen žáky z aplikací, kde je sám lektorem.</p></form>`;
   $("form", karta).addEventListener("submit", async (e) => { e.preventDefault(); const f = e.target, info = $(".stav-panel", karta); info.textContent = "Ukládám…";
@@ -119,11 +120,12 @@ function panelHeslo(karta, uid) {
 
 // ---------- přidat žáka (jen správce) ----------
 async function pridat(f) { const info = $("#pridat-stav");
-  const appky = [...f.querySelectorAll("[name=app]:checked")].map((c) => ({ id: c.value, role: "zak" }));
+  // host = jen Hry (Matika má testy a řešení jen pro doučování)
+  const appky = f.druh.value === "host" ? [{ id: "hry", role: "host" }] : [...f.querySelectorAll("[name=app]:checked")].map((c) => ({ id: c.value, role: "zak" }));
   if (f.heslo.value.length < 8) { info.textContent = "Heslo musí mít aspoň 8 znaků."; return; }
   info.textContent = "Zakládám…";
   try { await spravaUctu("zalozit", { jmeno: f.jmeno.value, prihlaseni: f.prihlaseni.value, heslo: f.heslo.value, aplikace: appky });
-    info.textContent = `Hotovo. ${f.jmeno.value} se přihlásí jménem „${f.prihlaseni.value.trim().toLowerCase()}“ a heslem, které jsi zadal.`; f.reset(); delete f.prihlaseni.dataset.rucne; f.hidden = true; await nactiZaky(ja); }
+    info.textContent = `Hotovo. ${f.jmeno.value} se přihlásí jménem „${f.prihlaseni.value.trim().toLowerCase()}“ a heslem, které jsi zadal.`; f.reset(); $("[data-pridat-appky]", f).hidden = false; $("[data-pridat-host]", f).hidden = true; delete f.prihlaseni.dataset.rucne; f.hidden = true; await nactiZaky(ja); }
   catch (x) { info.textContent = x.message; } }
 
 document.addEventListener("click", (e) => { const b = e.target.closest("[data-z]"); if (!b || !el() || !el().contains(b)) return; const karta = b.closest(".zak"), uid = karta && karta.dataset.uid;
@@ -135,6 +137,8 @@ document.addEventListener("click", (e) => { const b = e.target.closest("[data-z]
   p.dataset.co = b.dataset.z; p.hidden = false;
   if (b.dataset.z === "lekce") panelLekce(karta, uid); if (b.dataset.z === "heslo") panelHeslo(karta, uid); if (b.dataset.z === "body") panelBody(karta, uid); if (b.dataset.z === "pristupy") panelPristupy(karta, uid); });
 document.addEventListener("submit", (e) => { if (e.target.id === "form-pridat") { e.preventDefault(); pridat(e.target); } });
+document.addEventListener("change", (e) => { if (e.target.name !== "druh" || !e.target.closest("#form-pridat")) return; const f = e.target.form, host = f.druh.value === "host";
+  $("[data-pridat-appky]", f).hidden = host; $("[data-pridat-host]", f).hidden = !host; });
 // přihlašovací jméno z jména: „Petr Novák“ → „petr.novak“
 document.addEventListener("input", (e) => { if (e.target.name !== "jmeno" || !e.target.closest("#form-pridat")) return; const f = e.target.form;
   if (f.prihlaseni.dataset.rucne) return; f.prihlaseni.value = e.target.value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim().replace(/\s+/g, ".").replace(/[^a-z0-9._-]/g, "").slice(0, 30); });
