@@ -39,9 +39,9 @@
         <label>Jméno (jak se ukáže)<input name="jmeno" maxlength="40" required autocomplete="off"></label>
         <label>Přihlašovací jméno<input name="prihlaseni" maxlength="30" required autocapitalize="none" spellcheck="false" autocomplete="off"></label>
         <label>Heslo (aspoň 8 znaků)<input name="heslo" type="text" minlength="8" required autocomplete="new-password" spellcheck="false"></label>
-        <fieldset><legend>Účet pro</legend><label class="zaskrt"><input type="radio" name="druh" value="zak" checked> žáka</label><label class="zaskrt"><input type="radio" name="druh" value="host"> hosta – jen Hry</label></fieldset>
+        <fieldset><legend>Účet pro</legend><label class="zaskrt"><input type="radio" name="druh" value="zak" checked> žáka</label><label class="zaskrt"><input type="radio" name="druh" value="host"> hosta</label></fieldset>
         <fieldset data-pridat-appky><legend>Přístup</legend><label class="zaskrt"><input type="checkbox" name="app" value="matika" checked> Matika (žák)</label><label class="zaskrt"><input type="checkbox" name="app" value="hry" checked> Hry</label></fieldset>
-        <p class="pozn" data-pridat-host hidden>Host hraje jen Hry. Do Matiky nemá přístup – jsou v ní testy a řešení jen pro doučování.</p>
+        <p class="pozn" data-pridat-host hidden>Host dostane Matiku a Hry: lekce, hry a prázdné testy z přijímaček. Řešení a klíče neuvidí.</p>
         <div class="radek"><button type="button" data-z="pridat">Zrušit</button><button type="submit" class="hlavni">Založit účet</button></div>
         <p class="pozn">Žák nepotřebuje e-mail. Přihlásí se přihlašovacím jménem a heslem, které mu řekneš.</p>
       </form>

@@ -42,6 +42,17 @@ Deno.serve(async (req: Request) => {
   const radky = p.ok ? await p.json() : [];
   if (!Array.isArray(radky) || !radky.length) return json({ chyba: "bez přístupu" }, 403, h);
 
+  // host (role host) dostane jen verzi bez řešení a klíčů (host.html) a číslo verze – plnou Matiku ne (Učebna 0.8.12).
+  // Token už ověřila databáze výš; když se roli nepodaří zjistit, rozhodují pravidla databáze (žák se nesmí zaseknout).
+  if (soubor !== "host.html" && soubor !== "VERZE") {
+    try {
+      const b64 = auth.slice(7).split(".")[1].replace(/-/g, "+").replace(/_/g, "/"), sub = JSON.parse(atob(b64 + "=".repeat((4 - (b64.length % 4)) % 4))).sub;
+      const q = await fetch(`${SUPA}/rest/v1/pristupy?select=role&uzivatel=eq.${encodeURIComponent(sub)}&aplikace=eq.${app}`, { headers: { apikey, Authorization: auth } });
+      const r = q.ok ? await q.json() : [];
+      if (Array.isArray(r) && r.some((x: { role: string }) => x.role === "host")) return json({ chyba: "bez přístupu" }, 403, h);
+    } catch (_) { /* role neznámá – platí kontrola přístupu výš */ }
+  }
+
   if (!TOKEN) return json({ chyba: "server nemá GITHUB_TOKEN" }, 500, h);
   const g = await github(cesta);
   if (!g.ok) return json({ chyba: "soubor nenalezen", github: g.status }, g.status === 404 ? 404 : 502, h);

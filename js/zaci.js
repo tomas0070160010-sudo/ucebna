@@ -95,8 +95,8 @@ function panelBody(karta, uid) {
 function panelPristupy(karta, uid) {
   const p = data.profily.find((x) => x.id === uid) || {}, role = (app) => (data.pristupy.find((x) => x.uzivatel === uid && x.aplikace === app) || {}).role || "nema";
   $(".panel", karta).innerHTML = `<form class="pristupy-form" novalidate><table class="lekce-tab"><tbody>${Object.entries(APP).map(([a, n]) => `<tr><th>${n}</th><td><select name="${a}" aria-label="Přístup – ${n}">
-      ${[["nema", "nemá přístup"], ["zak", "žák"], ["host", "host"], ["lektor", "lektor"]].filter(([v]) => !(a === "matika" && v === "host" && role(a) !== "host")).map(([v, t]) => `<option value="${v}" ${role(a) === v ? "selected" : ""}>${t}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table>
-    <p class="pozn">Host má jen Hry – v Matice jsou testy a řešení jen pro doučování.</p>
+      ${[["nema", "nemá přístup"], ["zak", "žák"], ["host", "host"], ["lektor", "lektor"]].map(([v, t]) => `<option value="${v}" ${role(a) === v ? "selected" : ""}>${t}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table>
+    <p class="pozn">Host v Matice vidí lekce, hry a prázdné testy – bez řešení a klíčů.</p>
     <label class="zaskrt"><input type="checkbox" name="blok" ${p.zablokovan ? "checked" : ""}> Zablokovat – do aplikací se nedostane, postup zůstane uložený</label>
     <div class="radek"><button type="button" data-z="zavrit">Zavřít</button><button type="submit" class="hlavni">Uložit</button></div><p class="pozn stav-panel" aria-live="polite">Lektor vidí jen žáky z aplikací, kde je sám lektorem.</p></form>`;
   $("form", karta).addEventListener("submit", async (e) => { e.preventDefault(); const f = e.target, info = $(".stav-panel", karta); info.textContent = "Ukládám…";
@@ -120,8 +120,8 @@ function panelHeslo(karta, uid) {
 
 // ---------- přidat žáka (jen správce) ----------
 async function pridat(f) { const info = $("#pridat-stav");
-  // host = jen Hry (Matika má testy a řešení jen pro doučování)
-  const appky = f.druh.value === "host" ? [{ id: "hry", role: "host" }] : [...f.querySelectorAll("[name=app]:checked")].map((c) => ({ id: c.value, role: "zak" }));
+  // host = Matika a Hry v roli host: lekce, hry a prázdné testy, bez řešení a klíčů
+  const appky = f.druh.value === "host" ? [{ id: "matika", role: "host" }, { id: "hry", role: "host" }] : [...f.querySelectorAll("[name=app]:checked")].map((c) => ({ id: c.value, role: "zak" }));
   if (f.heslo.value.length < 8) { info.textContent = "Heslo musí mít aspoň 8 znaků."; return; }
   info.textContent = "Zakládám…";
   try { await spravaUctu("zalozit", { jmeno: f.jmeno.value, prihlaseni: f.prihlaseni.value, heslo: f.heslo.value, aplikace: appky });

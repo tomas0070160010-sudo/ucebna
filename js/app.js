@@ -53,9 +53,10 @@ async function ulozit() { if (!bezi || bezi.nahled) return; const { app, predpon
   try { if (await nahrat(app, predpona, ja.id)) stavSync(`Uloženo ${hodiny()}`, "ok"); } catch (e) { stavSync("Neuloženo – zkusím to znovu", "ne"); } }
 
 // jeden soubor aplikace pro všechny: nejdřív nejnovější verze ze soukromého repozitáře, ručně nahraný soubor je záloha
-async function souborAplikace(app, lektor) {
-  let html = null; try { html = await souborZRepa(`${app}/matika.html`); } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; }
-  if (!html) for (const soubor of lektor ? ["matika.html", "lektor.html", "zak.html"] : ["matika.html", "zak.html"]) { try { html = await souborText(`${app}/${soubor}`); break; } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; } }
+// host (role host): verze bez řešení a klíčů host.html – plnou Matiku nedostane (server ji hostovi ani nevydá)
+async function souborAplikace(app, lektor, host = false) {
+  let html = null; try { html = await souborZRepa(`${app}/${host ? "host" : "matika"}.html`); } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; }
+  if (!html) for (const soubor of host ? ["host.html"] : lektor ? ["matika.html", "lektor.html", "zak.html"] : ["matika.html", "zak.html"]) { try { html = await souborText(`${app}/${soubor}`); break; } catch (e) { if (e.kod === "sit" || e.kod === "odhlaseno") throw e; } }
   if (!html) return null;
   // soubor z artefaktu nemá kostru stránky – bez <!doctype> by se kreslil ve starém režimu prohlížeče
   return /^\s*<!doctype/i.test(html) ? html : `<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>${html}</body></html>`;
@@ -76,7 +77,8 @@ async function spustit(id) {
   try {
     await stahnout(app, z.predpona, ja.id);
     const lektor = ja.spravce || ja.pristupy[app] === "lektor";
-    let html = await souborAplikace(app, lektor);
+    const host = !lektor && ja.pristupy[app] === "host";
+    let html = await souborAplikace(app, lektor, host);
     if (!html) { stavSync(lektor ? "Matika tu ještě není – nahraj ji ve Správě." : "Matika tu ještě není. Lektor ji brzy přidá.", "ne"); return; }
     if (!lektor) html = await zakovska(app, html, ja.id);
     if (zd.hash === "#hry") html = vlozPred(html, `<script>window.__HRY = true;<\/script>\n`); // z dlaždice Hry: hry se ukážou hned
