@@ -3,6 +3,7 @@
 Stránka pro doučování a hry (přihlášení přes Supabase projekt `ucebna`).
 
 ## Verze
+- **0.8.13** (11. 11. 2026) – Hry: Člověče s mapami (Klasická, Malá pro dva, Ostrov s mosty, Témata) a kostkami (klasická, dvě kostky ±, zlomková, s ❓); texty karet bez rodu. Matika 3.29 pro žáky i hosty. Pojistka v pravidlech úložiště (`supabase/migrace/0.8.12-host-jen-testy.sql`) se podle rozhodnutí Tomáše 11. 11. nepoužije – klíče, archy a lektorskou verzi host nedostane ani bez ní.
 - **0.8.12** (11. 11. 2026) – Host v Matice: Učebna mu načte Matiku pro hosty (host.html – lekce, hry a prázdné testy z přijímaček, bez řešení, klíčů a archu); funkce „soubor“ hostovi plnou Matiku nevydá; Přidat → „hosta“ dá Matiku i Hry v roli host. Pravidlo úložiště jako pojistka čeká na OK (migrace 0.8.12).
 - **0.8.11** (11. 11. 2026) – Žáci › Přidat: účet pro hosta = jen Hry (role host); v Přístupech už host do Matiky nejde nastavit – Matika má testy a řešení jen pro doučování.
 - **0.8.10** (11. 11. 2026) – Hry: v Člověče zavře kartu počítače počítač sám (rychle, když hraje i člověk, déle, když hrají jen počítače), pod kartou ubývá pruh, klepnutím zmizí hned; Žáci › Body a odměny: lektor může dát dřív i 8 živých pozadí stránky z Matiky 3.28.

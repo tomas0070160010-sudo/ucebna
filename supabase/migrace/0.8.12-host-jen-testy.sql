@@ -1,6 +1,7 @@
 -- Učebna 0.8.12: host (role host) smí z úložiště číst jen prázdné testy (aplikace/<app>/testy/…) a verzi pro hosty (host.html).
 -- Plnou Matiku (matika.html, zak.html), klíče a vyplněné archy (klice/…) ani lektor.html nedostane. Žák a lektor beze změny.
 -- Pojistka navíc: dnes v úložišti žádná plná Matika neleží (11. 11.), klíče a lektor.html host nedostane už teď.
+-- Tomáš 11. 11.: zatím nepoužívat (nepotřebné – viz README 0.8.13). Kdyby se plná Matika někdy nahrála do úložiště, použít.
 -- Použít až po OK Tomáše (změna pravidel na serveru – nástroj chce potvrzení). Ověření: host dostane testy/…, matika.html ne.
 drop policy if exists "aplikace: čtení podle přístupu" on storage.objects;
 create policy "aplikace: čtení podle přístupu" on storage.objects for select to authenticated using (

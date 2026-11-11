@@ -923,6 +923,44 @@ body.na-prehledu nav.zalozky { display: none; }
 .cl-otazka-karta { display: grid; gap: 12px; justify-items: center; text-align: center; max-width: 420px; padding: 20px; border-radius: 18px; background: var(--karta); box-shadow: 0 18px 40px rgb(0 0 0 / .25); animation: zv-pop .35s cubic-bezier(.2, 1.4, .4, 1); }
 .cl-otazka-karta .nad { font: 800 12px var(--f-nadpis); letter-spacing: .1em; text-transform: uppercase; color: var(--modra); } .cl-otazka-karta b { font-size: 19px; }
 .cl-moznosti { display: grid; gap: 8px; width: 100%; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+/* Člověče – výběr mapy a kostky, mapy (Ostrov, Témata), herní kostky, vzhled kostek z Odměn */
+.cl-volba fieldset.cl-sada { width: 100%; border: 1.5px solid var(--linka); border-radius: 14px; padding: 8px 12px 12px; margin: 0; display: grid; gap: 8px; min-width: 0; text-align: left; }
+.cl-sada legend { font-weight: 800; padding: 0 6px; }
+.cl-vk-mrizka { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; }
+.cl-vk { position: relative; display: grid; justify-items: center; align-content: start; gap: 3px; padding: 10px 6px 9px; border: 2px solid var(--linka); border-radius: 12px; background: var(--karta); cursor: pointer; text-align: center; }
+.cl-vk input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.cl-vk:hover { border-color: var(--modra); } .cl-vk:has(input:checked) { border-color: var(--modra); background: color-mix(in srgb, var(--modra) 10%, var(--karta)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--modra) 25%, transparent); }
+.cl-vk:has(input:focus-visible) { outline: 3px solid var(--modra); outline-offset: 2px; }
+.cl-vk b { font-size: 15px; line-height: 1.2; } .cl-vk small { color: var(--tuzka); font-size: 13px; line-height: 1.25; }
+.cl-vk-obr { height: 46px; display: grid; place-items: center; } .cl-vk-obr .cl-kostka { width: 42px; height: 42px; } .cl-vk-obr .cl-kostky-dve .cl-kostka { width: 34px; height: 34px; }
+.cl-mini { width: 46px; height: 46px; fill: none; stroke: var(--inkoust); stroke-width: 6; stroke-dasharray: 1 8; stroke-linecap: round; }
+.cl-mini .most { stroke: var(--modra); } .cl-mini [class^="t"] { stroke-dasharray: none; stroke-width: 9; }
+.cl-mini .t0 { stroke: var(--oranzova); } .cl-mini .t1 { stroke: var(--modra); } .cl-mini .t2 { stroke: var(--zelena); } .cl-mini .t3 { stroke: var(--fialova); }
+.cl-pravidlo { margin: 0; font-size: 14px; color: var(--tuzka); }
+.cl-temata { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 10px; } .cl-temata[hidden] { display: none; }
+.cl-temata label { display: flex; gap: 6px; align-items: center; min-width: 0; } .cl-temata select { flex: 1; min-width: 0; padding: 8px; font-size: 14px; } .cl-temata small { grid-column: 1 / -1; }
+.cl-kostky-dve { display: inline-flex; gap: 4px; } .cl-kostky-dve .cl-kostka { width: 46px; height: 46px; }
+.cl-kostka-text { font: 800 27px var(--f-nadpis); text-anchor: middle; fill: var(--inkoust); } .cl-kostka-text.velky { font-size: 54px; } .cl-kostka-cara { stroke: var(--inkoust); stroke-width: 5; stroke-linecap: round; }
+.cl-pm { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } .cl-pm-kostky { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: center; } .cl-pm-kostky .cl-kostka { width: 52px; height: 52px; }
+.cl-pm button { display: grid; gap: 4px; justify-items: center; font-size: 21px; padding: 9px 6px; } .cl-pm button small { font: 700 11px var(--f-text); color: var(--tuzka); text-transform: uppercase; letter-spacing: .07em; }
+.cl-pole.most { fill: color-mix(in srgb, var(--cokolada) 20%, var(--karta)); stroke: var(--cokolada); } .cl-znak.most { font: 14px system-ui, "Segoe UI Emoji", "Apple Color Emoji", sans-serif; }
+.cl-deska.mapa-ostrov .cl-podklad { fill: color-mix(in srgb, var(--zelena) 10%, var(--karta)); stroke: color-mix(in srgb, var(--modra) 55%, var(--karta)); stroke-width: 4; }
+.cl-zatoka { fill: color-mix(in srgb, var(--modra) 24%, var(--karta)); stroke: color-mix(in srgb, var(--modra) 45%, var(--karta)); stroke-width: 2; }
+.cl-most-okraj { fill: none; stroke: var(--cokolada); stroke-width: 13; stroke-linecap: round; } .cl-most-prkna { fill: none; stroke: var(--cokolada-s); stroke-width: 8; stroke-dasharray: 3 4; }
+.cl-most-znak { font: 15px system-ui, "Segoe UI Emoji", "Apple Color Emoji", sans-serif; text-anchor: middle; pointer-events: none; }
+.cl-ctvrt { fill: none; stroke-width: 36; stroke-linecap: round; stroke-linejoin: round; opacity: .2; }
+.cl-tema-stitek { font: 800 13px var(--f-nadpis); text-anchor: middle; paint-order: stroke; stroke: var(--karta); stroke-width: 3px; stroke-linejoin: round; }
+.cl-karta.bal-most { --k: var(--cokolada); } .cl-karta.bal-kostka { --k: var(--oranzova); } .cl-karta-tema { color: var(--tuzka); font-weight: 700; }
+.cl-legenda summary small { display: block; font-weight: 500; color: var(--tuzka); padding-left: 18px; } .cl-leg-pravidlo { margin: 8px 0 0; font-size: 14px; }
+.cl-leg-temata { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0 0; font-size: 14px; } .cl-leg-temata > span { display: inline-flex; gap: 5px; align-items: center; } .cl-leg-temata .cl-tecka { width: 12px; height: 12px; }
+.cl-hvezdy-nebe { fill: #160d33; } #cl-hvezdy circle { fill: #fff; opacity: .85; }
+.cl-skin-neon .cl-kostka-tvar { fill: #111a3a; stroke: #36f9f6; } .cl-skin-neon .cl-kostka circle, .cl-skin-neon .cl-kostka-text { fill: #ff4fd8; } .cl-skin-neon .cl-kostka-cara { stroke: #ff4fd8; }
+.cl-skin-neon .cl-kostka { filter: drop-shadow(0 0 4px #36f9f699); } .cl-skin-neon .cl-podklad { fill: #0b0f24; stroke: #36f9f6; }
+.cl-skin-drevo .cl-kostka-tvar { fill: #d4a06a; stroke: #7a4f24; } .cl-skin-drevo .cl-kostka circle, .cl-skin-drevo .cl-kostka-text { fill: #3b2410; } .cl-skin-drevo .cl-kostka-cara { stroke: #3b2410; }
+.cl-skin-drevo .cl-podklad { fill: #e2bd8c; stroke: #7a4f24; }
+.cl-skin-vesmir .cl-kostka-tvar { fill: #1b1145; stroke: #7af0e4; } .cl-skin-vesmir .cl-kostka circle, .cl-skin-vesmir .cl-kostka-text { fill: #ffd36b; } .cl-skin-vesmir .cl-kostka-cara { stroke: #ffd36b; }
+.cl-skin-vesmir .cl-podklad { fill: url(#cl-hvezdy); stroke: #7af0e4; }
+.odm-kostky { display: flex; gap: 6px; align-items: center; } .odm-kostky .tt-c { position: static; border: 2px solid; } .odm-nahled .cl-kostka { width: 34px; height: 34px; flex: none; margin-left: 4px; }
 /* piškvorky */
 .pi-obal { width: 100%; max-width: 540px; } .pi-deska { display: block; width: 100%; height: auto; touch-action: manipulation; }
 .pi-podklad { fill: var(--karta); stroke: var(--linka); stroke-width: 2; } .pi-cara { stroke: var(--mrizka); stroke-width: 1.2; }
@@ -1339,7 +1377,41 @@ const OtazkyHer = (() => {
   function vyzva() { let i; do { i = Math.floor(Math.random() * VYZVY.length); } while (posledni.includes(i) && posledni.length < VYZVY.length); posledni = [i, ...posledni].slice(0, 12);
     const [t, sp, spatne] = VYZVY[i]; return { t, sp, m: mix([sp, ...spatne]) }; }
   const matika = () => vyber(MAT)();
-  return { matika, vyzva };
+  // ---------- otázky podle tématu (mapa Témata v Člověče): vlastní generované příklady ----------
+  const TEMY = { zlomky: "Zlomky", procenta: "Procenta", rovnice: "Rovnice", uhly: "Úhly", geometrie: "Obvody a obsahy", vyrazy: "Výrazy", cas: "Čas a jednotky", nasobilka: "Násobilka" };
+  const des = (x) => String(x).replace(".", ","), kl = (a) => a.filter((y) => y > 0 && Number.isInteger(y));
+  const pr = (t, sp, kolem, j = "") => ({ t, sp: sp + j, m: moznosti(sp + j, kolem.map((y) => y + j)) });
+  const TEMA = {
+    zlomky: [MAT[4], MAT[5],
+      () => { const [a, b] = vyber([[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [2, 5], [3, 5], [4, 5], [1, 6], [5, 6]]), k = nah(2, 5); return pr(`Zkrať zlomek ${k * a}/${k * b} na základní tvar.`, `${a}/${b}`, [`${a}/${k * b}`, `${k * a}/${b}`, `${a + 1}/${b + 1}`, `${b}/${a}`]); },
+      () => { const d = vyber([5, 7, 11]), a = nah(1, d - 2), b = nah(1, d - 1 - a); return pr(`${a}/${d} + ${b}/${d} = ?`, `${a + b}/${d}`, [`${a + b}/${2 * d}`, `${a * b}/${d}`, `${a + b + 1}/${d}`, `${Math.max(1, Math.abs(a - b))}/${d}`]); }],
+    procenta: [MAT[0],
+      () => { const [n, p] = vyber([[20, 25], [20, 75], [40, 25], [40, 75], [50, 10], [80, 25], [200, 10], [200, 25], [400, 75], [50, 50]]); return pr(`Kolik procent je ${(n * p) / 100} z ${n}?`, p, [10, 20, 25, 50, 75, 40], " %"); },
+      () => { const n = vyber([200, 400, 500, 600, 800]), p = vyber([10, 20, 25, 50]), sp = (n * (100 - p)) / 100; return pr(`Mikina stojí ${n} Kč a je zlevněná o ${p} %. Kolik stojí teď?`, sp, kl([(n * p) / 100, n - p, sp - 10, sp + (n * p) / 100]), " Kč"); }],
+    rovnice: [MAT[2],
+      () => { const a = nah(2, 9), x = nah(2, 10); return pr(`${a}x = ${a * x}. Kolik je x?`, x, kl([a * x - a, x + 1, x - 1, a, a * x])); },
+      () => { const a = nah(2, 12), b = nah(2, 15); return pr(`x − ${a} = ${b}. Kolik je x?`, a + b, kl([b - a, b, a + b + 1, a + b - 1])); },
+      () => { const x = nah(1, 9), a = nah(1, 9); return pr(`2x + ${a} = ${2 * x + a}. Kolik je x?`, x, kl([2 * x, x + 1, x - 1, x + a, 2 * x + a])); }],
+    uhly: [MAT[3],
+      () => { let u; do u = 5 * nah(4, 34); while (u === 90); return pr(`Vedlejší úhel k úhlu ${u}° má kolik stupňů?`, 180 - u, kl([90 - u, u, 360 - u, 190 - u]), "°"); },
+      () => { const a = 5 * nah(6, 16), b = 5 * nah(6, 16), c = 180 - a - b; return pr(`Trojúhelník má úhly ${a}° a ${b}°. Kolik stupňů má třetí úhel?`, c, kl([360 - a - b, c + 10, c - 10, a + b]), "°"); }],
+    geometrie: [MAT[6],
+      () => { const a = nah(2, 9), b = nah(2, 9); return pr(`Obdélník má strany ${a} cm a ${b} cm. Jaký má obsah?`, a * b, kl([2 * (a + b), a + b, a * b + a, a * b - b]), " cm²"); },
+      () => { const a = nah(2, 12), b = nah(2, 12); return pr(`Obdélník má strany ${a} cm a ${b} cm. Jaký má obvod?`, 2 * (a + b), kl([a * b, a + b, 2 * a + b, 2 * (a + b) + 2]), " cm"); }],
+    vyrazy: [
+      () => { const a = nah(2, 9), b = nah(2, 9), v = vyber(["a", "b", "x", "y"]); return pr(`${a}${v} + ${b}${v} = ?`, `${a + b}${v}`, [`${a * b}${v}`, `${a + b}${v}²`, `${a + b + 1}${v}`, `${a + b}`]); },
+      () => { const a = nah(2, 9), b = nah(1, 9), c = nah(2, 6); return pr(`Kolik je ${a}x + ${b}, když x = ${c}?`, a * c + b, kl([a + c + b, a * c, a * (c + b), a * c + b + 1])); },
+      () => { const b = nah(2, 7), a = b + nah(2, 6), v = vyber(["a", "b", "x", "y"]); return pr(`${a}${v} − ${b}${v} = ?`, `${a - b}${v}`, [`${a + b}${v}`, `${a - b}`, `${a - b + 1}${v}`, `${a - b}${v}²`]); }],
+    cas: [
+      () => { const h = nah(1, 3), m = vyber([10, 15, 20, 30, 45]); return pr(`Kolik minut je ${h} h ${m} min?`, h * 60 + m, [h * 100 + m, h * 60 + m + 10, h * 60, (h + 1) * 60 + m], " min"); },
+      () => { const d = vyber([1.5, 2.5, 3.5, 4.2, 0.8, 1.25]), sp = Math.round(d * 100); return { t: `Kolik centimetrů je ${des(d)} m?`, sp: sp + " cm", m: moznosti(sp + " cm", [des(d * 10) + " cm", Math.round(d * 1000) + " cm", sp + 10 + " cm", des(d) + " cm"]) }; },
+      () => { const m = nah(2, 9); return pr(`Kolik sekund je ${m} min?`, m * 60, [m * 100, m * 60 + 60, m * 30, m * 10], " s"); },
+      () => { const d = vyber([0.5, 1.5, 2.5, 0.25, 3.2]), sp = Math.round(d * 1000); return { t: `Kolik gramů je ${des(d)} kg?`, sp: sp + " g", m: moznosti(sp + " g", [Math.round(d * 100) + " g", sp + 100 + " g", Math.round(d * 10000) + " g"]) }; }],
+    nasobilka: [MAT[1], MAT[7],
+      () => { const a = nah(2, 9), b = nah(2, 9); return pr(`${a * b} : ${a} = ?`, b, kl([b + 1, b - 1, a, a * b - a])); }],
+  };
+  const tema = (k) => vyber(TEMA[k] || MAT)();
+  return { matika, vyzva, tema, TEMY };
 })();
 
 // ================= ⚓ Lodě: proti počítači, dvě hráčky u jednoho zařízení, online (kód místnosti) =================
@@ -1489,7 +1561,7 @@ return { spust, nahodne, zasah, pocitacStrela, lzePolozit, FLOTILA };
 })();
 
 // ================= 🎲 Člověče 2.0 – akční políčka a balíčky karet Náhoda a Truhla (vlastní znění) =================
-// Klasická deska: v každé čtvrtině (10 polí od startu barvy) je 5 akčních polí – 2 🛡 nebo 🎁, 3 🃏, 5 ❓, 6 🚀 / 🧊 / 🌀, 8 ★.
+// Klasická deska (rozmístění na ostatních mapách: h-clovece-mapy.js): v každé čtvrtině (10 polí od startu barvy) je 5 akčních polí – 2 🛡 nebo 🎁, 3 🃏, 5 ❓, 6 🚀 / 🧊 / 🌀, 8 ★.
 // Efekt karty: vpred / zpet (pole), znovu (hoď znovu), stit (do dalšího tahu tě nikdo nesebere), vymena (s nejbližší figurkou soupeře před tebou),
 // vyjed (figurka z domečku na start), vitr (ostatní o 1 zpět), stoj (vynecháš hod), vyber (příští hod si vybereš). priklad: efekt jen se správnou odpovědí.
 const CloveceePole = (() => {
@@ -1505,10 +1577,12 @@ const DRUHY = {
   zkratka: { ik: "🚀", n: "Zkratka", t: "Správná odpověď = skok o 5 polí vpřed." },
   led: { ik: "🧊", n: "Led", t: "Správná odpověď = jedeš dál, jinak jedno kolo stojíš." },
   vir: { ik: "🌀", n: "Vír", t: "Všechny ostatní figurky v této čtvrtině desky jdou o 1 pole zpět." },
+  most: { ik: "🌉", n: "Most", t: "Rozcestí: přes most (příklad, správně = 6 polí vpřed na druhý břeh), nebo dlouhou cestou kolem zátoky." },
+  kostka: { ik: "🎲", n: "Kostka s ❓", t: "Správně = šestka, špatně tah propadá." }, // není pole – otázka z herní kostky
 };
 const NAHODA = [
-  { id: "kolo", ik: "🚲", n: "Půjčil sis kolo", t: "Posuň se o 3 pole vpřed.", ef: { vpred: 3 } },
-  { id: "kaluz", ik: "🪤", n: "Kaluž", t: "Uklouzl jsi – o 2 pole zpět.", ef: { zpet: 2 } },
+  { id: "kolo", ik: "🚲", n: "Půjčené kolo", t: "Posuň se o 3 pole vpřed.", ef: { vpred: 3 } },
+  { id: "kaluz", ik: "🪤", n: "Kaluž", t: "Uklouznutí – o 2 pole zpět.", ef: { zpet: 2 } },
   { id: "vymena", ik: "🔁", n: "Výměna", t: "Prohoď se s nejbližší figurkou soupeře před tebou.", ef: { vymena: true } },
   { id: "stit", ik: "🛡", n: "Štít", t: "Do tvého dalšího tahu tě nikdo nesebere.", ef: { stit: true } },
   { id: "den", ik: "🍀", n: "Šťastný den", t: "Hoď ještě jednou.", ef: { znovu: true } },
@@ -1522,7 +1596,7 @@ const NAHODA = [
   { id: "dest", ik: "🌧", n: "Prší", t: "Schovej se – o 1 pole zpět.", ef: { zpet: 1 } },
   { id: "vytah", ik: "🛗", n: "Výtah", t: "Posuň se o 2 pole vpřed.", ef: { vpred: 2 } },
   { id: "priklad3", ik: "🧮", n: "Příklad za 3", t: "Vyřeš příklad – správně = 3 pole vpřed.", ef: { vpred: 3 }, priklad: true },
-  { id: "presny", ik: "🎯", n: "Přesný hod", t: "Vyřeš příklad – správně = příští hod si vybereš sám.", ef: { vyber: true }, priklad: true },
+  { id: "presny", ik: "🎯", n: "Přesný hod", t: "Vyřeš příklad – správně = příští hod si vybereš.", ef: { vyber: true }, priklad: true },
   { id: "zelena", ik: "🚦", n: "Zelená vlna", t: "Vyřeš příklad – správně = házíš znovu.", ef: { znovu: true }, priklad: true },
   { id: "most", ik: "🌉", n: "Most", t: "Vyřeš příklad – správně = 4 pole vpřed.", ef: { vpred: 4 }, priklad: true },
   { id: "kouzlo", ik: "✨", n: "Kouzelný štít", t: "Vyřeš příklad – správně = do dalšího tahu tě nikdo nesebere.", ef: { stit: true }, priklad: true },
@@ -1534,7 +1608,7 @@ const TRUHLA = [
   { id: "t-znovu", ik: "💎", n: "Poklad", t: "Hoď ještě jednou.", ef: { znovu: true } },
   { id: "t-vyjed", ik: "🗝", n: "Klíč od domečku", t: "Vyjeď figurkou z domečku na start (když žádnou doma nemáš, jdi o 1 vpřed).", ef: { vyjed: true } },
   { id: "t-vpred4", ik: "🦅", n: "Orel", t: "Posuň se o 4 pole vpřed.", ef: { vpred: 4 } },
-  { id: "t-vyber", ik: "🎯", n: "Kouzelná kostka", t: "Příští hod si vybereš sám.", ef: { vyber: true } },
+  { id: "t-vyber", ik: "🎯", n: "Kouzelná kostka", t: "Příští hod si vybereš.", ef: { vyber: true } },
   { id: "t-vymena", ik: "🔁", n: "Tajná chodba", t: "Prohoď se s nejbližší figurkou soupeře před tebou.", ef: { vymena: true } },
   { id: "t-kompas", ik: "🧭", n: "Kompas", t: "Posuň se o 3 pole vpřed.", ef: { vpred: 3 } },
 ];
@@ -1545,55 +1619,206 @@ function tahni(druhBal, bezPrikladu) { const B = (druhBal === "truhla" ? TRUHLA 
 return { druh, DRUHY, NAHODA, TRUHLA, tahni };
 })();
 
-// ================= 🎲 Člověče, nezlob se 2.0: 2–4 hráči u jednoho zařízení, počítač za chybějící, akční políčka a karty =================
+// ================= 🗺 Člověče – mapy: Klasická, Malá pro dva, Ostrov s mosty, Témata =================
+// Mapa = dráha v mřížce (kreslí se po 40 px), místa hráčů (start na dráze, domeček, cíl) a rozmístění akčních polí podle vzoru úseku.
+// Pozice figurky je relativní k jejímu startu: -1 domeček, 0 … N-1 dráha, N … N+F-1 cíl. Uložená hra bez mapy = Klasická.
+// Ostrov: na poli 🌉 si hráč vybere most (6 polí vpřed, s příkladem), nebo dlouhou cestu kolem zátoky. Témata: každá čtvrtina dráhy má své téma otázek.
+const CloveceMapy = (() => {
+const KRIZ = [[4,10],[4,9],[4,8],[4,7],[4,6],[3,6],[2,6],[1,6],[0,6],[0,5],[0,4],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[4,1],[4,0],[5,0],[6,0],[6,1],[6,2],[6,3],[6,4],[7,4],[8,4],[9,4],[10,4],[10,5],[10,6],[9,6],[8,6],[7,6],[6,6],[6,7],[6,8],[6,9],[6,10],[5,10]];
+const KRIZ_CIL = [[[5,9],[5,8],[5,7],[5,6]], [[1,5],[2,5],[3,5],[4,5]], [[5,1],[5,2],[5,3],[5,4]], [[9,5],[8,5],[7,5],[6,5]]];
+const KRIZ_DOM = [[[0,9],[1,9],[0,10],[1,10]], [[0,0],[1,0],[0,1],[1,1]], [[9,0],[10,0],[9,1],[10,1]], [[9,9],[10,9],[9,10],[10,10]]];
+// čtvercový okruh lo…hi: začíná dole v [x0, hi] a jde po směru hodinových ručiček (doleva, nahoru, doprava, dolů)
+function okruh(lo, hi, x0) { const c = []; for (let x = x0; x >= lo; x--) c.push([x, hi]); for (let y = hi - 1; y >= lo; y--) c.push([lo, y]);
+  for (let x = lo + 1; x <= hi; x++) c.push([x, lo]); for (let y = lo + 1; y <= hi; y++) c.push([hi, y]); for (let x = hi - 1; x > x0; x--) c.push([x, hi]); return c; }
+// místa 1–3 vzniknou otočením místa 0 o čtvrt kola kolem středu desky 11 × 11
+const R = ([x, y]) => [10 - y, x], ctyri = (b) => [0, 1, 2, 3].map((s) => b.map((p) => { for (let i = 0; i < s; i++) p = R(p); return p; }));
+const R2 = ([x, y]) => [8 - x, 8 - y]; // Malá: druhé místo naproti (otočení o půl kola kolem středu 9 × 9)
+const KLAS = { 2: ["bezpecne", "truhla", "bezpecne", "truhla"], 3: "nahoda", 5: "otazka", 6: ["zkratka", "led", "zkratka", "vir"], 8: "vyzva" };
+const MALA_D = [[0,8],[1,8],[2,8]], MALA_C = [[3,6],[3,5],[3,4]];
+const MAPY = {
+  klasicka: { n: "Klasická", kr: "40 polí · 2–4 hráči", t: "Dráha do kříže, 40 polí, 4 figurky. Hrají 2–4.", N: 40, F: 4, mist: 4, rozmer: 11, start: [0, 10, 20, 30], draha: KRIZ, cil: KRIZ_CIL, dom: KRIZ_DOM, usek: 10, vzor: KLAS,
+    mini: `<path d="M40 95V60H5V40h35V5h20v35h35v20H60v35z"/>` },
+  mala: { n: "Malá pro dva", kr: "24 polí · 2 hráči", t: "Malý okruh, 24 polí a 3 figurky. Rychlá hra asi na 10 minut – hrají jen dva.", N: 24, F: 3, mist: 2, rozmer: 9, start: [0, 12], draha: okruh(1, 7, 2),
+    cil: [MALA_C, MALA_C.map(R2)], dom: [MALA_D, MALA_D.map(R2)], usek: 12, vzor: { 2: ["bezpecne", "truhla"], 4: "nahoda", 6: "otazka", 8: ["zkratka", "vir"], 10: "vyzva" },
+    mini: `<rect x="15" y="15" width="70" height="70" rx="18"/>` },
+  ostrov: { n: "Ostrov s mosty", kr: "40 polí · rozcestí", t: "Na poli 🌉 si vybereš: přes most (příklad, správně = 6 polí vpřed na druhý břeh), nebo dlouhou cestou kolem zátoky, kde čeká 🎁 Truhla.",
+    N: 40, F: 4, mist: 4, rozmer: 11, start: [0, 10, 20, 30], draha: okruh(0, 10, 4), cil: KRIZ_CIL, dom: ctyri([[3,7],[4,7],[3,8],[4,8]]), usek: 10, most: 6,
+    vzor: { 1: "most", 3: "otazka", 4: "truhla", 5: "nahoda", 6: "bezpecne", 8: "vyzva" }, // konec mostu (7) volný, ať most nezavře 🛡
+    mini: `<path d="M10 80 C10 20, 90 20, 90 80"/><path d="M10 80 H90" class="most"/>` },
+  temata: { n: "Témata", kr: "čtvrtina = téma", t: "Každá čtvrtina dráhy má své téma. Otázky jsou z tématu, kde figurka stojí. Otázky jsou zapnuté vždy.", N: 40, F: 4, mist: 4, rozmer: 11, start: [0, 10, 20, 30],
+    draha: KRIZ, cil: KRIZ_CIL, dom: KRIZ_DOM, usek: 10, temata: true, vzor: { ...KLAS, 8: "otazka" },
+    mini: `<path d="M12 50a38 38 0 0 1 38-38" class="t0"/><path d="M50 12a38 38 0 0 1 38 38" class="t1"/><path d="M88 50a38 38 0 0 1-38 38" class="t2"/><path d="M50 88a38 38 0 0 1-38-38" class="t3"/>` },
+};
+Object.entries(MAPY).forEach(([id, m]) => { m.id = id; m.ctvrt = m.N / 4; });
+const mapa = (id) => MAPY[id] || MAPY.klasicka;
+// druh pole i (0…N-1); akce = false → jen Otázka, Výzva a most (most patří k Ostrovu vždy)
+function druh(m, i, akce) { const d = m.vzor[i % m.usek], x = Array.isArray(d) ? d[Math.floor(i / m.usek)] : d || null; return akce || x === "otazka" || x === "vyzva" || x === "most" ? x : null; }
+const BARVY_TEMAT = ["var(--oranzova)", "var(--modra)", "var(--zelena)", "var(--fialova)"];
+const STITKY = [[1.5, 7.5], [1.5, 2.5], [8.5, 2.5], [8.5, 7.5]]; // popisek tématu v rohu u jeho čtvrtiny
+// podklad pod políčky: zátoky a mosty (Ostrov), barevné čtvrtiny s názvem tématu (Témata)
+function pozadi(m, temata, B) { const px = ([x, y]) => [x * B + B / 2, y * B + B / 2]; let s = "";
+  if (m.most) { [[1.3, 8.7], [1.3, 1.3], [8.7, 1.3], [8.7, 8.7]].forEach((c) => { const [x, y] = px(c); s += `<circle cx="${x}" cy="${y}" r="${B * 1.05}" class="cl-zatoka"/>`; });
+    for (let q = 0; q < 4; q++) { const [ax, ay] = px(m.draha[q * m.ctvrt + 1]), [bx, by] = px(m.draha[q * m.ctvrt + 1 + m.most]), d = `M${ax} ${ay}L${bx} ${by}`;
+      s += `<path d="${d}" class="cl-most-okraj"/><path d="${d}" class="cl-most-prkna"/><text x="${(ax + bx) / 2}" y="${(ay + by) / 2 + 5}" class="cl-most-znak">🌉</text>`; } }
+  if (m.temata && temata) for (let q = 0; q < 4; q++) { const body = m.draha.slice(q * m.ctvrt, (q + 1) * m.ctvrt).map(px).map((p) => p.join(" ")).join(" L"), [tx, ty] = px(STITKY[q]);
+    s += `<path d="M${body}" class="cl-ctvrt" style="stroke:${BARVY_TEMAT[q]}"/><text x="${tx}" y="${ty + 5}" class="cl-tema-stitek" style="fill:${BARVY_TEMAT[q]}">${OtazkyHer.TEMY[temata[q]] || ""}</text>`; }
+  return s; }
+return { mapa, druh, pozadi, MAPY, BARVY_TEMAT, SEZNAM: Object.keys(MAPY) };
+})();
+
+// ================= 🎲 Člověče – herní kostky (Klasická, Dvě kostky ±, Zlomková, Kostka s ❓) a vzhled kostky z Odměn =================
+// Hod vrací { k } (o kolik polí), u Dvou kostek { a, b } (hráč pak vybere součet, nebo rozdíl), u Zlomkové { stena, k }, u ❓ { otaznik: true }.
+// „Šestka“ (vyjetí z domečku, hod znovu) = posun o 6: Zlomková ½ z 12, u Dvou kostek vybraný výsledek 6, u ❓ správně vyřešený příklad.
+// Vzhled (Neon, Dřevo, Vesmír) je odměna za ⭐ (Odmeny.kostky()) – platí v Tetrisu i tady (kostka a deska); na veřejné stránce her odměny nejsou.
+const CloveceKostky = (() => {
+const TYPY = {
+  klasicka: { n: "Klasická 1–6", kr: "jako vždy", t: "Hodíš 1–6. Šestkou vyjedeš z domečku a házíš znovu.", sestku: "šestku" },
+  plusminus: { n: "Dvě kostky ±", kr: "součet, nebo rozdíl", t: "Hodíš dvěma kostkami a vybereš, jestli jdeš o jejich součet, nebo rozdíl. Výsledek 6 platí jako šestka.", sestku: "výsledek 6" },
+  zlomkova: { n: "Zlomková", kr: "část z 12 polí", t: "Stěny ½, ⅓, ¼, ⅔, ¾ a 1. Jdeš o tu část z 12 polí – třeba ¾ z 12 = 9. ½ z 12 = 6 platí jako šestka. Do cíle nemusíš hodit přesně – figurka dojde na nejzazší volné místo.", sestku: "½ (6 polí)" },
+  otaznik: { n: "Kostka s ❓", kr: "příklad = šestka", t: "Stěny 1–5 a ❓. Na ❓ vyřešíš příklad: správně = šestka, špatně tah propadá. Bez otázek platí ❓ rovnou jako šestka.", sestku: "šestku (❓)" },
+};
+const ZLOMKY = [[1, 2, "½", 6], [1, 3, "⅓", 4], [1, 4, "¼", 3], [2, 3, "⅔", 8], [3, 4, "¾", 9], [1, 1, "1", 12]]; // čitatel, jmenovatel, znak, polí
+const typ = (id) => (TYPY[id] ? id : "klasicka");
+const r6 = () => 1 + Math.floor(Math.random() * 6);
+function hod(id) {
+  if (id === "plusminus") { const a = r6(); return { a, b: r6() }; }
+  if (id === "zlomkova") { const i = Math.floor(Math.random() * 6); return { stena: i, k: ZLOMKY[i][3] }; }
+  if (id === "otaznik") { const k = r6(); return k === 6 ? { otaznik: true } : { k }; }
+  return { k: r6() }; }
+// čísla, která jde vybrat kartou „Přesný hod“: u Zlomkové stěny (hodnota = polí), jinak 1–6
+const steny = (id) => (id === "zlomkova" ? ZLOMKY.map((z, i) => ({ k: z[3], stena: i })) : [1, 2, 3, 4, 5, 6].map((k) => ({ k })));
+const popisSteny = (i) => `${ZLOMKY[i][2]} z 12 = ${ZLOMKY[i][3]}`;
+const skin = () => { try { return (typeof Odmeny !== "undefined" && Odmeny.kostky()) || ""; } catch (e) { return ""; } };
+// ---------- kreslení stěny ----------
+const TECKY = { 1: [[50, 50]], 2: [[28, 28], [72, 72]], 3: [[28, 28], [50, 50], [72, 72]], 4: [[28, 28], [72, 28], [28, 72], [72, 72]], 5: [[28, 28], [72, 28], [50, 50], [28, 72], [72, 72]], 6: [[28, 26], [72, 26], [28, 50], [72, 50], [28, 74], [72, 74]] };
+// obsah: číslo 1–6 (tečky), { stena } (zlomek), "?" nebo nic (prázdná)
+function svg(obsah, popis, cls = "") { let v = "";
+  if (obsah === "?") v = `<text x="50" y="68" class="cl-kostka-text velky">?</text>`;
+  else if (obsah && obsah.stena != null) { const [c, j] = ZLOMKY[obsah.stena]; v = j === 1 ? `<text x="50" y="68" class="cl-kostka-text velky">1</text>` : `<text x="50" y="44" class="cl-kostka-text">${c}</text><path d="M32 52H68" class="cl-kostka-cara"/><text x="50" y="82" class="cl-kostka-text">${j}</text>`; }
+  else if (TECKY[obsah]) v = TECKY[obsah].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="8.5"/>`).join("");
+  return `<svg viewBox="0 0 100 100" class="cl-kostka${cls ? " " + cls : ""}" aria-label="${popis || "Kostka"}"><rect x="6" y="6" width="88" height="88" rx="20" class="cl-kostka-tvar"/>${v}</svg>`; }
+// ikona typu kostky do výběru před hrou
+function ikona(id) {
+  if (id === "plusminus") return `<span class="cl-kostky-dve">${svg(3, "Kostka 3")}${svg(5, "Kostka 5")}</span>`;
+  if (id === "zlomkova") return svg({ stena: 4 }, "Stěna ¾");
+  if (id === "otaznik") return svg("?", "Stěna s otazníkem");
+  return svg(3, "Kostka 3"); }
+return { TYPY, ZLOMKY, typ, hod, steny, popisSteny, skin, svg, ikona, SEZNAM: Object.keys(TYPY) };
+})();
+
+// ================= 🎲 Člověče – výběr před hrou: hráči, mapa, herní kostka, otázky a akční políčka =================
+// Mapa a kostka se pamatují (úložiště „hra-clovece-nast“). U mapy Témata se volí téma každé čtvrtiny – předvybraná jsou slabá témata z mapy v Týdnu
+// (jen v Matice; na veřejné stránce her Týden není). Témata mají otázky zapnuté vždy. Malá pro dva pustí jen dva hráče.
+const CloveceVolba = (() => {
+const MP = CloveceMapy, KS = CloveceKostky, KLIC = "hra-clovece-nast";
+const minimapa = (m) => `<svg viewBox="0 0 100 100" class="cl-mini" aria-hidden="true">${m.mini}</svg>`;
+const maTyden = () => typeof Tyden !== "undefined";
+function slaba() { const k = Object.keys(OtazkyHer.TEMY); let s = [];
+  try { if (maTyden()) s = Tyden.temata().filter((t) => k.includes(t.k)).sort((a, b) => b.slabe - a.slabe || b.skore - a.skore).map((t) => t.k); } catch (e) { s = []; }
+  return [...new Set([...s, "zlomky", "procenta", "rovnice", "uhly"])].slice(0, 4); }
+const karta = (jm, id, obr, n, kr, zap) => `<label class="cl-vk"><input type="radio" name="cl-${jm}" value="${id}"${zap ? " checked" : ""}><span class="cl-vk-obr">${obr}</span><b>${n}</b><small>${kr}</small></label>`;
+function html(barvy, lze) { const ul = nacist(KLIC, {}) || {}, mapa = MP.MAPY[ul.mapa] ? ul.mapa : "klasicka", kostka = KS.typ(ul.kostka), tem = slaba(), skin = KS.skin(), tm = mapa === "temata";
+  return `<div class="cl-volba${skin ? " cl-skin-" + skin : ""}"><p class="pozn">Hra pro 2–4 u jednoho zařízení. Za chybějící může hrát počítač. Na akčních políčkách čekají otázky, karty, štíty a zkratky – kartu vidí všichni.</p>
+    ${lze ? `<button type="button" class="hlavni" data-cl="pokracovat">Pokračovat v rozehrané hře</button>` : ""}
+    <div class="cl-hraci">${barvy.map((b, i) => `<div class="cl-hrac"><span class="cl-tecka" style="background:${b[1]}"></span><input value="Hráč ${i + 1}" maxlength="14" data-jm="${i}" aria-label="Jméno hráče ${i + 1}">
+      <select data-typ="${i}" aria-label="Kdo hraje za ${b[0].toLowerCase()}"><option value="clovek"${i === 0 ? " selected" : ""}>Člověk</option><option value="pc"${i === 1 ? " selected" : ""}>Počítač</option><option value="nikdo"${i > 1 ? " selected" : ""}>Nehraje</option></select></div>`).join("")}</div>
+    <fieldset class="cl-sada"><legend>🗺 Mapa</legend><div class="cl-vk-mrizka">${MP.SEZNAM.map((id) => { const m = MP.MAPY[id]; return karta("mapa", id, minimapa(m), m.n, m.kr, id === mapa); }).join("")}</div>
+      <p class="cl-pravidlo" data-cl-pravidlo="mapa">${MP.MAPY[mapa].t}</p>
+      <div class="cl-temata" data-cl-temata${tm ? "" : " hidden"}>${[0, 1, 2, 3].map((q) => `<label><span class="cl-tecka" style="background:${MP.BARVY_TEMAT[q]}"></span><select data-cl-tema="${q}" aria-label="Téma čtvrtiny ${q + 1}">${Object.entries(OtazkyHer.TEMY).map(([k, n]) => `<option value="${k}"${k === tem[q] ? " selected" : ""}>${n}</option>`).join("")}</select></label>`).join("")}
+        <small class="pozn">${maTyden() ? "Předvybraná jsou slabá témata z mapy v Týdnu – jdou změnit." : "Vyber téma pro každou čtvrtinu desky."}</small></div></fieldset>
+    <fieldset class="cl-sada"><legend>🎲 Kostka</legend><div class="cl-vk-mrizka">${KS.SEZNAM.map((id) => karta("kostka", id, KS.ikona(id), KS.TYPY[id].n, KS.TYPY[id].kr, id === kostka)).join("")}</div>
+      <p class="cl-pravidlo" data-cl-pravidlo="kostka">${KS.TYPY[kostka].t}</p></fieldset>
+    <label class="cl-prepinac"><input type="checkbox" data-cl-otazky checked${tm ? " disabled" : ""}> Otázky z matiky a výzvy</label>
+    <label class="cl-prepinac"><input type="checkbox" data-cl-akce checked> Akční políčka a karty (🃏 🎁 🛡 🚀 🧊 🌀)</label>
+    <button type="button" class="${lze ? "" : "hlavni"}" data-cl="nova">Nová hra</button></div>`; }
+// změna mapy nebo kostky: pravidla pod výběrem, témata a přepínač otázek
+function zmena(el, t) { if (!t.name) return; const jm = t.name.replace("cl-", ""), p = el.querySelector(`[data-cl-pravidlo="${jm}"]`);
+  if (jm === "mapa") { const m = MP.mapa(t.value), o = el.querySelector("[data-cl-otazky]"); if (p) p.textContent = m.t;
+    el.querySelector("[data-cl-temata]").hidden = !m.temata; o.disabled = !!m.temata; if (m.temata) o.checked = true; }
+  if (jm === "kostka" && p) p.textContent = KS.TYPY[KS.typ(t.value)].t; }
+// nastavení nové hry z formuláře, nebo { chyba }
+function precti(el, barvy) { const v = (n) => (el.querySelector(`input[name="cl-${n}"]:checked`) || {}).value;
+  const m = MP.mapa(v("mapa")), kostka = KS.typ(v("kostka"));
+  const hraci = barvy.map((bb, i) => { const t = el.querySelector(`[data-typ="${i}"]`).value; return { jmeno: (el.querySelector(`[data-jm="${i}"]`).value.trim() || bb[0]).slice(0, 14), barva: i, pc: t === "pc", aktivni: t !== "nikdo" }; });
+  const n = hraci.filter((h) => h.aktivni).length;
+  if (n < 2) return { chyba: "Hrají aspoň dva – nastav druhého hráče nebo počítač." };
+  if (n > m.mist) return { chyba: `${m.n}: hrají jen dva – u ostatních nastav Nehraje.` };
+  ulozit(KLIC, { mapa: m.id, kostka });
+  return { hraci, mapa: m.id, kostka, temata: m.temata ? [0, 1, 2, 3].map((q) => el.querySelector(`[data-cl-tema="${q}"]`).value) : null,
+    otazky: !!m.temata || el.querySelector("[data-cl-otazky]").checked, akce: el.querySelector("[data-cl-akce]").checked }; }
+return { html, zmena, precti, slaba };
+})();
+
+// ================= 🎲 Člověče, nezlob se 2.0: 2–4 hráči u jednoho zařízení, počítač za chybějící, akční políčka a karty, mapy a herní kostky =================
 // Pravidla: z domečku jen šestkou, po šestce háže znovu, bez figurky v poli až 3 pokusy; skok na soupeře ho pošle domů; do cíle jen přesným hodem.
-// Políčka a karty: h-clovece-pole.js (❓ ★ 🃏 🎁 🛡 🚀 🧊 🌀). Figurka jde pole po poli (logika je hotová hned, animace je jen zobrazení);
-// kartička i otázka se ukážou velké uprostřed desky – vidí je všichni u stolu. Rozehraná hra se ukládá (i uprostřed pohybu).
+// Políčka a karty: h-clovece-pole.js · mapy (Klasická, Malá pro dva, Ostrov s mosty, Témata): h-clovece-mapy.js · herní kostky a vzhled z Odměn:
+// h-clovece-kostky.js · výběr před hrou: h-clovece-volba.js. Figurka jde pole po poli (logika je hotová hned, animace je jen zobrazení);
+// kartička i otázka se ukážou velké uprostřed desky – vidí je všichni u stolu. Rozehraná hra se ukládá (i uprostřed pohybu); hra bez mapy a kostky = Klasická.
 const Clovece = (() => {
-const DRAHA = [[4,10],[4,9],[4,8],[4,7],[4,6],[3,6],[2,6],[1,6],[0,6],[0,5],[0,4],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[4,1],[4,0],[5,0],[6,0],[6,1],[6,2],[6,3],[6,4],[7,4],[8,4],[9,4],[10,4],[10,5],[10,6],[9,6],[8,6],[7,6],[6,6],[6,7],[6,8],[6,9],[6,10],[5,10]];
-const CIL = [[[5,9],[5,8],[5,7],[5,6]], [[1,5],[2,5],[3,5],[4,5]], [[5,1],[5,2],[5,3],[5,4]], [[9,5],[8,5],[7,5],[6,5]]];
-const DOM = [[[0,9],[1,9],[0,10],[1,10]], [[0,0],[1,0],[0,1],[1,1]], [[9,0],[10,0],[9,1],[10,1]], [[9,9],[10,9],[9,10],[10,10]]];
 const BARVY = [["Červená", "#e5484d", "#a3262b"], ["Modrá", "#3e7bfa", "#1f4fb3"], ["Zelená", "#30a46c", "#18794e"], ["Žlutá", "#f5b301", "#a66f00"]];
-const KLIC = "hra-clovece", P = CloveceePole;
-const abs = (h, rel) => (h * 10 + rel) % 40;
+const KLIC = "hra-clovece", P = CloveceePole, MP = CloveceMapy, KS = CloveceKostky, V = CloveceVolba;
+const nactiHru = () => { const h = nacist(KLIC, null); if (h && h.hraci) { h.mapa = MP.mapa(h.mapa).id; h.kostka = KS.typ(h.kostka); } return h && h.hraci ? h : null; };
 function spust(el, skore) {
-  let g = nacist(KLIC, null), hodim = false, cekej = null, casovac = null, kartaCas = null, anim = null, ukazana = ""; // ukazana = karta, která se už otočila (při překreslení se neotáčí znovu)
+  let g = nactiHru(), hodim = false, cekej = null, casovac = null, kartaCas = null, anim = null, ukazana = ""; // ukazana = karta, která se už otočila (při překreslení se neotáčí znovu)
+  const casy = new Set(), pozdeji = (fn, ms) => { const t = setTimeout(() => { casy.delete(t); fn(); }, ms); casy.add(t); }; // zastav() je zruší (nová hra, zavření)
   const ulozHru = () => ulozit(KLIC, g), L = () => g.hraci.length;
   const krok = () => (matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 160);
-  const pole = (a) => P.druh(a, g.akce);
-  function novaHra(nast) { g = { hraci: nast.hraci.map((h) => ({ ...h, fig: [-1, -1, -1, -1] })), na: 0, hod: null, pokusy: 0, stav: "hod", otazky: nast.otazky, akce: nast.akce, zprava: "", konec: null, tah: 0 }; dalsiPlatny(true); ulozHru(); kresli(); auto(); }
-  const hraje = () => g.hraci[g.na], vPoli = (h) => h.fig.some((p) => p >= 0 && p < 40);
+  const M = () => MP.mapa(g.mapa), N = () => M().N, F = () => M().F, T = () => KS.TYPY[KS.typ(g.kostka)];
+  const misto = (h) => (h.misto != null ? h.misto : h.barva);
+  const abs = (h, rel) => (M().start[misto(g.hraci[h])] + rel) % N(); // h = pořadí hráče, rel = pozice od jeho startu
+  const pole = (a) => MP.druh(M(), a, g.akce);
+  const temaPole = (a) => (M().temata && g.temata ? g.temata[Math.floor(a / M().ctvrt)] : null);
+  const priklad = (a) => { const t = a >= 0 ? temaPole(a) : null; return t ? { ...OtazkyHer.tema(t), tema: t } : OtazkyHer.matika(); };
+  function novaHra(n) { const m = MP.mapa(n.mapa); let s = 0;
+    g = { hraci: n.hraci.map((h) => ({ ...h, misto: m.mist === 4 ? h.barva : h.aktivni ? s++ : 0, fig: Array(m.F).fill(-1) })), mapa: m.id, kostka: KS.typ(n.kostka), temata: m.temata ? n.temata : null,
+      na: 0, hod: null, pokusy: 0, stav: "hod", otazky: n.otazky || !!m.temata, akce: n.akce, zprava: "", konec: null, tah: 0 };
+    dalsiPlatny(true); ulozHru(); kresli(); auto(); }
+  const hraje = () => g.hraci[g.na], vPoli = (h) => h.fig.some((p) => p >= 0 && p < N());
+  const novyHod = () => { g.hod = null; g.stena = null; g.dvojice = null; };
   function dalsiPlatny(prvni) { if (!prvni) g.na = (g.na + 1) % L(); let n = 0;
     while (n++ < 9) { const h = g.hraci[g.na]; if (!h.aktivni) { g.na = (g.na + 1) % L(); continue; }
       if (h.stoji) { h.stoji--; g.zprava = (g.zprava ? g.zprava + " " : "") + `${h.jmeno} vynechává hod.`; g.na = (g.na + 1) % L(); continue; } break; }
-    hraje().stit = false; g.hod = null; g.pokusy = 0; g.stav = "hod"; } // štít platí do vlastního dalšího tahu
-  function obsazeno(a) { for (let h = 0; h < L(); h++) { if (!g.hraci[h].aktivni) continue; const f = g.hraci[h].fig.findIndex((p) => p >= 0 && p < 40 && abs(g.hraci[h].barva, p) === a); if (f >= 0) return { h, f }; } return null; }
+    hraje().stit = false; novyHod(); g.pokusy = 0; g.stav = "hod"; } // štít platí do vlastního dalšího tahu
+  function obsazeno(a) { for (let h = 0; h < L(); h++) { if (!g.hraci[h].aktivni) continue; const f = g.hraci[h].fig.findIndex((p) => p >= 0 && p < N() && abs(h, p) === a); if (f >= 0) return { h, f }; } return null; }
   const chranena = (h, a) => pole(a) === "bezpecne" || !!g.hraci[h].stit;
-  function cil(h, rel) { if (rel < 40 || rel > 43) return false; return !g.hraci[h].fig.includes(rel); }
-  function tahy(h, k) { const hr = g.hraci[h], v = [];
+  function cil(h, rel) { if (rel < N() || rel >= N() + F()) return false; return !g.hraci[h].fig.includes(rel); }
+  function tahy(h, k) { const hr = g.hraci[h], v = []; if (!(k > 0)) return v;
     hr.fig.forEach((p, f) => { let n;
       if (p === -1) { if (k !== 6) return; n = 0; } else n = p + k;
-      if (n > 43) return;
-      if (n >= 40) { if (!cil(h, n)) return; for (let x = 40; x < n; x++) if (hr.fig.includes(x)) return; v.push({ f, n }); return; }
-      const a = abs(hr.barva, n), o = obsazeno(a); if (o && (o.h === h || chranena(o.h, a))) return; v.push({ f, n, sebrat: o }); });
+      if (n >= N() && g.kostka === "zlomkova") { let t = -1; for (let x = Math.max(p + 1, N()); x <= Math.min(n, N() + F() - 1); x++) { if (hr.fig.includes(x)) break; t = x; } if (t >= 0) v.push({ f, n: t }); return; } // Zlomková nemá 1, 2 ani 5 – do cíle dojde na nejzazší volné místo
+      if (n >= N() + F()) return;
+      if (n >= N()) { if (!cil(h, n)) return; for (let x = N(); x < n; x++) if (hr.fig.includes(x)) return; v.push({ f, n }); return; }
+      const a = abs(h, n), o = obsazeno(a); if (o && (o.h === h || chranena(o.h, a))) return; v.push({ f, n, sebrat: o }); });
     return v; }
-  // ---------- hod ----------
+  // ---------- hod (podle herní kostky) ----------
   function hod() { if (g.stav !== "hod" || hodim || anim) return; const hr = hraje();
-    if (hr.vyber) { if (hr.pc) { hr.vyber = false; const k = [6, 5, 4, 3, 2, 1].find((x) => tahy(g.na, x).length) || 6; g.zprava = `${hr.jmeno} si vybírá ${k}.`; zpracuj(k); } else { g.stav = "vyber"; g.zprava = `${hr.jmeno}: vyber si číslo na kostce.`; ulozHru(); kresli(); } return; }
-    hodim = true; const k = 1 + Math.floor(Math.random() * 6);
-    const kostka = el.querySelector(".cl-kostka"); if (kostka) { kostka.classList.remove("hazi"); void kostka.offsetWidth; kostka.classList.add("hazi"); }
-    setTimeout(() => { hodim = false; zpracuj(k); }, 520); }
-  function zpracuj(k) { g.hod = k; g.pokusy++; const m = tahy(g.na, k), hr = hraje();
+    if (hr.vyber) { if (hr.pc) { hr.vyber = false; const s = KS.steny(g.kostka).sort((a, b) => b.k - a.k), v = s.find((x) => tahy(g.na, x.k).length) || s[0]; zpracuj(v.k, v.stena != null ? KS.popisSteny(v.stena) : ""); }
+      else { g.stav = "vyber"; g.zprava = `${hr.jmeno}: vyber si číslo na kostce.`; ulozHru(); kresli(); } return; }
+    hodim = true; const v = KS.hod(g.kostka);
+    el.querySelectorAll(".cl-hod .cl-kostka").forEach((k) => { k.classList.remove("hazi"); void k.offsetWidth; k.classList.add("hazi"); });
+    pozdeji(() => { hodim = false; padlo(v); }, 520); }
+  function padlo(v) { const hr = hraje(); g.stena = v.stena != null ? v.stena : v.otaznik ? "?" : null; g.dvojice = v.a != null ? [v.a, v.b] : null;
+    if (g.dvojice) { g.stav = "soucet"; g.hod = null; g.zprava = `${hr.jmeno}: padlo ${v.a} a ${v.b}. Součet, nebo rozdíl?`; ulozHru(); kresli(); auto(); return; }
+    if (v.otaznik) { g.zprava = `${hr.jmeno}: na kostce je ❓.`; if (!hr.pc && g.otazky) return ukazOtazku("kostka", -1, false, priklad(M().start[misto(hr)]));
+      return !g.otazky || Math.random() < 0.6 ? zpracuj(6, "❓ = šestka") : propadl(`${hr.jmeno}: ❓ – příklad nevyšel, šestka není.`); }
+    zpracuj(v.k, v.stena != null ? KS.popisSteny(v.stena) : ""); }
+  function soucet(op) { if (g.stav !== "soucet" || !g.dvojice) return; const [a, b] = g.dvojice, k = op === "+" ? a + b : Math.abs(a - b); if (!k) return;
+    zpracuj(k, op === "+" ? `${a} + ${b} = ${k}` : `${Math.max(a, b)} − ${Math.min(a, b)} = ${k}`); }
+  const pcSoucet = () => { const [a, b] = g.dvojice, sk = (k) => { const m = tahy(g.na, k); return m.length ? Math.max(...m.map(skorePC)) + (k === 6 ? 30 : 0) : -1e9; }; return a !== b && sk(Math.abs(a - b)) > sk(a + b) ? "-" : "+"; };
+  function propadl(text) { const hr = hraje(); g.pokusy++; g.hod = null;
+    if (!vPoli(hr) && g.pokusy < 3) { g.zprava = `${text} Pokus ${g.pokusy} ze 3.`; g.stav = "hod"; } else { g.zprava = `${text} Tah propadá.`; dalsiPlatny(); }
+    ulozHru(); kresli(); auto(); }
+  function zpracuj(k, popis) { g.hod = k; g.pokusy++; const m = tahy(g.na, k), hr = hraje();
     if (!m.length) { const bezPole = !vPoli(hr);
-      if (k === 6) { g.zprava = `${hr.jmeno}: šestka, ale není kam táhnout – hází znovu.`; g.stav = "hod"; }
-      else if (bezPole && g.pokusy < 3) { g.zprava = `${hr.jmeno}: ${k} – potřebuje šestku (pokus ${g.pokusy} ze 3).`; g.stav = "hod"; }
-      else { g.zprava = `${hr.jmeno}: ${k} – není kam táhnout.`; dalsiPlatny(); }
+      if (k === 6) { g.zprava = `${hr.jmeno}: ${popis || "šestka"}, ale není kam táhnout – hází znovu.`; g.stav = "hod"; }
+      else if (bezPole && g.pokusy < 3) { g.zprava = `${hr.jmeno}: ${popis || k} – potřebuje ${T().sestku} (pokus ${g.pokusy} ze 3).`; g.stav = "hod"; }
+      else { g.zprava = `${hr.jmeno}: ${popis || k} – není kam táhnout.`; dalsiPlatny(); }
       ulozHru(); kresli(); auto(); return; }
-    g.stav = "tah"; g.zprava = `${hr.jmeno}: padla ${k}.`; ulozHru(); kresli();
-    if (hr.pc) setTimeout(() => tahni(vyberPC(m).f), 650); else if (new Set(m.map((t) => hr.fig[t.f] + ">" + t.n)).size === 1) setTimeout(() => g.stav === "tah" && tahni(m[0].f), 650); } // jediná možnost = táhne sám
-  function vyberPC(m) { const hr = g.hraci[g.na], sk = (t) => { const d = t.n < 40 ? pole(abs(hr.barva, t.n)) : null;
-    return (t.sebrat ? 100 : 0) + (t.n >= 40 ? 60 : 0) + (hr.fig[t.f] === -1 ? 40 : 0) + t.n * 0.5 + (d === "truhla" ? 20 : d === "bezpecne" ? 8 : d === "otazka" ? -5 : 0); };
-    return m.slice().sort((a, b) => sk(b) - sk(a))[0]; }
+    g.stav = "tah"; g.zprava = popis ? `${hr.jmeno}: ${popis}.` : `${hr.jmeno}: padla ${k}.`; ulozHru(); kresli();
+    if (hr.pc) pozdeji(() => tahni(vyberPC(m).f), 650); else if (new Set(m.map((t) => hr.fig[t.f] + ">" + t.n)).size === 1) pozdeji(() => g.stav === "tah" && tahni(m[0].f), 650); } // jediná možnost = táhne sám
+  const skorePC = (t) => { const hr = hraje(), d = t.n < N() ? pole(abs(g.na, t.n)) : null;
+    return (t.sebrat ? 100 : 0) + (t.n >= N() ? 60 : 0) + (hr.fig[t.f] === -1 ? 40 : 0) + t.n * 0.5 + (d === "truhla" ? 20 : d === "bezpecne" ? 8 : d === "most" ? 6 : d === "otazka" ? -5 : 0); };
+  const vyberPC = (m) => m.slice().sort((a, b) => skorePC(b) - skorePC(a))[0];
   // ---------- pohyb ----------
   const rozsah = (p, n) => { const c = []; if (p === -1) return [n]; for (let x = p; x !== n;) { x += n > p ? 1 : -1; c.push(x); } return c; };
   function prehraj(kroky, hotovo) { kroky = kroky.filter((k) => k.cesta.length); const t = krok();
@@ -1608,40 +1833,55 @@ function spust(el, skore) {
   function dokonci() { const d0 = g.dal || { krok: "konec", sest: false }; g.dal = null;
     if (d0.krok !== "pole") { poTahu(d0.sest || d0.znovu); return; }
     const hr = hraje(), f = d0.f, sest = d0.sest;
-    if (hr.fig.every((p) => p >= 40)) { g.konec = g.na; g.stav = "konec"; g.zprava = `🎉 ${hr.jmeno} vyhrává!`; ulozHru(); kresli(); skore(hr.jmeno); return; }
-    const a = hr.fig[f] < 40 ? abs(hr.barva, hr.fig[f]) : -1, d = a >= 0 ? pole(a) : null, clovek = !hr.pc;
-    if ((d === "otazka" || d === "vyzva") && g.otazky && clovek) return ukazOtazku(d, f, sest, d === "otazka" ? OtazkyHer.matika() : OtazkyHer.vyzva());
+    if (hr.fig.every((p) => p >= N())) { g.konec = g.na; g.stav = "konec"; g.zprava = `🎉 ${hr.jmeno} vyhrává!`; ulozHru(); kresli(); skore(hr.jmeno); return; }
+    const a = hr.fig[f] < N() ? abs(g.na, hr.fig[f]) : -1, d = a >= 0 ? pole(a) : null, clovek = !hr.pc;
+    if ((d === "otazka" || d === "vyzva") && g.otazky && clovek) return ukazOtazku(d, f, sest, d === "otazka" ? priklad(a) : OtazkyHer.vyzva());
+    if (d === "most") return mostVolba(f, sest, a);
     if (d === "nahoda" || d === "truhla") { const k = P.tahni(d, !clovek || !g.otazky), doba = k.priklad ? 0 : dobaKarty(clovek);
-      g.stav = "karta"; g.karta = { ...k, bal: d, h: g.na, f, sest, q: k.priklad ? OtazkyHer.matika() : null, doba, do: doba ? Date.now() + doba : 0 };
+      g.stav = "karta"; g.karta = { ...k, bal: d, h: g.na, f, sest, q: k.priklad ? priklad(a) : null, doba, do: doba ? Date.now() + doba : 0 };
       g.zprava = `${hr.jmeno} táhne kartu ${d === "truhla" ? "Truhla" : "Náhoda"}.`; ulozHru(); kresli(); if (doba) { clearTimeout(kartaCas); kartaCas = setTimeout(zavriKartu, doba); } return; }
-    if (d === "zkratka" || d === "led") { if (g.otazky && clovek) return ukazOtazku(d, f, sest, OtazkyHer.matika());
+    if (d === "zkratka" || d === "led") { if (g.otazky && clovek) return ukazOtazku(d, f, sest, priklad(a));
       const vyjde = clovek || Math.random() < 0.5; return d === "zkratka" ? (vyjde ? efekt({ vpred: 5 }, f, sest, "🚀 Zkratka!") : poTahu(sest)) : (vyjde && !clovek ? poTahu(sest) : efekt({ stoj: true }, f, sest, "🧊 Led – příští hod stojíš.")); }
     if (d === "vir") return efekt({ vir: a }, f, sest, "🌀 Vír: ostatní figurky v této čtvrtině jdou o 1 zpět.");
     poTahu(sest); }
-  function poTahu(znovu) { if (znovu) { g.stav = "hod"; g.pokusy = 0; g.hod = null; g.zprava += g.zprava ? " Hází znovu." : ""; } else dalsiPlatny(); ulozHru(); kresli(); auto(); }
+  function poTahu(znovu) { if (znovu) { g.stav = "hod"; g.pokusy = 0; novyHod(); g.zprava += g.zprava ? " Hází znovu." : ""; } else dalsiPlatny(); ulozHru(); kresli(); auto(); }
+  // ---------- most (Ostrov): přes most na druhý břeh, nebo dlouhou cestou ----------
+  function mostVolny(h, f) { const p = g.hraci[h].fig[f], n = p + (M().most || 0); if (p < 0 || n >= N()) return false; const a = abs(h, n), o = obsazeno(a); return !o || (o.h !== h && !chranena(o.h, a)); }
+  function mostVolba(f, sest, a) { const hr = hraje();
+    if (!mostVolny(g.na, f)) { g.zprava = `🌉 Na druhém břehu teď stoupnout nejde – ${hr.jmeno} jde dlouhou cestou.`; return poTahu(sest); }
+    if (hr.pc) { if (Math.random() < 0.5) return efekt({ most: true }, f, sest, `🌉 ${hr.jmeno}: přes most na druhý břeh!`); g.zprava = `🌉 ${hr.jmeno}: most se zhoupl, figurka zůstává na břehu.`; return poTahu(sest); }
+    g.stav = "most"; g.most = { f, sest, a }; g.zprava = `${hr.jmeno}: rozcestí – přes most, nebo dlouhou cestou?`; ulozHru(); kresli(); }
+  function mostRozhodni(ano) { if (g.stav !== "most" || !g.most) return; const { f, sest, a } = g.most, hr = hraje(); g.most = null;
+    if (!ano) { g.zprava = `${hr.jmeno} jde dlouhou cestou kolem zátoky.`; return poTahu(sest); }
+    if (g.otazky) return ukazOtazku("most", f, sest, priklad(a));
+    efekt({ most: true }, f, sest, "🌉 Přes most na druhý břeh!"); }
   // posun figurky o d polí (karta, zkratka); na vlastní nebo chráněné figurce se zastaví před ní, nechráněného soupeře sebere; do cíle karta nevede
-  function posun(h, f, d) { const hr = g.hraci[h], p = hr.fig[f]; if (p < 0 || p >= 40) return { kroky: [], msg: "Figurka je v domečku nebo v cíli – karta nic nedělá." };
-    let n = d > 0 ? Math.min(39, p + d) : Math.max(0, p + d), seb = null;
-    while (n !== p) { const a = abs(hr.barva, n), o = obsazeno(a); if (!o) break; if (o.h !== h && !chranena(o.h, a)) { seb = o; break; } n -= Math.sign(d); }
+  function posun(h, f, d) { const hr = g.hraci[h], p = hr.fig[f]; if (p < 0 || p >= N()) return { kroky: [], msg: "Figurka je v domečku nebo v cíli – karta nic nedělá." };
+    let n = d > 0 ? Math.min(N() - 1, p + d) : Math.max(0, p + d), seb = null;
+    while (n !== p) { const a = abs(h, n), o = obsazeno(a); if (!o) break; if (o.h !== h && !chranena(o.h, a)) { seb = o; break; } n -= Math.sign(d); }
     if (n === p) return { kroky: [], msg: "Není kam – figurka zůstává." };
     const cesta = rozsah(p, n), kroky = [{ h, f, cesta }]; if (seb) { kroky.push(odchod(seb, cesta.length)); g.hraci[seb.h].fig[seb.f] = -1; }
     hr.fig[f] = n; return { kroky, msg: seb ? `${g.hraci[seb.h].jmeno} jde domů!` : "" }; }
-  function zpatky1(filtr) { const kroky = []; g.hraci.forEach((h, hi) => { if (!h.aktivni) return; h.fig.forEach((p, f) => { if (p <= 0 || p >= 40 || !filtr(hi, f, abs(h.barva, p))) return;
-    if (!obsazeno(abs(h.barva, p - 1))) { h.fig[f] = p - 1; kroky.push({ h: hi, f, cesta: [p - 1] }); } }); }); return kroky; }
+  // skok přes most rovnou na druhý břeh (volnost hlídá mostVolny); soupeře tam pošle domů
+  function skok(h, f, d) { const hr = g.hraci[h], n = hr.fig[f] + d, o = obsazeno(abs(h, n)), kroky = [{ h, f, cesta: [n] }];
+    if (o && o.h !== h) { kroky.push(odchod(o, 1)); g.hraci[o.h].fig[o.f] = -1; } hr.fig[f] = n; return { kroky, msg: o && o.h !== h ? `${g.hraci[o.h].jmeno} jde domů!` : "" }; }
+  function zpatky1(filtr) { const kroky = []; g.hraci.forEach((h, hi) => { if (!h.aktivni) return; h.fig.forEach((p, f) => { if (p <= 0 || p >= N() || !filtr(hi, f, abs(hi, p))) return;
+    if (!obsazeno(abs(hi, p - 1))) { h.fig[f] = p - 1; kroky.push({ h: hi, f, cesta: [p - 1] }); } }); }); return kroky; }
   function efekt(ef, f, sest, uvod) { const h = g.na, hr = hraje(); let kroky = [], msg = "", znovu = false;
     if (ef.vpred || ef.zpet) { const r = posun(h, f, ef.vpred || -ef.zpet); kroky = r.kroky; msg = r.msg; }
+    if (ef.most) { const r = skok(h, f, M().most); kroky = r.kroky; msg = r.msg; }
     if (ef.znovu) znovu = true;
     if (ef.stit) { hr.stit = true; msg = "🛡 Štít až do tvého dalšího tahu."; }
     if (ef.stoj) { hr.stoji = 1; msg = "Příští hod vynecháš."; }
     if (ef.vyber) { hr.vyber = true; msg = "Příští hod si vybereš."; }
-    if (ef.vyjed) { const i = hr.fig.indexOf(-1), a = abs(hr.barva, 0), o = obsazeno(a);
+    if (ef.vyjed) { const i = hr.fig.indexOf(-1), a = abs(h, 0), o = obsazeno(a);
       if (i < 0 || (o && (o.h === h || chranena(o.h, a)))) { const r = posun(h, f, 1); kroky = r.kroky; msg = i < 0 ? "Doma nikdo není – o 1 pole vpřed." : "Start je obsazený – o 1 pole vpřed."; }
       else { kroky = [{ h, f: i, cesta: [0] }]; if (o) { kroky.push(odchod(o, 1)); g.hraci[o.h].fig[o.f] = -1; } hr.fig[i] = 0; msg = "Nová figurka na startu."; } }
     if (ef.vymena) { const p = hr.fig[f]; msg = "Před tebou není s kým se prohodit.";
-      if (p >= 0 && p < 40) for (let dd = 1; dd < 40 - p; dd++) { const o = obsazeno(abs(hr.barva, p + dd)); if (!o || o.h === h) continue; if (chranena(o.h, abs(hr.barva, p + dd))) break;
+      if (p >= 0 && p < N()) for (let dd = 1; dd < N() - p; dd++) { const o = obsazeno(abs(h, p + dd)); if (!o || o.h === h) continue; if (chranena(o.h, abs(h, p + dd))) break;
         const op = g.hraci[o.h].fig[o.f]; if (op - dd < 0) break; g.hraci[o.h].fig[o.f] = op - dd; hr.fig[f] = p + dd; kroky = [{ h, f, cesta: [p + dd] }, { h: o.h, f: o.f, cesta: [op - dd] }]; msg = `Prohozeno s figurkou: ${g.hraci[o.h].jmeno}.`; break; } }
     if (ef.vitr) { kroky = zpatky1((hi) => hi !== h); msg = kroky.length ? "Soupeři jdou o 1 zpět." : "Vítr nikoho neposunul."; }
-    if (ef.vir != null) { const q = Math.floor(ef.vir / 10); kroky = zpatky1((hi, ff, a) => !(hi === h && ff === f) && Math.floor(a / 10) === q); msg = kroky.length ? "" : "Nikoho nesmetl."; }
+    if (ef.vir != null) { const q = Math.floor(ef.vir / M().ctvrt); kroky = zpatky1((hi, ff, a) => !(hi === h && ff === f) && Math.floor(a / M().ctvrt) === q); msg = kroky.length ? "" : "Nikoho nesmetl."; }
     g.zprava = [uvod, msg].filter(Boolean).join(" "); g.stav = "pohyb"; g.dal = { krok: "konec", sest, znovu }; ulozHru(); prehraj(kroky, dokonci); }
   // ---------- otázka a karta uprostřed desky ----------
   // jak dlouho je karta vidět: vlastní karta hráče 3,2 s (nebo OK); karta počítače krátce, když hraje i člověk (ať se nečeká),
@@ -1654,32 +1894,39 @@ function spust(el, skore) {
   function zavriKartu() { clearTimeout(kartaCas); if (g.stav !== "karta") return; const k = g.karta; g.karta = null; efekt(k.ef, k.f, k.sest, `${k.ik} ${k.n}:`); }
   function odpoved(o) { const q = g.stav === "karta" ? g.karta && g.karta.q : g.otazka; if (!q || q.vysledek) return; q.vysledek = { ok: o === q.sp, o }; Zaznam.pis("hra", q.vysledek.ok ? "otázka správně" : "otázka špatně"); ulozHru(); kresli();
     casovac = setTimeout(pokracuj, 1500); }
-  function pokracuj() { const hr = hraje();
+  function pokracuj() {
     if (g.stav === "karta") { const k = g.karta; g.karta = null; if (k.q.vysledek.ok) efekt(k.ef, k.f, k.sest, `✓ ${k.ik} ${k.n}:`); else { g.zprava = `✗ Správně bylo ${k.q.sp}. Karta nic nedá.`; poTahu(k.sest); } return; }
     const q = g.otazka; g.otazka = null; const ok = q.vysledek.ok;
+    if (q.druh === "kostka") { if (ok) zpracuj(6, "✓ ❓ = šestka"); else propadl(`✗ Správně bylo ${q.sp}. Šestka není.`); return; }
+    if (q.druh === "most") { if (ok) efekt({ most: true }, q.f, q.sest, "✓ 🌉 Přes most na druhý břeh!"); else { g.zprava = `✗ Správně bylo ${q.sp}. Most se zhoupl – figurka zůstává na břehu.`; poTahu(q.sest); } return; }
     if (q.druh === "zkratka") { if (ok) efekt({ vpred: 5 }, q.f, q.sest, "✓ 🚀 Zkratka!"); else { g.zprava = `✗ Správně bylo ${q.sp}. Zkratka zůstala zavřená.`; poTahu(q.sest); } return; }
     if (q.druh === "led") { if (ok) { g.zprava = "✓ Led tě nezastavil."; poTahu(q.sest); } else efekt({ stoj: true }, q.f, q.sest, `✗ Správně bylo ${q.sp}. 🧊`); return; }
     if (ok) { g.zprava = "✓ Správně!"; poTahu(true); return; }
     if (q.druh === "otazka") { g.zprava = `✗ Správně bylo ${q.sp}.`; const r = posun(g.na, q.f, -2); g.zprava += r.kroky.length ? " Figurka jde o 2 pole zpět." : " Zpátky nejde."; g.stav = "pohyb"; g.dal = { krok: "konec", sest: q.sest }; ulozHru(); prehraj(r.kroky, dokonci); return; }
     g.zprava = `✗ Správně bylo: ${q.sp}.`; poTahu(q.sest); }
   function auto() { clearTimeout(cekej); if (!g || anim || !hraje().pc) return;
-    if (g.stav === "hod") cekej = setTimeout(hod, 700); else if (g.stav === "tah") cekej = setTimeout(() => { const m = tahy(g.na, g.hod); if (m.length) tahni(vyberPC(m).f); else poTahu(false); }, 650); }
+    if (g.stav === "hod") cekej = setTimeout(hod, 700);
+    else if (g.stav === "soucet") cekej = setTimeout(() => soucet(pcSoucet()), 900);
+    else if (g.stav === "tah") cekej = setTimeout(() => { const m = tahy(g.na, g.hod); if (m.length) tahni(vyberPC(m).f); else poTahu(false); }, 650); }
   // ---------- kreslení ----------
   const B = 40, kruh = (x, y, r, tr) => `<circle cx="${x * B + 20}" cy="${y * B + 20}" r="${r}" ${tr}/>`;
-  function kde(h, f) { const hr = g.hraci[h], ak = anim && anim.kroky.find((k) => k.h === h && k.f === f), p = ak ? ak.cesta[Math.min(anim.i, ak.cesta.length - 1)] : hr.fig[f];
-    return { p, xy: p === -1 ? DOM[hr.barva][f] : p >= 40 ? CIL[hr.barva][p - 40] : DRAHA[abs(hr.barva, p)], ak }; }
-  function deska(tahyNyni) {
-    let s = `<svg viewBox="0 0 440 440" class="cl-deska" role="img" aria-label="Hrací deska"><defs>${BARVY.map((b, i) => `<radialGradient id="clf${i}" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="${b[1]}"/><stop offset="1" stop-color="${b[2]}"/></radialGradient>`).join("")}<marker id="cl-sipka" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10z" class="cl-sipka-hrot"/></marker></defs>`;
-    s += `<rect x="2" y="2" width="436" height="436" rx="22" class="cl-podklad"/>`;
-    DOM.forEach((d, i) => { const [x, y] = d[0]; s += `<rect x="${x * B + 2}" y="${y * B + 2}" width="${2 * B - 4}" height="${2 * B - 4}" rx="16" fill="${BARVY[i][1]}" opacity=".16"/>`; });
-    DRAHA.forEach(([x, y], i) => { if (pole(i) !== "zkratka") return; const [x2, y2] = DRAHA[(i + 5) % 40], ax = x * B + 20, ay = y * B + 20, bx = x2 * B + 20, by = y2 * B + 20;
-      s += `<path d="M${ax} ${ay} Q${(ax + bx) / 2 + (220 - (ax + bx) / 2) * 0.55} ${(ay + by) / 2 + (220 - (ay + by) / 2) * 0.55} ${bx} ${by}" class="cl-zkratka" marker-end="url(#cl-sipka)"/>`; });
-    DRAHA.forEach(([x, y], i) => { const st = i % 10 === 0 ? BARVY[i / 10][1] : null, d = pole(i);
+  const barvaMista = (s) => { const h = g.hraci.find((x) => x.aktivni && misto(x) === s); return h ? BARVY[h.barva] : BARVY[M().mist === 4 ? s : s * 2]; };
+  function kde(h, f) { const hr = g.hraci[h], m = M(), ak = anim && anim.kroky.find((k) => k.h === h && k.f === f), p = ak ? ak.cesta[Math.min(anim.i, ak.cesta.length - 1)] : hr.fig[f];
+    return { p, xy: p === -1 ? m.dom[misto(hr)][f] : p >= m.N ? m.cil[misto(hr)][p - m.N] : m.draha[abs(h, p)], ak }; }
+  function deska(tahyNyni) { const m = M(), W = m.rozmer * B, C = W / 2;
+    let s = `<svg viewBox="0 0 ${W} ${W}" class="cl-deska mapa-${m.id}" role="img" aria-label="Hrací deska – ${m.n}"><defs>${BARVY.map((b, i) => `<radialGradient id="clf${i}" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="${b[1]}"/><stop offset="1" stop-color="${b[2]}"/></radialGradient>`).join("")}<marker id="cl-sipka" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10z" class="cl-sipka-hrot"/></marker>`
+      + `<pattern id="cl-hvezdy" width="46" height="46" patternUnits="userSpaceOnUse"><rect width="46" height="46" class="cl-hvezdy-nebe"/><circle cx="8" cy="10" r="1.3"/><circle cx="31" cy="22" r="1"/><circle cx="19" cy="38" r="1.5"/><circle cx="40" cy="5" r=".8"/></pattern></defs>`;
+    s += `<rect x="2" y="2" width="${W - 4}" height="${W - 4}" rx="22" class="cl-podklad"/>` + MP.pozadi(m, g.temata, B);
+    m.dom.forEach((d, i) => { const xs = d.map((p) => p[0]), ys = d.map((p) => p[1]), x0 = Math.min(...xs), y0 = Math.min(...ys);
+      s += `<rect x="${x0 * B + 2}" y="${y0 * B + 2}" width="${(Math.max(...xs) - x0 + 1) * B - 4}" height="${(Math.max(...ys) - y0 + 1) * B - 4}" rx="16" fill="${barvaMista(i)[1]}" opacity=".16"/>`; });
+    m.draha.forEach(([x, y], i) => { if (pole(i) !== "zkratka") return; const [x2, y2] = m.draha[(i + 5) % m.N], ax = x * B + 20, ay = y * B + 20, bx = x2 * B + 20, by = y2 * B + 20;
+      s += `<path d="M${ax} ${ay} Q${(ax + bx) / 2 + (C - (ax + bx) / 2) * 0.55} ${(ay + by) / 2 + (C - (ay + by) / 2) * 0.55} ${bx} ${by}" class="cl-zkratka" marker-end="url(#cl-sipka)"/>`; });
+    m.draha.forEach(([x, y], i) => { const si = m.start.indexOf(i), st = si >= 0 ? barvaMista(si)[1] : null, d = pole(i);
       s += kruh(x, y, 15, `class="cl-pole${d ? " " + d : ""}" ${st ? `style="stroke:${st};stroke-width:4"` : ""}`);
       if (d && (g.otazky || (d !== "otazka" && d !== "vyzva"))) s += `<text x="${x * B + 20}" y="${y * B + 25.5}" class="cl-znak ${d}">${P.DRUHY[d].ik}</text>`; });
-    CIL.forEach((c, i) => c.forEach(([x, y]) => (s += kruh(x, y, 14, `fill="${BARVY[i][1]}" fill-opacity=".22" stroke="${BARVY[i][1]}" stroke-width="2"`))));
-    DOM.forEach((d, i) => d.forEach(([x, y]) => (s += kruh(x, y, 14, `fill="none" stroke="${BARVY[i][1]}" stroke-opacity=".5" stroke-width="2"`))));
-    s += `<circle cx="220" cy="220" r="16" class="cl-stred"/>`;
+    m.cil.forEach((c, i) => c.forEach(([x, y]) => (s += kruh(x, y, 14, `fill="${barvaMista(i)[1]}" fill-opacity=".22" stroke="${barvaMista(i)[1]}" stroke-width="2"`))));
+    m.dom.forEach((d, i) => d.forEach(([x, y]) => (s += kruh(x, y, 14, `fill="none" stroke="${barvaMista(i)[1]}" stroke-opacity=".5" stroke-width="2"`))));
+    s += `<circle cx="${C}" cy="${C}" r="16" class="cl-stred"/>`;
     const mozne = new Set((tahyNyni || []).map((t) => t.f)), navrch = [];
     g.hraci.forEach((h, hi) => { if (!h.aktivni) return; h.fig.forEach((_, f) => { const { xy: [x, y], ak } = kde(hi, f);
       const muze = !anim && hi === g.na && mozne.has(f) && !h.pc, cx = x * B + 20, cy = y * B + 20, posl = g.posledni && g.posledni.h === hi && g.posledni.f === f;
@@ -1687,59 +1934,72 @@ function spust(el, skore) {
         ${muze ? `<circle cx="${cx}" cy="${cy}" r="18" class="cl-zar" stroke="${BARVY[h.barva][1]}"/>` : ""}${h.stit ? `<circle cx="${cx}" cy="${cy}" r="16" class="cl-stit-kruh"/>` : ""}<ellipse cx="${cx}" cy="${cy + 11}" rx="10" ry="3.5" class="cl-stin"/>
         <circle cx="${cx}" cy="${cy}" r="11.5" fill="url(#clf${h.barva})" stroke="${BARVY[h.barva][2]}" stroke-width="1.5"/></g>`; if (ak) navrch.push(t); else s += t; /* figurka v pohybu se kreslí navrch */ }); });
     return s + navrch.join("") + "</svg>"; }
-  const tecky = { 1: [[50, 50]], 2: [[28, 28], [72, 72]], 3: [[28, 28], [50, 50], [72, 72]], 4: [[28, 28], [72, 28], [28, 72], [72, 72]], 5: [[28, 28], [72, 28], [50, 50], [28, 72], [72, 72]], 6: [[28, 26], [72, 26], [28, 50], [72, 50], [28, 74], [72, 74]] };
-  const kostka = (k) => `<svg viewBox="0 0 100 100" class="cl-kostka" aria-label="Kostka${k ? ": " + k : ""}"><rect x="6" y="6" width="88" height="88" rx="20" class="cl-kostka-tvar"/>${(tecky[k] || []).map(([x, y]) => `<circle cx="${x}" cy="${y}" r="8.5"/>`).join("")}</svg>`;
+  // kostka v tlačítku Hodit: podle herní kostky a posledního hodu
+  function kostkaTed() { const k = KS.typ(g.kostka);
+    if (k === "plusminus") { const [a, b] = g.dvojice || [0, 0]; return `<span class="cl-kostky-dve">${KS.svg(a, a ? "Kostka " + a : "Kostka")}${KS.svg(b, b ? "Kostka " + b : "Kostka")}</span>`; }
+    if (k === "zlomkova") return KS.svg(g.stena != null ? { stena: g.stena } : null, g.stena != null ? "Kostka: " + KS.ZLOMKY[g.stena][2] : "Kostka");
+    if (g.stena === "?") return KS.svg("?", "Kostka: otazník");
+    return KS.svg(g.hod, "Kostka" + (g.hod ? ": " + g.hod : "")); }
   const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
   function moznostiHtml(q) { return `<div class="cl-moznosti">${q.m.map((o) => { const v = q.vysledek, tr = !v ? "" : o === q.sp ? " ok" : o === v.o ? " spatne" : "";
     return `<button type="button" data-odp="${esc(o)}"${v || hraje().pc ? " disabled" : ""} class="${tr}">${esc(o)}</button>`; }).join("")}</div>${q.vysledek ? `<b class="cl-vysledek ${q.vysledek.ok ? "ok" : "spatne"}">${q.vysledek.ok ? "✓ Správně!" : `✗ Správně bylo ${esc(q.sp)}`}</b>` : ""}`; }
+  const temaHtml = (q) => (q && q.tema ? ` · ${OtazkyHer.TEMY[q.tema]}` : "");
   function kartaHtml() { const hr = hraje(), tecka = `<span class="cl-tecka" style="background:${BARVY[hr.barva][1]}"></span>`;
-    const klic = g.stav === "karta" && g.karta ? `k${g.tah}-${g.karta.id}` : g.stav === "otazka" && g.otazka ? `o${g.tah}-${g.otazka.t}` : "", otoc = klic && klic !== ukazana ? " otoc" : ""; ukazana = klic || ukazana;
+    const klic = g.stav === "karta" && g.karta ? `k${g.tah}-${g.karta.id}` : g.stav === "otazka" && g.otazka ? `o${g.tah}-${g.otazka.t}` : g.stav === "most" ? `m${g.tah}` : "", otoc = klic && klic !== ukazana ? " otoc" : ""; ukazana = klic || ukazana;
     if (g.stav === "karta" && g.karta) { const k = g.karta;
       const pc = hr.pc && !k.q;
       return `<div class="cl-karta-vrstva"><div class="cl-karta bal-${k.bal}${otoc}${pc ? " cl-karta-pc" : ""}" role="dialog" aria-label="Karta ${esc(k.n)}"${pc ? ` data-cl="karta-ok" title="Klepni a karta zmizí hned"` : ""}><div class="cl-karta-hlava">${k.bal === "truhla" ? "🎁 Truhla" : "🃏 Náhoda"}</div>
         <div class="cl-karta-ik" aria-hidden="true">${k.ik}</div><b class="cl-karta-nazev">${esc(k.n)}</b><p>${esc(k.t)}</p>
-        ${k.q ? `<div class="cl-karta-q"><b>${esc(k.q.t)}</b>${moznostiHtml(k.q)}</div>` : hr.pc ? "" : `<button type="button" class="hlavni" data-cl="karta-ok">OK</button>`}
+        ${k.q ? `<div class="cl-karta-q">${k.q.tema ? `<small class="cl-karta-tema">Téma: ${OtazkyHer.TEMY[k.q.tema]}</small>` : ""}<b>${esc(k.q.t)}</b>${moznostiHtml(k.q)}</div>` : hr.pc ? "" : `<button type="button" class="hlavni" data-cl="karta-ok">OK</button>`}
         <small class="cl-karta-kdo">${tecka}${esc(hr.jmeno)} · ${pc ? "zmizí sama, klepnutím hned" : "vidí všichni"}</small>${pruhHtml(k)}</div></div>`; }
     if (g.stav === "otazka" && g.otazka) { const q = g.otazka, D = P.DRUHY[q.druh];
-      return `<div class="cl-karta-vrstva"><div class="cl-karta bal-${q.druh}${otoc}" role="dialog" aria-label="${D.n}"><div class="cl-karta-hlava">${D.ik} ${D.n}</div><b class="cl-karta-nazev">${esc(q.t)}</b>${moznostiHtml(q)}
+      return `<div class="cl-karta-vrstva"><div class="cl-karta bal-${q.druh}${otoc}" role="dialog" aria-label="${D.n}"><div class="cl-karta-hlava">${D.ik} ${D.n}${temaHtml(q)}</div><b class="cl-karta-nazev">${esc(q.t)}</b>${moznostiHtml(q)}
         <small class="pozn">${D.t}</small><small class="cl-karta-kdo">${tecka}${esc(hr.jmeno)} odpovídá · vidí všichni</small></div></div>`; }
+    if (g.stav === "most" && g.most) {
+      return `<div class="cl-karta-vrstva"><div class="cl-karta bal-most${otoc}" role="dialog" aria-label="Rozcestí u mostu"><div class="cl-karta-hlava">🌉 Rozcestí</div><div class="cl-karta-ik" aria-hidden="true">🌉</div>
+        <b class="cl-karta-nazev">Přes most, nebo dlouhou cestou?</b><p>Most vede o ${M().most} polí vpřed na druhý břeh${g.otazky ? " – nejdřív vyřešíš příklad" : ""}. Dlouhá cesta jde kolem zátoky, kde čeká 🎁 Truhla.</p>
+        <div class="cl-moznosti"><button type="button" class="hlavni" data-most="ano">🌉 Přes most</button><button type="button" data-most="ne">Dlouhou cestou</button></div>
+        <small class="cl-karta-kdo">${tecka}${esc(hr.jmeno)} vybírá · vidí všichni</small></div></div>`; }
     return ""; }
-  function volba() { const ul = nacist(KLIC, null), lze = ul && ul.stav !== "konec";
-    el.innerHTML = `<div class="cl-volba"><p class="pozn">Hra pro 2–4 u jednoho zařízení. Za chybějící může hrát počítač. Na akčních políčkách čekají otázky, karty, štíty a zkratky – kartu vidí všichni.</p>
-      ${lze ? `<button type="button" class="hlavni" data-cl="pokracovat">Pokračovat v rozehrané hře</button>` : ""}
-      <div class="cl-hraci">${BARVY.map((b, i) => `<div class="cl-hrac"><span class="cl-tecka" style="background:${b[1]}"></span><input value="Hráč ${i + 1}" maxlength="14" data-jm="${i}" aria-label="Jméno hráče ${i + 1}">
-        <select data-typ="${i}" aria-label="Kdo hraje za ${b[0].toLowerCase()}"><option value="clovek"${i === 0 ? " selected" : ""}>Člověk</option><option value="pc"${i === 1 ? " selected" : ""}>Počítač</option><option value="nikdo"${i > 1 ? " selected" : ""}>Nehraje</option></select></div>`).join("")}</div>
-      <label class="cl-prepinac"><input type="checkbox" data-cl-otazky checked> Otázky z matiky a výzvy</label>
-      <label class="cl-prepinac"><input type="checkbox" data-cl-akce checked> Akční políčka a karty (🃏 🎁 🛡 🚀 🧊 🌀)</label>
-      <button type="button" class="${lze ? "" : "hlavni"}" data-cl="nova">Nová hra</button></div>`; }
-  function legenda() { const d = Object.keys(P.DRUHY).filter((k) => (g.akce || k === "otazka" || k === "vyzva") && (g.otazky || (k !== "otazka" && k !== "vyzva")));
-    return d.length ? `<details class="cl-legenda"><summary>Co dělají políčka</summary><ul>${d.map((k) => `<li><span class="cl-legenda-ik ${k}">${P.DRUHY[k].ik}</span><span><b>${P.DRUHY[k].n}</b> – ${P.DRUHY[k].t}</span></li>`).join("")}</ul></details>` : ""; }
+  function volba() { const ul = nactiHru(); el.innerHTML = V.html(BARVY, ul && ul.stav !== "konec"); }
+  function legenda() { const m = M(), Tk = T(), vid = new Set(m.draha.map((_, i) => pole(i)));
+    const d = Object.keys(P.DRUHY).filter((k) => vid.has(k) && (g.otazky || (k !== "otazka" && k !== "vyzva")));
+    const tem = m.temata && g.temata ? `<p class="cl-leg-temata">${g.temata.map((t, q) => `<span><span class="cl-tecka" style="background:${MP.BARVY_TEMAT[q]}"></span>${OtazkyHer.TEMY[t]}</span>`).join("")}</p>` : "";
+    return `<details class="cl-legenda"><summary>Pravidla a políčka <small>${m.n} · ${Tk.n}</small></summary><p class="cl-leg-pravidlo">🗺 <b>${m.n}</b> – ${m.t}</p>${tem}<p class="cl-leg-pravidlo">🎲 <b>${Tk.n}</b> – ${Tk.t}</p>
+      ${d.length ? `<ul>${d.map((k) => `<li><span class="cl-legenda-ik ${k}">${P.DRUHY[k].ik}</span><span><b>${P.DRUHY[k].n}</b> – ${P.DRUHY[k].t}</span></li>`).join("")}</ul>` : ""}</details>`; }
+  function ovladani(hr, popis, hodLze) {
+    if (g.stav === "konec") return `<button type="button" class="hlavni" data-cl="znovu">Hrát znovu</button>`;
+    if (g.stav === "vyber") return `<div class="cl-vyber" role="group" aria-label="Vyber číslo">${KS.steny(g.kostka).map((s) => `<button type="button" data-vyber="${s.k}"${s.stena != null ? ` data-stena="${s.stena}"` : ""} aria-label="${s.stena != null ? KS.popisSteny(s.stena) : "Číslo " + s.k}">${KS.svg(s.stena != null ? { stena: s.stena } : s.k)}</button>`).join("")}</div>`;
+    if (g.stav === "soucet" && g.dvojice) { const [a, b] = g.dvojice, dis = hr.pc ? " disabled" : "";
+      return `<div class="cl-pm" role="group" aria-label="Součet, nebo rozdíl"><div class="cl-pm-kostky">${KS.svg(a, "Kostka " + a)}${KS.svg(b, "Kostka " + b)}</div>
+        <button type="button" data-pm="+"${dis}><small>součet</small>${a} + ${b}</button><button type="button" data-pm="-"${dis || (a === b ? " disabled" : "")}${a === b ? ' title="Rozdíl je 0 – figurka by stála."' : ""}><small>rozdíl</small>${Math.max(a, b)} − ${Math.min(a, b)}</button></div>`; }
+    return `<button type="button" class="cl-hod" data-cl="hod" ${hodLze ? "" : "disabled"} aria-label="Hodit kostkou">${kostkaTed()}<span>${popis}</span></button>`; }
   function kresli() {
-    if (!g || g.stav === "volba") { volba(); return; } const hr = hraje(), m = g.stav === "tah" && !anim ? tahy(g.na, g.hod) : [];
-    const hodLze = g.stav === "hod" && !hr.pc && !anim, popis = anim || g.stav === "pohyb" ? "Figurka jde…" : g.stav === "hod" ? (hr.pc ? "Počítač hází…" : "Hodit (mezerník)") : g.stav === "tah" ? (hr.pc ? "Počítač táhne…" : "Vyber figurku") : g.stav === "karta" ? "Karta…" : g.stav === "otazka" ? "Otázka…" : "";
+    if (!g || g.stav === "volba") { volba(); return; } const hr = hraje(), m = g.stav === "tah" && !anim ? tahy(g.na, g.hod) : [], skin = KS.skin();
+    const hodLze = g.stav === "hod" && !hr.pc && !anim, popis = anim || g.stav === "pohyb" ? "Figurka jde…" : g.stav === "hod" ? (hr.pc ? "Počítač hází…" : "Hodit (mezerník)") : g.stav === "tah" ? (hr.pc ? "Počítač táhne…" : "Vyber figurku") : g.stav === "karta" ? "Karta…" : g.stav === "otazka" ? "Otázka…" : g.stav === "most" ? "Rozcestí…" : "";
     const ikony = (h) => (h.stit ? " 🛡" : "") + (h.stoji ? " ⏸" : "") + (h.vyber ? " 🎯" : "");
-    el.innerHTML = `<div class="cl-hra"><div class="cl-deska-obal">${deska(m)}${kartaHtml()}</div>
+    el.innerHTML = `<div class="cl-hra${skin ? " cl-skin-" + skin : ""}"><div class="cl-deska-obal">${deska(m)}${kartaHtml()}</div>
       <aside class="cl-panel"><div class="cl-na-tahu" style="--b:${BARVY[hr.barva][1]}"><span class="cl-tecka"></span><b>${g.stav === "konec" ? g.zprava : `Na tahu: ${esc(hr.jmeno)}${ikony(hr)}`}</b></div>
-        ${g.stav === "konec" ? `<button type="button" class="hlavni" data-cl="znovu">Hrát znovu</button>` : g.stav === "vyber" ? `<div class="cl-vyber" role="group" aria-label="Vyber číslo">${[1, 2, 3, 4, 5, 6].map((k) => `<button type="button" data-vyber="${k}" aria-label="Číslo ${k}">${kostka(k)}</button>`).join("")}</div>`
-          : `<button type="button" class="cl-hod" data-cl="hod" ${hodLze ? "" : "disabled"} aria-label="Hodit kostkou">${kostka(g.hod)}<span>${popis}</span></button>`}
-        <p class="cl-zprava" aria-live="polite">${esc(g.zprava || "Hází se kostkou. Z domečku se vyjíždí šestkou.")}</p>
-        <ul class="cl-poradi">${g.hraci.filter((h) => h.aktivni).map((h) => `<li${h === hr ? ' class="ted"' : ""}><span class="cl-tecka" style="background:${BARVY[h.barva][1]}"></span>${esc(h.jmeno)}${h.pc ? " · počítač" : ""}${ikony(h)}<small>${h.fig.filter((p) => p >= 40).length}/4 v cíli</small></li>`).join("")}</ul>
+        ${ovladani(hr, popis, hodLze)}
+        <p class="cl-zprava" aria-live="polite">${esc(g.zprava || `Hází se kostkou. Z domečku se vyjíždí – potřebuješ ${T().sestku}.`)}</p>
+        <ul class="cl-poradi">${g.hraci.filter((h) => h.aktivni).map((h) => `<li${h === hr ? ' class="ted"' : ""}><span class="cl-tecka" style="background:${BARVY[h.barva][1]}"></span>${esc(h.jmeno)}${h.pc ? " · počítač" : ""}${ikony(h)}<small>${h.fig.filter((p) => p >= N()).length}/${F()} v cíli</small></li>`).join("")}</ul>
         ${legenda()}<button type="button" class="maly" data-cl="menu">Hráči a nová hra</button></aside></div>`;
   }
-  const zastav = () => { clearTimeout(cekej); clearTimeout(casovac); clearTimeout(kartaCas); anim = null; };
-  el.addEventListener("click", (e) => { const b = e.target.closest("[data-cl], [data-f], [data-odp], [data-vyber]"); if (!b || b.disabled) return;
+  const zastav = () => { clearTimeout(cekej); clearTimeout(casovac); clearTimeout(kartaCas); casy.forEach(clearTimeout); casy.clear(); anim = null; hodim = false; };
+  el.addEventListener("click", (e) => { const b = e.target.closest("[data-cl], [data-f], [data-odp], [data-vyber], [data-pm], [data-most]"); if (!b || b.disabled) return;
     if (b.dataset.odp != null && g && (g.stav === "otazka" || g.stav === "karta") && !hraje().pc) { odpoved(b.dataset.odp); return; }
-    if (b.dataset.vyber != null && g && g.stav === "vyber") { hraje().vyber = false; g.stav = "hod"; zpracuj(+b.dataset.vyber); return; }
+    if (b.dataset.vyber != null && g && g.stav === "vyber") { hraje().vyber = false; g.stav = "hod"; zpracuj(+b.dataset.vyber, b.dataset.stena != null ? KS.popisSteny(+b.dataset.stena) : ""); return; }
+    if (b.dataset.pm != null && g && !hraje().pc) { soucet(b.dataset.pm); return; }
+    if (b.dataset.most != null && g && !hraje().pc) { mostRozhodni(b.dataset.most === "ano"); return; }
     if (b.dataset.f != null) { tahni(+b.dataset.f); return; }
     const a = b.dataset.cl;
     if (a === "hod") hod();
     if (a === "karta-ok") zavriKartu();
-    if (a === "pokracovat") { g = nacist(KLIC, null); obnov(); }
+    if (a === "pokracovat") { g = nactiHru(); if (g) obnov(); }
     if (a === "menu") { zastav(); g = null; volba(); }
-    if (a === "znovu") { const n = { hraci: g.hraci.map((h) => ({ jmeno: h.jmeno, barva: h.barva, pc: h.pc, aktivni: h.aktivni })), otazky: g.otazky, akce: g.akce }; novaHra(n); }
-    if (a === "nova") { const hraci = BARVY.map((bb, i) => { const t = el.querySelector(`[data-typ="${i}"]`).value; return { jmeno: (el.querySelector(`[data-jm="${i}"]`).value.trim() || bb[0]).slice(0, 14), barva: i, pc: t === "pc", aktivni: t !== "nikdo" }; });
-      if (hraci.filter((h) => h.aktivni).length < 2) { Body.oznam("Hrají aspoň dva – nastav druhého hráče nebo počítač."); return; }
-      novaHra({ hraci, otazky: el.querySelector("[data-cl-otazky]").checked, akce: el.querySelector("[data-cl-akce]").checked }); } });
+    if (a === "znovu") novaHra({ hraci: g.hraci.map((h) => ({ jmeno: h.jmeno, barva: h.barva, pc: h.pc, aktivni: h.aktivni })), otazky: g.otazky, akce: g.akce, mapa: g.mapa, kostka: g.kostka, temata: g.temata });
+    if (a === "nova") { const n = V.precti(el, BARVY); if (n.chyba) { Body.oznam(n.chyba); return; } novaHra(n); } });
+  el.addEventListener("change", (e) => { if (e.target.matches('.cl-volba input[type="radio"]')) V.zmena(el, e.target); });
   el.addEventListener("keydown", (e) => { if ((e.key === " " || e.key === "Enter") && e.target.matches(".cl-fig")) { e.preventDefault(); tahni(+e.target.dataset.f); } });
   const klav = (k) => { if (k === " " && g && g.stav === "hod" && !hraje().pc) hod(); };
   // po obnovení stránky: rozehraný pohyb dokončí, karta počítače se zavře sama, otázka s výsledkem pokračuje
@@ -1753,7 +2013,7 @@ function spust(el, skore) {
   skore("–");
   return { stop: zastav, klav, get stav() { return g; } };
 }
-return { spust, DRAHA, abs };
+return { spust, DRAHA: CloveceMapy.mapa("klasicka").draha, abs: (h, rel) => (h * 10 + rel) % 40 };
 })();
 
 // ================= ✕◯ Piškvorky: pět v řadě na poli 15 × 15 (na telefonu 12 × 12, online vždy 15 × 15) – proti počítači, dva u jednoho zařízení, online (kód místnosti) =================
@@ -2765,7 +3025,7 @@ const HRY_P = [
   { id: "pingpong", n: "Ping-pong", ik: "🏓", p: "Proti počítači, nebo online. Myš, prst nebo šipky ↑ ↓. Hraje se do 5." },
   { id: "had", n: "Had", ik: "🐍", p: "Sám, s čísly (sbírej jen správná), nebo souboj online o body. Zdí projdeš na druhou stranu." },
   { id: "lode", n: "Lodě", ik: "⚓", p: "Proti počítači, ve dvou u jednoho zařízení, nebo online. Zásah = střílíš znovu." },
-  { id: "clovece", n: "Člověče, nezlob se", ik: "🎲", p: "Pro 2–4 u jednoho zařízení, za chybějící hraje počítač. Políčka s otázkami." },
+  { id: "clovece", n: "Člověče, nezlob se", ik: "🎲", p: "Pro 2–4 u jednoho zařízení, za chybějící hraje počítač. Čtyři mapy, herní kostky a políčka s otázkami." },
   { id: "piskvorky", n: "Piškvorky", ik: "✕", p: "Pět v řadě. Proti počítači, ve dvou, nebo online." },
   { id: "zavod", n: "Závod v počítání", ik: "🚀", p: "10 příkladů co nejrychleji – sám na čas, nebo online souboj se stejnými příklady." },
   { id: "osa", n: "Odhadovačka na ose", ik: "📏", p: "Kde leží 3/8, 0,7 nebo 125 %? Klepni na osu – čím blíž, tím víc bodů. Sám, nebo online." },
