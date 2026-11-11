@@ -2,6 +2,7 @@
 // matika/testy/ – zadání (vidí každý s přístupem k Matice), matika/klice/ – klíče a vyplněné archy (jen lektor a správce).
 // Správce je nahraje ve Správě najednou; názvy z CERMATu (M9A_2026_TS.pdf …) se převedou na tvar Matiky (2026-A-test.pdf).
 import { api, nahratSoubor, seznamSouboru } from "./server.js";
+import { rozbalZip } from "./zip.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const TYP = { ts: "test", test: "test", ksr: "klic", klic: "klic", vza: "arch", arch: "arch" };
@@ -23,12 +24,17 @@ export async function kresliPdf() {
   const el = $("#pdf-testy"); if (!el) return;
   let t = [], k = []; try { [t, k] = await Promise.all([seznamSouboru("matika/testy/"), seznamSouboru("matika/klice/")]); } catch (e) { /* ukáže se 0 */ }
   const pdf = (s) => s.filter((x) => /\.pdf$/.test(x.name)).length;
-  el.innerHTML = `<div class="soubor"><div><b>PDF testů</b><small>V Učebně je ${pdf(t)} zadání a ${pdf(k)} klíčů a vyplněných archů. Vyber najednou všechny PDF testů ze složky – zadání (M9A_2026_TS.pdf), klíče (…_KSR.pdf) i vzorové archy (…_VZA.pdf). Zadání uvidí žák s přístupem k Matice, klíče jen lektor.</small></div>
-    <label class="tl">Nahrát PDF…<input type="file" accept=".pdf,application/pdf" multiple data-nahrat-pdf hidden></label></div>`;
+  el.innerHTML = `<div class="soubor"><div><b>PDF testů</b><small>V Učebně je ${pdf(t)} zadání a ${pdf(k)} klíčů a vyplněných archů. Vyber najednou všechny PDF testů ze složky – zadání (M9A_2026_TS.pdf), klíče (…_KSR.pdf) i vzorové archy (…_VZA.pdf) – nebo jeden .zip, ve kterém jsou. Zadání uvidí žák s přístupem k Matice, klíče jen lektor.</small></div>
+    <label class="tl">Nahrát PDF…<input type="file" accept=".pdf,.zip,application/pdf,application/zip" multiple data-nahrat-pdf hidden></label></div>`;
 }
 
 document.addEventListener("change", async (e) => { const i = e.target.closest("[data-nahrat-pdf]"); if (!i || !i.files.length) return;
-  const st = $("#sprava-stav"), soubory = [...i.files]; i.value = "";
+  const st = $("#sprava-stav"), vybrane = [...i.files], soubory = []; i.value = "";
+  // .zip se rozbalí tady v prohlížeči; dál jde každé PDF z něj jako samostatný soubor
+  for (const f of vybrane) { if (!/\.zip$/i.test(f.name)) { soubory.push(f); continue; }
+    st.textContent = `Rozbaluji ${f.name}…`;
+    try { (await rozbalZip(await f.arrayBuffer())).filter((x) => /\.pdf$/i.test(x.jmeno)).forEach((x) => soubory.push(new File([x.obsah], x.jmeno, { type: "application/pdf" }))); }
+    catch (x) { st.textContent = x.message; return; } }
   const dobre = soubory.map((f) => [f, nazevPdf(f.name)]).filter(([, n]) => n), spatne = soubory.filter((f) => !nazevPdf(f.name)).map((f) => f.name);
   let hotovo = 0, chyby = 0;
   for (const [f, n] of dobre) { st.textContent = `Nahrávám PDF ${hotovo + chyby + 1} z ${dobre.length}…`;

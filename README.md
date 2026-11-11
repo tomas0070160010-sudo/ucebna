@@ -3,6 +3,7 @@
 Stránka pro doučování a hry (přihlášení přes Supabase projekt `ucebna`).
 
 ## Verze
+- **0.8.9** (11. 11. 2026) – Správa › PDF testů: nahrání jedním souborem .zip (rozbalí se v prohlížeči, uložené i zabalené soubory), jasná hláška u rozbitého zipu.
 - **0.8.8** (11. 11. 2026) – stránka her: Člověče, nezlob se 2.0 – figurka jde pole po poli, 20 akčních políček (Náhoda, Truhla, Bezpečné, Zkratka, Led, Vír, Otázka, Výzva), karta uprostřed desky pro všechny.
 - **0.8.7** (11. 11. 2026) – stránka her: Tetris se zlomky začíná s předem poskládaným obrázkem z fialových čtverečků (výška podle obtížnosti, nejvýš půl hřiště), na Lehké a Střední občas padá větší dílek, online mají oba hráči stejný obrázek.
 - **0.8.6** (11. 11. 2026) – Žáci › Body a odměny: lektor může dát odměnu za hvězdičky dřív (zaškrtnutím); stránka her: piškvorky na telefonu na poli 12 × 12, vzhled kostek v Tetrisu. Potřebuje Matiku 3.23.
